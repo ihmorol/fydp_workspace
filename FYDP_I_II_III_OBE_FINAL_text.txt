@@ -1,0 +1,2132 @@
+Page 1 of 14 
+CSE 4000A: Final Year Design Project - I 
+ 
+CO 
+Course Outcome (CO) 
+Program 
+Outcome 
+(PO) 
+Distributions of 
+Marks (%) 
+Assessment* 
+ 
+Timeline 
+(Weeks) 
+Teacher 
+Mentor 
+CO1 
+Propose a real-life project that addresses a 
+complex 
+engineering 
+problem 
+that 
+requires 
+fundamental 
+and 
+special 
+knowledge to design its solution.
+PO1 
+ 
+10 
+Chapter 1: 
+Real Life 
+Problem 
+1-2 
+CO2 
+Identify and review the existing solutions 
+of the complex engineering problem, and 
+conduct a gap analysis.
+PO4 
+ 
+15 
+Chapter 2: 
+Investigation 
+3-6 
+CO3 
+Identify the outcomes and functional 
+requirements of the proposed solution 
+considering software and/or hardware 
+specifications and standards.
+PO2 
+15 
+ 
+Chapter 3: 
+Section 3.1 
+Chapter 5: 
+Section 5.1
+7-10 
+CO4 
+Identify sub-components of a complex 
+problem; 
+prepare 
+a 
+timeline 
+and 
+appropriate budget using the project 
+management skill. 
+PO11 
+10 
+ 
+Chapter 3: 
+Section 3.3, 
+3.4 
+Chapter 5: 
+Section 5.3
+11-12 
+CO5 
+Prepare an interim report of the project 
+and make an oral presentation. 
+PO10 
+15 
+15 
+Report, 
+Presentation 
+ 
+CO6 
+Identify and engage in independent 
+learning activities due to technological 
+changes as required in the process of 
+developing the project. 
+PO12 
+20 
+ 
+Journal 
+writing and 
+Submission 
+ 
+*If the FYDP template is not maintained, assessment is made based on similar contents of the given 
+chapters/sections.   
+Rubrics for Assessing Course Outcomes of FYDP - I 
+CO1: Propose a real-life project that addresses a complex engineering problem that requires fundamental and 
+special knowledge to design its solution. 
+Assessment: Real Life Problem Identification, Overall Report Structure & Format 
+Assessment Tool: Chapter 1: Real Life Problem 
+Total Marks: 10% 
+Evaluator: Mentor 
+Levels → 
+Criteria
+Excellent 
+(10-9) 
+Very Good 
+(8-7) 
+Good 
+(6-5) 
+Poor 
+(4-0) 
+Identification and 
+Definition of 
+Problem Statement 
+The problem statement 
+is clearly and 
+objectively identified 
+with concise language 
+and defined with 
+consistent precision of 
+detail. It also addresses 
+real-life issues to allow 
+students to tackle big 
+The problem 
+statement is clearly 
+and objectively 
+identified with 
+concise language and 
+defined with some 
+precision of detail. 
+The problem also 
+addresses real-life 
+The problem is 
+identified and 
+defined in a 
+manner that is 
+somewhat 
+unclear. The 
+problem also 
+somewhat 
+misses real-life
+The 
+identification 
+and definition 
+of the problem 
+are completely 
+unclear. 
+
+Page 2 of 14 
+challenges. 
+issues. 
+issues. 
+Uniqueness 
+The project is 
+successfully executed 
+from concept to 
+completion with a 
+novel and original 
+approach. 
+The project is 
+successfully 
+executed from 
+concept to 
+completion. 
+However, 
+unique and 
+original aspects 
+are unclear. 
+The project is 
+partially 
+successfully 
+executed, with 
+very little 
+unique aspects. 
+The project 
+work has 
+started, 
+however it is 
+not completed yet. 
+The work 
+that is 
+presented is 
+from other 
+student’s work.
+Organization 
+Extremely well 
+organized, logical 
+format that was easy to 
+follow; flowed 
+smoothly from one idea 
+to another and cleverly 
+conveyed; The report is 
+also free from errors in 
+formatting, citation, 
+and references. No 
+grammatical, spelling, 
+or punctuation errors.
+Presented in a 
+thoughtful manner; 
+there were signs of 
+organization and 
+most transitions were 
+easy to follow, but at 
+times ideas were 
+unclear. Also, there 
+exist a few 
+grammatical, 
+spelling, or 
+punctuation errors.
+Somewhat organized, 
+ideas were not 
+presented well and 
+transitions were not 
+always smooth, 
+which at times 
+distracted the 
+audience 
+Confusing, format 
+was difficult to 
+follow; transitions of 
+ideas were abrupt and 
+seriously distracted 
+the audience. 
+Moreover, there 
+exists a numerous 
+number of 
+grammatical, 
+spelling, or 
+punctuation errors.
+ 
+CO2 Rubrics: Identify and review the existing solutions of the complex engineering problem, and conduct a gap 
+analysis. 
+Assessment: Literature Review and Gap Analysis, References 
+Assessment Tool: Chapter 2: Investigation 
+Total Marks: 15% 
+Evaluator: Mentor 
+Levels → 
+Criteria
+Excellent 
+(15-13) 
+Good 
+(12-8) 
+Poor 
+(7-0) 
+Literature 
+Review 
+Excellent reviews of the 
+existing literature. Includes 
+most recent journals, 
+conferences, magazines etc. 
+Covers highly cited/ impact 
+factor papers.
+Moderate reviews of the 
+existing literature. Includes 
+journals, conferences, 
+magazines etc. Covers 
+moderately cited/ impact 
+papers.
+Poor reviews of the existing 
+literature. Includes poor 
+quality/ predatory journals, 
+conferences, magazines etc. 
+Covers journal without 
+impact factor.
+Gap Analysis 
+Studied and found a gap of 
+similar applications based on 
+features.  
+ 
+Have studied sufficient 
+papers and found gaps based 
+on taxonomy.  
+ 
+Clustered all the literature 
+gaps and summarized it into 
+Studied and found a gap of 
+similar applications without 
+features identification.  
+ 
+Have studied sufficient 
+papers and found gaps 
+without taxonomy.  
+ 
+Clustered the literature gaps 
+and summarized it.
+Poor literature gap analysis 
+and summarization. 
+
+Page 3 of 14 
+specific points. 
+References 
+Followed standard 
+references using bibtex 
+and/or others.
+Followed an own way in the 
+report and differences in 
+references style.
+Doesn’t follow any standard 
+and is erroneous. 
+ 
+CO3: Identify the outcomes and functional requirements of the proposed solution considering software and/or 
+hardware specifications and standards. 
+Assessment: Requirements Analysis 
+Assessment Tool: Section: 3.1 in Report 
+Total Marks: 15% 
+Evaluator: Teacher 
+Levels → 
+Criteria 
+Excellent 
+(10-9) 
+Very Good 
+(7-8) 
+Good 
+(6-5) 
+Needs 
+Improvement 
+(4-3) 
+Poor 
+(2-0) 
+Requirement 
+Analysis 
+Following sub-
+sections are written 
+lucidly:  
+ 
+1. Requirements 
+inception/elicitation 
+ 
+2. Requirements 
+analysis  
+ 
+3. System modeling 
+ 
+4. Requirements 
+specification  
+ 
+Rhetoric technical 
+writing, especially 
+the exploitation of 
+figures. Grammar 
+and typos are 
+checked. 
+States lucidly the 
+following 
+subsections 3.1.1, 
+3.1.2, 3.1.3, and 
+3.1.4:  
+ 
+1. Requirements 
+inception/elicitation 
+ 
+2. Requirements 
+analysis  
+ 
+3. System modeling 
+ 
+4. Requirements 
+specification 
+(Producing 
+software 
+requirement models 
+by including ER 
+diagrams, data flow 
+diagrams (DFDs), 
+function 
+decomposition 
+diagrams (FDDs), 
+data dictionaries, 
+etc.)
+States lucidly the 
+following 
+subsections 3.1.1, 
+3.1.2, and 3.1.3:  
+ 
+1. Requirements 
+inception/elicitation 
+ 
+2. Requirements 
+analysis  
+ 
+3. System modeling 
+(Blueprints for 
+system design and 
+modeling should be 
+elaborated) 
+States lucidly the 
+following 
+subsections 3.1.1 
+and 3.1.2:  
+ 
+1. Requirements 
+inception/elicitation 
+ 
+2. Requirements 
+analysis and 
+negotiation 
+(Requirement s are 
+identified and 
+conflicts with 
+stakeholders are 
+solved, e.g. UML 
+diagram can be 
+used) 
+States lucidly 
+the following 
+subsection 
+3.1.1:  
+ 
+1. 
+Requirements 
+inception/ 
+elicitation 
+(Meeting 
+with 
+stakeholder s 
+and identify 
+their needs 
+and wants) 
+ 
+ 
+ 
+ 
+
+Page 4 of 14 
+Assessment: Standards 
+Assessment Tool: Section 5.1 in Report 
+Total Marks: 5% 
+Evaluator: Teacher 
+Levels → 
+Criteria
+Excellent 
+(5) 
+Very Good 
+(4) 
+Average 
+(3) 
+Poor 
+(2-0) 
+Literature 
+Review 
+States lucidly the list 
+of standards that are 
+followed to ensure the 
+reliability of the 
+project.  
+ 
+Rhetoric technical 
+writing. Grammar and 
+typos are checked. 
+States lucidly the list of 
+standards that are 
+followed to ensure the 
+reliability of the project 
+(why are standards 
+important in the 
+project?). 
+Mention the name 
+of standards and 
+present its 
+guidelines briefly.  
+- ASCE/SEI 7-16  
+- ASTM F963-17  
+- ISO 13485:2016 
+Identify the list of 
+standards that can be 
+used in the project, e.g. 
+name of the standards 
+from the following 
+sources: 
+- IEEESA  
+- AIAA  
+- IOS  
+- ANSI  
+- ACI  
+- ASTM  
+- Others
+ 
+CO4: Identify sub-components of a complex problem; prepare a timeline and appropriate budget using the project 
+management skill. 
+Assessment: Components/Architecture, Plan and Budget (Report Section 3.3, 3.4, Section 5.3, 10%) 
+Assessment: Components/Architecture, Plan and Budget 
+Assessment Tool: Report Section 3.3, 3.4, Section 5.3 
+Total Marks: 10% 
+Evaluator: Teacher 
+Levels → 
+Criteria 
+Excellent 
+(10-9) 
+Very Good 
+(8-7) 
+Needs 
+Improvement 
+(6-5) 
+Poor 
+(4-0) 
+Components/ 
+Architecture  
+A system 
+architecture is 
+designed in terms of 
+Context Diagram 
+and Data Flow 
+Diagrams. The 
+diagrams are 
+showing necessary 
+interdependence 
+among the 
+components and 
+well described. 
+Main external or 
+internal 
+stakeholders and 
+functional 
+workflows are 
+A system 
+architecture is 
+designed in terms of 
+Context Diagram 
+and Data Flow 
+Diagrams. Main 
+external or internal 
+stakeholders and 
+functional 
+workflows are 
+present. The Major 
+workflows are 
+supported with 
+basic interface 
+designs. 
+A system 
+architecture is 
+designed in terms of 
+Context Diagram 
+and Data Flow 
+Diagrams. The 
+Major workflows 
+are supported with 
+basic interface 
+designs. 
+A system 
+architecture is 
+designed in terms of 
+Context Diagram 
+and Data Flow 
+Diagrams. 
+
+Page 5 of 14 
+present. The Major 
+workflows are 
+supported with 
+basic interface 
+designs.
+Plan 
+A 24-week or two 
+trimester based plan 
+is prepared with 
+task allocation. The 
+tasks are divided 
+into subtasks and 
+the dependency is 
+clearly depicted. A 
+contingency plan is 
+present.
+A 24-week or two 
+trimester based plan 
+is prepared with 
+task allocation. The 
+tasks are divided 
+into subtasks and 
+the dependency is 
+clearly depicted. 
+A 24-week or two 
+trimester based plan 
+is prepared with 
+task allocation. 
+A 24-week or two 
+trimester based plan 
+is prepared. 
+Budget 
+A detailed 
+budget/cost analysis 
+is given with 
+alternatives for each 
+item with critical 
+discussion 
+addressing the 
+effects in design. 
+Includes a business-
+revenue model.
+A detailed cost 
+analysis is given 
+with alternates in 
+each item. Critical 
+analysis is given on 
+the selection of the 
+component and its 
+effects on the 
+design. No business 
+models are shown.
+A budget is given 
+only, showing per 
+item costs and 
+alternates. 
+A budget is given 
+only, showing per 
+item costs. 
+ 
+CO5: Prepare an interim report of the project and make an oral presentation. 
+Assessment: Presentation 
+Assessment Tool: Completeness of Contents, delivery 
+Total Marks: 8% + 8% 
+Evaluator: Teacher + Mentor 
+Levels → 
+Criteria
+Excellent 
+(8-7) 
+Very Good 
+(6-5) 
+Average 
+(4-3) 
+Poor 
+(2-0) 
+Completeness 
+of Contents 
+Appropriate to the 
+topic.  
+Well designed with 
+good flow and 
+appropriate use of 
+pictures and graphs 
+Appropriate to the 
+topic.  
+Well designed with 
+appropriate use of 
+pictures and graphs, 
+but uniformity in the 
+slides absent 
+Appropriate to the 
+topic.  
+Not so well 
+designed. 
+Uniformity in the 
+slides absent. 
+Inappropriate use of 
+pictures and graphs
+Not appropriate to 
+the topic.  
+Poor design without 
+use of any pictures 
+and graphs. Only 
+written slides 
+Delivery 
+Confident delivery 
+style with clear 
+voice and 
+appropriate dress up  
+ 
+Good spoken 
+English 
+Confidence in 
+delivery with 
+appropriate dress up 
+but voice is not clear 
+ 
+Good spoken 
+English 
+Low confidence and 
+voice not clear. 
+Dress up is 
+appropriate.  
+ 
+Spoken English not 
+so good 
+No confidence in 
+delivery. Voice not 
+audible. No eye 
+contact with the 
+audience. Dress up 
+is inappropriate.  
+ 
+Poor spoken English
+
+Page 6 of 14 
+Assessment: Viva 
+Assessment Tool: Understanding of project and related domains, delivery 
+Total Marks: 7% + 7% 
+Evaluator: Teacher + Mentor 
+Levels → 
+Criteria
+Excellent 
+(7) 
+Very Good 
+(6-5) 
+Average 
+(4-3) 
+Poor 
+(2-0) 
+Understanding of 
+project and related 
+domains 
+Good understanding 
+of the relevance of 
+the project  
+ 
+Extensive 
+knowledge of not 
+only the project but 
+domain around
+Fair understanding 
+of the relevance of 
+the project  
+ 
+Extensive 
+knowledge of the 
+project but not of 
+the domain around
+Fair understanding 
+of the relevance of 
+the project  
+ 
+Fair knowledge of 
+the project and the 
+domain around 
+Poor understanding 
+of the relevance of 
+the project  
+ 
+Lacks sufficient 
+knowledge of 
+project 
+Delivery 
+Technically correct 
+and confident 
+answer  
+ 
+Crisp to-the-point 
+answers 
+Most of the answers 
+are technically 
+correct but 
+confidence not very 
+good  
+ 
+Crisp to-the-point 
+answers
+Few of the answers 
+are technically 
+correct but 
+confidence is not 
+good  
+ 
+Answers not to-the-
+point
+Poor technically 
+knowledge of the 
+subject and low on 
+confidence  
+ 
+Vague answers 
+ 
+CO6: Identify and engage in independent learning activities due to technological changes as required in the 
+process of developing the project. 
+Assessment: Continuous evaluation during the whole period of FYDP-I 
+Assessment Tool: Curiosity, Self initiative, Independence, Transfer of past learning, Reflection on learning 
+Total Marks: 20% 
+Evaluator: Teacher 
+Levels → 
+Criteria
+Excellent 
+(20-18) 
+Very Good 
+(17-15) 
+Average 
+(14-10) 
+Poor 
+(9-0) 
+Curiosity 
+Explores a topic in 
+depth. 
+ 
+Indicate intense 
+interest in the subject. 
+Explores a topic in 
+depth. 
+ 
+Indicate interest in 
+the subject. 
+Explores a topic 
+with some evidence 
+of depth.  
+ 
+Indicate mild 
+interest in the 
+subject.
+Explores a topic at a 
+surface level.  
+ 
+Indicate low interest 
+in the subject. 
+Self initiative 
+Completes required 
+work. 
+ 
+Generates and pursues 
+opportunities to expand 
+knowledge, skills, and 
+abilities. 
+Completes required 
+work. 
+ 
+Identifies and 
+pursues 
+opportunities to 
+expand knowledge, 
+skills, and abilities.
+Completes required 
+work.  
+ 
+Identifies 
+opportunities to 
+expand knowledge, 
+skills, and abilities. 
+Completes required 
+work. 
+
+Page 7 of 14 
+Independence 
+Flourish outside 
+classroom 
+requirements.  
+ 
+Educational interests 
+and pursuits exist. 
+ 
+Knowledge and/or 
+experiences are 
+pursued independently
+Beyond classroom 
+requirements. 
+ 
+Pursues substantial, 
+additional 
+knowledge and/or 
+actively pursues 
+independent 
+educational 
+experiences.
+Beyond classroom 
+requirements. 
+ 
+Pursues additional 
+knowledge and/or 
+shows interest in 
+pursuing 
+independent 
+educational 
+experiences.
+Begins to look 
+beyond classroom 
+requirements. 
+ 
+Showing interest in 
+pursuing knowledge 
+independently. 
+Transfer of past 
+learning 
+Makes explicit 
+references to previous 
+learning and applies in 
+an innovative (new and 
+creative) way that 
+knowledge and those 
+skills in novel 
+situations
+Makes references to 
+previous learning 
+and shows evidence 
+of applying that 
+knowledge and 
+those skills in novel 
+situations 
+Makes references to 
+previous learning 
+and attempts to 
+apply that 
+knowledge and 
+those skills in novel 
+situations. 
+Makes vague 
+references to 
+previous learning 
+but does not apply 
+knowledge and 
+skills in novel 
+situations. 
+Reflection on 
+learning 
+Reviews prior learning 
+in depth. 
+ 
+Reveal significantly 
+changed perspectives 
+about educational and 
+life experiences, which 
+provide foundation for 
+expanded knowledge, 
+growth, and maturity 
+over time.
+Reviews prior 
+learning in depth. 
+ 
+Reveal fully 
+clarified meanings 
+or indicating 
+broader 
+perspectives about 
+educational or life 
+events. 
+Reviews prior 
+learning with some 
+depth. 
+ 
+Reveal slightly 
+clarified meanings 
+or indicating 
+somewhat broader 
+perspectives about 
+educational or life 
+events.
+Reviews prior 
+learning at a surface 
+level. 
+ 
+Does not reveal 
+clarified meaning or 
+indicating a broader 
+perspective about 
+educational or life 
+events. 
+ 
+ 
+CSE 4000B: Final Year Design Project - II 
+Course Outcome (CO) 
+Program 
+Outcome 
+(PO) 
+Distributions of 
+Marks (%) 
+Assessment* 
+Timeline 
+(Weeks) 
+Teacher
+Mentor 
+CO1: Analyze and design the real-life 
+project with given specifications and 
+requirements.
+PO3 
+10 
+20 
+Chapter 3: sec. 3.3 
+ 
+1-4 
+CO2: Act and manage the designed 
+project 
+effectively 
+in 
+a 
+team 
+environment.
+PO9 
+ 
+20 
+Weekly 
+assessment - 
+Journal
+ 
+CO3: Use modern tools in the process of 
+designing the solution of the real-life 
+project.
+PO5 
+10 
+10 
+ 
+Chapter 4: Tools 
+ 
+5-12 
+CO4: Present project’s outcomes through 
+written technical documents and oral 
+presentations.
+PO10 
+15 
+15 
+Presentation, 
+Report 
+ 
+*If the FYDP template is not maintained, assessment is made based on similar contents of the given 
+chapters/sections.   
+
+Page 8 of 14 
+CO1: Analyze and design the real-life project with given specifications and requirements. 
+Assessment: Requirements Engineering 
+Assessment Tool: Chapter: 3 in Report 
+Total Marks: 10% (Teacher), 20% Mentor. Teacher’s mark will be halved for the following rubric. 
+Levels → 
+Criteria 
+Excellent 
+(20-18) 
+Very Good 
+(17-15) 
+Good 
+(14-12) 
+Needs 
+Improvement 
+(11-8) 
+Poor 
+(7-0) 
+Requirement 
+Engineering 
+Following sub-
+sections are written 
+lucidly:  
+ 
+1. Requirements 
+inception/elicitation 
+ 
+2. Requirements 
+analysis  
+ 
+3. System modeling 
+ 
+4. Requirements 
+specification  
+ 
+Rhetoric technical 
+writing, especially 
+the exploitation of 
+figures. Grammar 
+and typos are 
+checked. 
+States lucidly the 
+following 
+subsections 3.1.1, 
+3.1.2, 3.1.3, and 
+3.1.4:  
+ 
+1. Requirements 
+inception/elicitation 
+ 
+2. Requirements 
+analysis  
+ 
+3. System modeling 
+ 
+4. Requirements 
+specification 
+(Producing 
+software 
+requirement models 
+by including ER 
+diagrams, data flow 
+diagrams (DFDs), 
+function 
+decomposition 
+diagrams (FDDs), 
+data dictionaries, 
+etc.)
+States lucidly the 
+following 
+subsections 3.1.1, 
+3.1.2, and 3.1.3:  
+ 
+1. Requirements 
+inception/elicitation 
+ 
+2. Requirements 
+analysis  
+ 
+3. System modeling 
+(Blueprints for 
+system design and 
+modeling should be 
+elaborated) 
+States lucidly the 
+following 
+subsections 3.1.1 
+and 3.1.2:  
+ 
+1. Requirements 
+inception/elicitation 
+ 
+2. Requirements 
+analysis and 
+negotiation 
+(Requirement s are 
+identified and 
+conflicts with 
+stakeholders are 
+solved, e.g. UML 
+diagram can be 
+used) 
+States lucidly 
+the following 
+subsection 
+3.1.1:  
+ 
+1. 
+Requirements 
+inception/ 
+elicitation 
+(Meeting 
+with 
+stakeholder s 
+and identify 
+their needs 
+and wants) 
+ 
+CO2: Act and manage the designed project effectively in a team environment. 
+Assessment: Management of the project with teamwork 
+Assessment Tool: Presentation, Report 
+Total Marks: 20% 
+Evaluator: Mentor 
+Levels → 
+Criteria 
+Excellent 
+(20-18) 
+Very Good 
+(17-15) 
+Average 
+(14-10) 
+Poor 
+(9-0) 
+Teamwork reflects 
+in Journal 
+Management 
+The student writes 
+about his taking 
+part in any of the 
+tasks, i.e., reading, 
+writing, citing, 
+grammar checking, 
+cross check of 
+other’s writeup, 
+The student writes 
+abouts his taking 
+part in any of the 
+previous tasks but 
+writes about his 
+weak contribution 
+on implementing/ 
+designing a 
+The student writes 
+about his weak 
+contributions both 
+in any of the 
+previous tasks and 
+implementing/ 
+designing a 
+concept/program.
+The student writes 
+(found) about his 
+poor/no  
+contributions. 
+
+Page 9 of 14 
+soundness of 
+reasoning checking, 
+etc. related to a 
+report writing as a 
+part of group 
+activities, about his 
+learning/designing/ 
+implementing a 
+concept/program.
+concept/program. 
+Weekly Activities 
+The student writes 
+about his taking 
+part in a group 
+discussion, using 
+standard 
+management 
+software, sharing a 
+new idea/ 
+technology with 
+team members and 
+engaging in 
+brainstorming 
+together to solve a 
+problem.
+The student writes 
+about his taking 
+part in the group 
+discussion, using 
+standard 
+management 
+software, sharing a 
+new idea/ 
+technology, but 
+cannot afford 
+brainstorming to 
+solve a problem. 
+The student writes 
+about his taking 
+part in a group 
+discussion, but does 
+not use any 
+management 
+software, cannot 
+share any new ideas 
+and does not engage 
+in brainstorming. 
+The student does 
+not write about his 
+taking part in any 
+group discussion 
+ever. 
+ 
+CO3: Use modern tools in the process of designing the solution of the real-life project. 
+Assessment: Use modern tools 
+Assessment Tool: Chapter 4 - tools 
+Total Marks: 10% 
+Evaluator: Mentor 
+Levels → 
+Criteria 
+Excellent 
+(10-9) 
+Very Good 
+(8-7) 
+Good 
+(6-5) 
+Poor 
+(4-0) 
+Integration of 
+Modern Tools 
+Fully integrates a 
+wide range of 
+relevant, modern 
+design tools that 
+enhance both the 
+quality and 
+efficiency of the 
+solution.
+Uses modern tools 
+effectively, but may 
+not fully explore or 
+integrate all 
+relevant tools or 
+features. 
+Uses a limited set of 
+tools with minimal 
+integration, leading 
+to inefficiencies. 
+Relies on outdated 
+methods or uses 
+limited tools, 
+reducing the overall 
+effectiveness and 
+efficiency of the 
+design process. 
+Tool Selection 
+Justification 
+Provides a clear, 
+well-reasoned 
+justification for the 
+selection of tools, 
+aligning them 
+directly with project 
+goals.
+Justifies tool 
+selection with a 
+reasonable 
+explanation, though 
+some tools may not 
+be fully aligned 
+with project needs.
+Provides limited or 
+weak justification 
+for tool selection, 
+with some tools not 
+clearly linked to 
+project goals. 
+Fails to justify the 
+selection of tools, or 
+chooses tools that 
+are not suitable for 
+the project. 
+Efficiency in Tool 
+Use 
+Demonstrates 
+exceptional 
+efficiency with 
+modern tools, 
+optimizing design 
+Demonstrates good 
+efficiency with 
+tools, but there are 
+some missed 
+opportunities to 
+Uses tools with 
+moderate efficiency, 
+but significant 
+delays or errors 
+occur in the design 
+Struggles with tool 
+use, leading to 
+major delays or 
+errors, reducing the 
+overall efficiency of 
+
+Page 10 of 14 
+time, accuracy, and 
+productivity. 
+optimize workflows 
+or productivity. 
+process. 
+the design process. 
+CO4: Present project’s outcomes through written technical documents and oral presentations. 
+Assessment: Presentation 
+Assessment Tool: Completeness of Contents, delivery 
+Rubrics is the same as of CO5 in FYDP I.  
+ 
+CSE 4000C: Final Year Design Project - III 
+ 
+CO 
+Course Outcome (CO) 
+Program 
+Outcome 
+(PO) 
+Distributions of 
+Marks (%) 
+Assessment* 
+Timeline 
+Teacher
+Mentor
+CO1
+Verify and validate the design of the real-
+life project by fulfilling the 
+specifications.
+PO3 
+ 
+25 
+Chapter 4 - 
+evaluation 
+ 
+1-7 
+CO2
+Assess professional and social impacts 
+related to the designed project. 
+PO6 
+5 
+5 
+Report 5.2 –
+economic, social 
+and political 
+constraints
+8 
+CO3
+Assess ethical perspectives and 
+responsibilities related to the designed 
+project.
+PO8 
+5 
+5 
+Report 5.2 –
+Ethical constraint  
+9 
+CO4
+Identify the impact of environmental 
+considerations and the sustainability of 
+the completed project.
+PO7 
+5 
+5 
+Report 5.2 -
+environmental 
+and sustainability 
+10 
+CO5
+Write professional and technical 
+documents related to the project and 
+orally present project results. 
+PO10 
+15 
+15 
+Presentation, 
+Report (Based 
+on full report)
+ 
+CO6
+Identify and engage in independent 
+learning activities due to technological 
+changes as required during the project. 
+PO12 
+ 
+15 
+Chapter 6: 
+Conclusion 
+11-12 
+*If the FYDP template is not maintained, assessment is made based on similar contents of the given 
+chapters/sections.   
+CO1: Verify and validate the design of the real-life project by fulfilling the specifications. 
+Assessment: Implementation, verification and validation of the project design 
+Assessment Tool: Chapter 3 
+Total Marks: 25% 
+Evaluator: Mentor 
+Levels → 
+Criteria 
+Excellent 
+(25-22) 
+Very Good 
+(21-18) 
+Good 
+(17-14) 
+Need 
+Improvement 
+(13-10) 
+Poor 
+(9-0) 
+Project 
+Design 
+Following sub-
+sections are written 
+lucidly:  
+ 
+1. Requirements 
+inception/elicitation 
+States lucidly the 
+following 
+subsections 3.1.1, 
+3.1.2, 3.1.3, and 
+3.1.4:  
+ 
+1. Requirements 
+States lucidly the 
+following 
+subsections 
+3.1.1, 3.1.2, and 
+3.1.3:  
+ 
+1. Requirements 
+States lucidly the 
+following 
+subsections 3.1.1 
+and 3.1.2:  
+ 
+1. Requirements 
+inception/elicitation 
+States lucidly 
+the following 
+subsection 
+3.1.1:  
+ 
+1. 
+Requirements 
+
+Page 11 of 14 
+2. Requirements 
+analysis  
+ 
+3. System modeling 
+ 
+4. Requirements 
+specification  
+ 
+Rhetoric technical 
+writing, especially 
+the exploitation of 
+figures. Grammar 
+and typos are 
+checked. 
+inception/elicitation 
+ 
+2. Requirements 
+analysis  
+ 
+3. System modeling 
+ 
+4. Requirements 
+specification 
+(Producing software 
+requirement models 
+by including ER 
+diagrams, data flow 
+diagrams (DFDs), 
+function 
+decomposition 
+diagrams (FDDs), 
+data dictionaries, 
+etc.)
+inception/ 
+elicitation  
+ 
+2. Requirements 
+analysis  
+ 
+3. System 
+modeling 
+(Blueprints for 
+system design 
+and modeling 
+should be 
+elaborated) 
+ 
+2. Requirements 
+analysis and 
+negotiation 
+(Requirement s are 
+identified and 
+conflicts with 
+stakeholders are 
+solved, e.g. UML 
+diagram can be 
+used) 
+inception/ 
+elicitation 
+(Meeting 
+with 
+stakeholder s 
+and identify 
+their needs 
+and wants) 
+ 
+CO2: Assess professional and social impacts related to the designed project. 
+Assessment: Societal, health, safety, legal and cultural issues 
+Assessment Tool: Chapter 5: Section 5.2 
+Total Marks: 5% (Teacher), 5% (Mentor) - Marks are averaged. 
+Levels → 
+Criteria
+Excellent 
+(10-9) 
+Very Good 
+(8-7) 
+Average 
+(6-5) 
+Poor 
+(4-0) 
+Societal Impact 
+Thoroughly analyzes 
+societal impacts, 
+including long-term 
+effects, multiple 
+perspectives, and 
+broader social 
+implications.
+Identifies key 
+societal impacts, 
+with reasonable 
+consideration of 
+short and long-term 
+effects. 
+Limited analysis of 
+societal impacts, 
+focusing mostly on 
+immediate or 
+narrow effects. 
+No clear analysis of 
+societal impact or 
+lacks depth and 
+context. 
+Health 
+Implications 
+Provides a detailed 
+analysis of health 
+impacts, considering 
+mental and physical 
+health, and proposes 
+actionable solutions. 
+Explores health 
+impacts in a general 
+sense, addressing 
+both physical and 
+mental health 
+aspects, but lacks 
+specific solutions.
+Mentions health 
+implications but 
+lacks clarity in how 
+the problem affects 
+health or fails to 
+consider mental 
+health.
+Health impacts are 
+either not mentioned 
+or very briefly 
+addressed, with no 
+actionable solutions or 
+insights. 
+Safety Concerns 
+Comprehensive 
+examination of safety 
+risks, including 
+preventive measures, 
+and adherence to 
+safety standards.
+Addresses key 
+safety concerns and 
+suggests some 
+preventive 
+measures or safety 
+strategies.
+Discusses safety but 
+lacks thorough 
+analysis or specific 
+preventive 
+measures. 
+No safety 
+considerations or very 
+minimal mention of 
+safety risks and no 
+preventive 
+suggestions.
+Legal 
+Considerations 
+In-depth review of 
+legal issues, including 
+relevant laws, 
+regulations, and
+Adequate analysis 
+of legal aspects, 
+mentioning relevant 
+laws and ethical 
+Mentions legal 
+concerns but with 
+little depth, or 
+focuses on a single 
+No or minimal legal 
+considerations are 
+included, or the 
+analysis is outdated or 
+
+Page 12 of 14 
+compliance 
+requirements. 
+implications, 
+though lacking 
+detail in some areas.
+aspect of the law 
+without addressing 
+others.
+irrelevant. 
+Cultural 
+Sensitivity 
+Thoroughly examines 
+cultural factors and 
+proposes solutions 
+that respect cultural 
+values, diversity, and 
+inclusivity.
+Acknowledges 
+cultural factors and 
+their influence, with 
+some attention to 
+cultural sensitivity. 
+Mentions cultural 
+factors but lacks 
+depth or fails to link 
+them effectively to 
+solutions or 
+recommendations.
+No attention to 
+cultural sensitivity or 
+misunderstandings of 
+cultural issues present. 
+CO3: Assess ethical perspectives and responsibilities related to the designed project. 
+Assessment: Adherence to professional ethics and responsibilities 
+Assessment Tool: Chapter 5: Section 5.2 
+Total Marks: 5% (Teacher), 5% (Mentor)- Marks are averaged. 
+Levels → 
+Criteria
+Excellent 
+(10-9) 
+Very Good 
+(8-7) 
+Average 
+(6-5) 
+Poor 
+(4-0) 
+Professional Ethics 
+Consistently 
+follows all 
+professional ethical 
+standards, 
+demonstrating 
+integrity, 
+transparency, and 
+fairness in design 
+process, 
+collaboration, and 
+decision-making.
+Generally follows 
+professional ethical 
+standards with 
+minor lapses, 
+addressing them 
+promptly when 
+recognized in 
+design and team 
+interactions. 
+Inconsistently 
+applies professional 
+ethical standards, 
+with some lapses 
+affecting the project 
+or collaboration. 
+Frequently 
+disregards 
+professional ethics, 
+with repeated lapses 
+or failures to 
+demonstrate ethical 
+conduct in design 
+and teamwork. 
+Professional 
+Responsibilities 
+Takes full 
+responsibility for 
+the project, 
+including design, 
+decisions, and 
+outcomes, 
+acknowledging 
+mistakes, and acting 
+with accountability 
+and reliability in all 
+tasks.
+Generally takes 
+responsibility for 
+the project and 
+tasks, with 
+occasional lapses 
+but promptly 
+addresses mistakes 
+and issues. 
+Rarely takes 
+responsibility for 
+actions or decisions, 
+shifting blame or 
+avoiding 
+accountability in 
+design or 
+collaboration. 
+Fails to take 
+responsibility for 
+the project or tasks, 
+frequently shifting 
+blame, and does not 
+acknowledge or 
+correct mistakes. 
+ 
+ 
+CO4: Identify the impact of environmental considerations and the sustainability of the completed project 
+Assessment: Environmental impact and sustainability of the project 
+Assessment Tool: Chapter 5: Section 5.2 
+Total Marks: 5% (Teacher), 5% (Mentor)- Marks are averaged.  
+Levels → 
+Criteria
+Excellent 
+(10-9) 
+Very Good 
+(8-7) 
+Average 
+(6-5) 
+Poor 
+(4-0) 
+Environmental 
+Impact 
+Thoroughly 
+analyzes and 
+addresses the 
+environmental 
+Identifies the main 
+environmental 
+impacts and 
+suggests some 
+Mentions 
+environmental 
+impacts but offers 
+limited solutions or 
+Does not consider 
+environmental 
+impact or provides 
+minimal to no 
+
+Page 13 of 14 
+impact, identifying 
+key factors such as 
+resource usage, 
+waste generation, 
+and energy 
+consumption, and 
+provides effective 
+solutions.
+strategies to 
+minimize them but 
+lacks depth in 
+addressing all 
+factors. 
+addresses only one 
+aspect of the 
+environment. 
+strategies for 
+mitigating harm to 
+the environment. 
+Sustainability of the 
+Design 
+Provides a 
+comprehensive 
+sustainability plan 
+that ensures long-
+term environmental, 
+economic, and 
+social benefits, 
+including renewable 
+resources and 
+lifecycle analysis.
+Includes 
+sustainability 
+considerations, with 
+a focus on some 
+aspects such as 
+material use or 
+energy, but lacks a 
+holistic approach. 
+Acknowledges 
+sustainability but 
+provides limited or 
+unclear actions on 
+how the design will 
+contribute to long-
+term sustainability. 
+Fails to address 
+sustainability or 
+provides no 
+actionable plans to 
+make the design 
+sustainable in the 
+long term. 
+ 
+CO5: Write professional and technical documents related to the project and orally present project results. 
+Assessment: Presentation 
+Assessment Tool: Completeness of Contents, delivery 
+Rubrics is the same as of CO5 in FYDP I.  
+CO6: Identify and engage in independent learning activities due to technological changes as required during the 
+project. 
+Assessment: Continuous evaluation during the whole period of FYDP 
+Assessment Tool: Curiosity, Self initiative, Independence, Transfer of past learning, Reflection on learning 
+Total Marks: 15% (Mentor) 
+Levels → 
+Criteria
+Excellent 
+(15-12) 
+Very Good 
+(11-9) 
+Good 
+(8-4) 
+Poor 
+(3-0) 
+Curiosity 
+Explores a topic in 
+depth. 
+ 
+Indicate intense 
+interest in the subject. 
+Explores a topic in 
+depth. 
+ 
+Indicate interest in 
+the subject. 
+Explores a topic 
+with some evidence 
+of depth.  
+ 
+Indicate mild 
+interest in the 
+subject.
+Explores a topic at a 
+surface level.  
+ 
+Indicate low interest 
+in the subject. 
+Self initiative 
+Completes required 
+work. 
+ 
+Generates and pursues 
+opportunities to expand 
+knowledge, skills, and 
+abilities. 
+Completes required 
+work. 
+ 
+Identifies and 
+pursues 
+opportunities to 
+expand knowledge, 
+skills, and abilities.
+Completes required 
+work.  
+ 
+Identifies 
+opportunities to 
+expand knowledge, 
+skills, and abilities. 
+Completes required 
+work. 
+Independence 
+Flourish outside 
+classroom 
+requirements. 
+Beyond classroom 
+requirements. 
+Beyond classroom 
+requirements. 
+Begins to look 
+beyond classroom 
+requirements.
+
+Page 14 of 14 
+ 
+Educational interests 
+and pursuits exist. 
+ 
+Knowledge and/or 
+experiences are 
+pursued independently
+Pursues substantial, 
+additional 
+knowledge and/or 
+actively pursues 
+independent 
+educational 
+experiences.
+Pursues additional 
+knowledge and/or 
+shows interest in 
+pursuing 
+independent 
+educational 
+experiences.
+ 
+Showing interest in 
+pursuing knowledge 
+independently. 
+Transfer of past 
+learning 
+Makes explicit 
+references to previous 
+learning and applies in 
+an innovative (new and 
+creative) way that 
+knowledge and those 
+skills in novel 
+situations
+Makes references to 
+previous learning 
+and shows evidence 
+of applying that 
+knowledge and 
+those skills in novel 
+situations 
+Makes references to 
+previous learning 
+and attempts to 
+apply that 
+knowledge and 
+those skills in novel 
+situations. 
+Makes vague 
+references to 
+previous learning 
+but does not apply 
+knowledge and 
+skills in novel 
+situations. 
+Reflection on 
+learning 
+Reviews prior learning 
+in depth. 
+ 
+Reveal significantly 
+changed perspectives 
+about educational and 
+life experiences, which 
+provide foundation for 
+expanded knowledge, 
+growth, and maturity 
+over time.
+Reviews prior 
+learning  in depth. 
+ 
+Reveal fully 
+clarified meanings 
+or indicating 
+broader 
+perspectives about 
+educational or life 
+events. 
+Reviews prior 
+learning  with some 
+depth. 
+ 
+Reveal slightly 
+clarified meanings 
+or indicating 
+somewhat broader 
+perspectives about 
+educational or life 
+events.
+Reviews prior 
+learning at a surface 
+level. 
+ 
+Does not reveal 
+clarified meaning or 
+indicating a broader 
+perspective about 
+educational or life 
+events. 
+ 
+ 
+CO-PO mapping for FYDP I, II and III 
+Course code and Course name 
+CO PO1 PO2 PO3 PO4 PO5 PO6 PO7 PO8 PO9 PO10 PO11 PO12
+CSE 4000A: Final Year Design Project - I 
+CO1
+√ 
+  
+  
+  
+CO2
+  
+  
+√  
+  
+CO3
+  
+√ 
+   
+  
+CO4
+  
+  
+  
+  
+√ 
+CO5
+  
+  
+  
+  
+√ 
+CO6
+  
+  
+  
+  
+√
+Project – 4000B: Final Year Design Project - 
+II 
+CO1
+  
+√  
+CO2
+  
+  
+  
+  
+√
+CO3
+  
+  
+  
+  
+√  
+CO4
+  
+  
+  
+  
+ √
+CSE 4000C: Final Year Design Project – III  
+CO1
+√  
+  
+  
+CO2
+  
+  
+  
+√
+CO3
+  
+  
+  
+√ 
+CO4
+  
+  
+  
+  
+√ 
+CO5
+  
+  
+  
+  
+√ 
+CO6
+  
+  
+  
+  
+√
+Overall 
+ 
+1 
+1
+2 
+1 
+1 
+1
+1
+1
+1 
+3
+1
+2 
+ 

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "academic-researcher": {
+      "source": "shubhamsaboo/awesome-llm-apps",
+      "sourceType": "github",
+      "computedHash": "73a461c6ca9d0d5d9fb66da78915f2500a92ed59874873f03beed4cfb7bdd281"
+    }
+  }
+}

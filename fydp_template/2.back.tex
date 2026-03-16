@@ -1,0 +1,65 @@
+\chapter{Background}
+
+[\textit{Must be present in FYDP-1 Report and also in Final Report}]
+
+This chapter presents the theoretical and research background needed to understand the proposed study. It introduces the core concepts behind ODE solving and artificial neural networks, reviews the most relevant prior work, and then identifies the specific research gap that motivates this project.
+
+\section{Preliminaries}
+An ordinary differential equation describes how one or more state variables change with respect to a single independent variable, usually time. When the initial state of the system is known, the problem is typically written as an initial value problem in which the goal is to recover the state trajectory over a chosen time interval. For nonlinear systems, analytic solutions are often unavailable, so numerical integration becomes the standard tool for approximating the solution. Among the most common methods are Euler's method and higher-order Runge-Kutta schemes, where the latter are generally preferred because they provide much better accuracy for a comparable step size. In this project, the numerical solution is not the final research contribution; instead, it acts as a trusted reference against which learned ANN approximators can be evaluated.
+
+The target system in this study is the Lorenz-1960 three-component ODE system, which appears in reduced meteorological modeling and is used in recent literature as a benchmark for neural differential equation solvers \cite{matthews2025pinnde}. In the selected formulation, the system is written as
+\begin{align}
+\frac{dx}{dt} &= kl\left(\frac{1}{k^2+l^2}-\frac{1}{k^2}\right)yz, \\
+\frac{dy}{dt} &= kl\left(\frac{1}{l^2}-\frac{1}{k^2+l^2}\right)xz, \\
+\frac{dz}{dt} &= \frac{kl^2}{2}\left(\frac{1}{k^2}-\frac{1}{l^2}\right)xy,
+\end{align}
+with the parameter values $k=2$ and $l=1$, initial conditions $x(0)=0.5$, $y(0)=0.75$, and $z(0)=1$, and a time interval of interest $t \in [0,1]$. Because the variables are coupled and the dynamics are nonlinear, the system provides a suitable setting for testing whether a neural approximator can capture multivariate temporal behavior accurately.
+
+Artificial neural networks are function approximators built from stacked affine transformations and nonlinear activation functions. In a standard multilayer perceptron (MLP), the input is passed through several hidden layers, and the network parameters are adjusted during training to minimize a chosen loss function. For regression tasks such as differential equation approximation, the output layer typically predicts continuous values, while the training process minimizes an error criterion such as mean squared error. Backpropagation and gradient-based optimization make it possible to learn these parameters efficiently \cite{pratama2022ann,chen2019neural}. In the present project, a feedforward ANN receives time as input and predicts the three state variables of the Lorenz-1960 system at that time.
+
+Activation functions are an important design element because they control the nonlinearity and smoothness of the learned mapping. Functions such as sigmoid and hyperbolic tangent are smooth and historically common in differential equation approximators, while ReLU-family functions often train faster in deep learning applications. However, the best activation choice for a specific ODE approximation problem is not obvious in advance. This is one reason architecture search is central to the proposed research. By varying depth, width, and activation under a fixed benchmark problem, the study can determine which structural choices most strongly influence approximation quality.
+
+\section{Literature Review}
+\subsection{Similar Applications}
+Neural networks have already been used in several closely related scientific computing applications. One established application is the numerical approximation of partial differential equations without relying solely on grid-based discretization. The survey by Pratama et al. reviews three ANN-based frameworks, namely PyDEns, NeuroDiffEq, and Nangs, and shows that neural approximators can solve benchmark PDEs such as the heat, wave, and Poisson equations with varying accuracy and computational cost \cite{pratama2022ann}. Although these examples focus on PDEs rather than the Lorenz-1960 ODE system, they demonstrate that neural networks can act as practical approximators for differential equation solution functions.
+
+Another similar application is the use of neural architectures for operator learning and physics-informed equation solving. Matthews and Bihlo present PinnDE as a library for solving differential equations with physics-informed neural networks and related neural operators, and their study includes a DeepONet treatment of the Lorenz-1960 system \cite{matthews2025pinnde}. This is especially relevant because it confirms that the exact benchmark problem selected for this project is already considered meaningful in current scientific machine learning research.
+
+There is also a broader family of continuous-depth models represented by Neural ODEs. Chen et al. propose a framework in which the neural network parameterizes the derivative of the hidden state and a black-box ODE solver computes the forward dynamics \cite{chen2019neural}. This paradigm differs from directly approximating a known solution function, but it is still a similar application in the sense that it links neural learning with continuous-time dynamical systems. For the present work, Neural ODEs serve as an important conceptual comparison that helps distinguish between learning the governing dynamics and learning the solution trajectory itself.
+
+\subsection{Related Research}
+The most directly relevant source for this project is the recent work on PinnDE by Matthews and Bihlo \cite{matthews2025pinnde}. Their study positions physics-informed neural networks and operator-learning approaches as flexible tools for solving differential equations and includes a dedicated experiment on the Lorenz-1960 system. In that example, a DeepONet architecture composed of branch and trunk subnetworks is used with multiple hidden layers and tanh activation. This paper is highly relevant because it validates the benchmark problem, provides an implementation-oriented reference point, and shows that a neural method can approximate the Lorenz-1960 dynamics successfully. However, the paper does not perform a systematic study of plain feedforward ANN architecture choices for the same system.
+
+The second key source is the survey by Pratama et al. on ANN-based methods for solving partial differential equations \cite{pratama2022ann}. The paper compares three methods: PyDEns, which modifies the Deep Galerkin Method; NeuroDiffEq, which uses a trial approximate solution to enforce problem constraints; and Nangs, which trains on grid points. The survey reports that NeuroDiffEq and Nangs often outperform PyDEns on more demanding PDE settings, while PyDEns is more suitable for lower-dimensional cases. For this FYDP, the paper is useful in two ways. First, it provides a structured overview of how plain or weakly constrained neural approximators can be used for differential equations. Second, it highlights methodological choices such as ansatz-based constraint handling and the frequent use of tanh activations. At the same time, the study is limited to PDE examples and does not explore the Lorenz-1960 benchmark or conduct an architecture optimization study.
+
+The third major reference is the Neural ODE framework of Chen et al. \cite{chen2019neural}. This work introduces a continuous-depth learning perspective in which the network represents the derivative function and training is performed through adjoint-based differentiation. The contribution is foundational because it connects deep learning with continuous-time dynamics in a mathematically elegant way. Nevertheless, its problem formulation differs from the focus of this project. Neural ODEs primarily learn latent dynamics as part of a larger model, whereas the present project studies a direct function approximator that maps time to the known state variables of a specific physical system. Therefore, Neural ODEs are best treated as adjacent literature that clarifies the research landscape rather than as a direct methodological template.
+
+Taken together, the literature suggests that neural networks are already credible tools for differential equation solving, but the methods are fragmented across different assumptions. Some approaches inject physics into the loss, some build the initial conditions into an ansatz, and others parameterize the dynamics instead of the solution. This makes the literature rich, but it also leaves room for a focused comparative study of straightforward ANN architectures on a concrete ODE benchmark.
+
+\section{Gap Analysis}
+The review of the literature reveals a clear and manageable gap for FYDP-level investigation. First, there is no clear study in the current local source set that systematically compares plain feedforward ANN architectures for the Lorenz-1960 system itself. The most directly related work solves the same benchmark using a DeepONet within a physics-informed framework, but architecture optimization is not its main objective \cite{matthews2025pinnde}. Second, the survey of ANN-based differential equation solvers demonstrates that neural approximators can be effective, yet it focuses on PDE benchmarks and therefore does not answer how similar design choices behave on a coupled nonlinear ODE system \cite{pratama2022ann}. Third, the Neural ODE literature is conceptually relevant, but it studies a different modeling paradigm and therefore does not resolve the architecture-selection question for direct solution approximation \cite{chen2019neural}.
+
+For this reason, the central research gap can be stated as follows: current related work does not establish which plain ANN architecture is most suitable for approximating the Lorenz-1960 ODE solution when the model is trained as a direct time-to-state regressor. This gap can be decomposed into three more specific missing pieces. The first missing piece is the lack of a direct comparison of network depth and width on this benchmark. The second is the absence of a focused analysis of activation functions for this exact problem. The third is the lack of a clean comparison point between a plain ANN baseline and the more structured physics-informed alternative used in the literature.
+
+\begin{table}[htbp]
+\centering
+\caption{Summary of the literature gap motivating the proposed study.}
+\begin{tabular}{|p{3.0cm}|p{2.3cm}|p{1.6cm}|p{1.9cm}|p{1.7cm}|p{1.7cm}|}
+\hline
+\textbf{Work} & \textbf{Method} & \textbf{Equation Type} & \textbf{Architecture Study} & \textbf{Lorenz-1960} & \textbf{Plain ANN Focus} \\
+\hline
+Matthews and Bihlo \cite{matthews2025pinnde} & PINN / DeepONet & ODE and PDE & No & Yes & No \\
+\hline
+Pratama et al. \cite{pratama2022ann} & PyDEns, NeuroDiffEq, Nangs & PDE & No & No & Partial \\
+\hline
+Chen et al. \cite{chen2019neural} & Neural ODE & ODE & No & No & No \\
+\hline
+Proposed work & Plain feedforward ANN comparison & ODE & Yes & Yes & Yes \\
+\hline
+\end{tabular}
+\end{table}
+
+Based on this gap, the proposed study is well positioned for FYDP-I. It is narrow enough to be feasible within an undergraduate timeline, but still novel enough to satisfy the requirement of a justified research contribution. The project does not attempt to solve all issues in neural differential equation learning. Instead, it asks a precise and defensible question: among several candidate ANN architectures, which one most accurately approximates the Lorenz-1960 ODE solution under a controlled experimental setup?
+
+\section{Summary}
+This chapter has introduced the theoretical foundation and research context for the proposed work. The discussion covered the basics of ODE solving, the role of ANN models as nonlinear function approximators, and the most relevant prior studies on PINN-based, ANN-based, and continuous-depth neural approaches. The resulting gap analysis shows that there is a clear opportunity to study plain ANN architecture selection for the Lorenz-1960 system in a focused and methodical way. This conclusion motivates the design choices and experimental plan presented in the next chapter.
