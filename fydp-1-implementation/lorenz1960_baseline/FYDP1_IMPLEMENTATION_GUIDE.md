@@ -1,0 +1,1203 @@
+# FYDP 1 Implementation Guide
+
+## Overview
+
+This document explains the full FYDP 1 implementation that was built in this project for the Lorenz-1960 numerical baseline.
+
+The FYDP 1 scope that was implemented is:
+
+- define the Lorenz-1960 initial value problem clearly
+- implement a custom Runge-Kutta 4th order solver
+- implement a standard Python scientific-library solver baseline
+- compare both solvers fairly
+- validate that the baseline is numerically trustworthy enough to support later ANN work
+
+The final result is a small, focused baseline package in [lorenz1960_baseline](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline) containing four Colab-ready notebooks, one shared Python module, a short plan file, and this handoff guide.
+
+
+## Problem and Goal
+
+### What problem FYDP 1 was solving
+
+The wider FYDP project is about using ANN models later. That only makes sense if there is already a trustworthy numerical reference for the Lorenz-1960 system.
+
+Without that reference:
+
+- there is no reliable target for ANN training
+- there is no fair way to judge ANN accuracy
+- bad numerical data could be mistaken for ANN failure
+- bad ANN results could be misread as numerical truth
+
+So FYDP 1 was not about machine learning yet. FYDP 1 was about building the numerical foundation first.
+
+### What outcome was expected
+
+The expected outcome was a reproducible baseline that:
+
+- uses the correct Lorenz-1960 equations
+- uses explicit parameters and initial conditions
+- solves the same problem with two methods
+- compares them on the same grid
+- shows evidence that the implementation is consistent
+- is organized clearly enough for later reuse in ANN experiments
+
+### What success looked like
+
+For this stage, success meant:
+
+- the Lorenz-1960 benchmark is defined clearly and consistently
+- the custom RK4 solver runs correctly
+- the SciPy baseline runs correctly
+- both solvers are compared fairly
+- the difference between them is very small on the chosen interval
+- the notebooks are readable, ordered, and reusable
+
+
+## Scope of Work
+
+### Included in FYDP 1
+
+The following work was included:
+
+- reading local project files to extract the exact Lorenz-1960 problem framing
+- choosing one consistent benchmark setup
+- creating a small shared Python module for equations, solvers, metrics, and plots
+- creating four notebooks:
+  - [01_problem_setup.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/01_problem_setup.ipynb)
+  - [02_rk4_implementation.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/02_rk4_implementation.ipynb)
+  - [03_python_solver_baseline.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/03_python_solver_baseline.ipynb)
+  - [04_validation_and_comparison.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/04_validation_and_comparison.ipynb)
+- creating a notebook-generation script so the notebooks can be rebuilt from source
+- validating the code paths by executing notebook code cells sequentially in Python
+
+### Intentionally excluded
+
+The following were intentionally not implemented:
+
+- ANN models
+- training datasets saved to disk
+- train/validation/test split logic for ANN work
+- PINN or DeepONet reproduction
+- hyperparameter search
+- long-time Lorenz integration beyond the chosen benchmark interval
+- packaging, CLI tooling, web UI, or experiment tracking systems
+
+### Assumptions made
+
+These assumptions were used:
+
+- the printed Lorenz-1960 equations in local `paper1` Section 4.2 are the correct benchmark definition
+- the appendix code snippet in that paper should not be treated as authoritative
+- the benchmark interval is `t in [0, 1]`
+- the problem is suitable for explicit Runge-Kutta methods on that interval
+- a fixed RK4 step of `1e-3` is a reasonable primary baseline choice
+- SciPy `solve_ivp` with `DOP853`, `rtol=1e-10`, and `atol=1e-12` is a reasonable numerical reference for comparison
+
+These assumptions are not hidden. They are written directly into the notebooks and module.
+
+### Boundaries followed
+
+The implementation deliberately stayed inside these boundaries:
+
+- no ANN code
+- no fabricated claims or citations
+- no claims of analytical truth where only numerical agreement exists
+- no unnecessary architecture or abstractions beyond what helps clarity and reuse
+
+
+## What I Changed
+
+This section lists the important files involved and explains exactly what each one does.
+
+### 1. [lorenz1960_baseline](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline)
+
+This folder did not exist before this work. It was created as the dedicated FYDP 1 baseline package.
+
+Why it was necessary:
+
+- to keep the numerical baseline separate from unrelated FYDP notes and papers
+- to make the first implementation easy to find later
+- to avoid scattering solver logic across notebooks without a shared source
+
+### 2. [lorenz1960_baseline/lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+
+This is the main shared module.
+
+What it does:
+
+- stores the default problem configuration
+- computes Lorenz-1960 coefficients from `k` and `l`
+- defines the right-hand side function
+- implements RK4 step and RK4 solve
+- wraps SciPy `solve_ivp`
+- computes error metrics
+- helps align solutions on a shared grid
+- builds summary tables
+- creates plots used by the notebooks
+
+What was changed:
+
+- this file was newly created
+
+Why that change was necessary:
+
+- without it, each notebook would repeat the same equations and constants
+- repeated solver logic would make later edits error-prone
+- shared code makes RK4 and SciPy comparisons fair because both pull from the same source
+
+Important objects and functions inside it:
+
+- `Lorenz1960Config`
+- `DEFAULT_CONFIG`
+- `lorenz1960_coefficients`
+- `lorenz1960_rhs`
+- `make_uniform_grid`
+- `rk4_step`
+- `rk4_solve`
+- `solve_lorenz1960_scipy`
+- `compute_error_metrics`
+- `subsample_uniform_solution`
+- `final_state_table`
+- `plot_state_time_series`
+- `plot_3d_trajectory`
+- `plot_error_curves`
+
+### 3. [lorenz1960_baseline/01_problem_setup.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/01_problem_setup.ipynb)
+
+What it does:
+
+- defines the benchmark problem
+- states the research objective of FYDP 1
+- writes down the exact Lorenz-1960 equations
+- records the chosen numerical settings
+- separates verified facts from chosen assumptions
+
+What was changed:
+
+- this notebook was newly created
+
+Why that change was necessary:
+
+- the benchmark definition must be frozen before solver implementation starts
+- later work should not silently drift to a different equation form or parameter set
+
+### 4. [lorenz1960_baseline/02_rk4_implementation.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/02_rk4_implementation.ipynb)
+
+What it does:
+
+- explains RK4 briefly
+- runs the custom RK4 solver
+- reports the final state
+- plots the state variables over time
+- plots the 3D trajectory
+
+What was changed:
+
+- this notebook was newly created
+
+Why that change was necessary:
+
+- you asked for a custom RK4 implementation from scratch
+- the notebook makes that implementation visible and inspectable
+
+### 5. [lorenz1960_baseline/03_python_solver_baseline.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/03_python_solver_baseline.ipynb)
+
+What it does:
+
+- runs the library-based baseline using SciPy `solve_ivp`
+- reports solver metadata such as `nfev`, `status`, and `message`
+- reports the final state
+- plots time series and the 3D trajectory
+
+What was changed:
+
+- this notebook was newly created
+
+Why that change was necessary:
+
+- the project needed a standard scientific-library baseline
+- using the same shared setup makes the comparison fair
+
+### 6. [lorenz1960_baseline/04_validation_and_comparison.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/04_validation_and_comparison.ipynb)
+
+What it does:
+
+- runs RK4 and SciPy on the same comparison grid
+- compares the solutions numerically
+- creates overlay plots
+- creates absolute error curves
+- computes MAE, RMSE, and max absolute error
+- performs an RK4 step-halving check
+- prints a reliability note based on the comparison
+
+What was changed:
+
+- this notebook was newly created
+
+Why that change was necessary:
+
+- validation was a hard requirement
+- without this notebook, the baseline would only be two solver demos, not a trustworthy benchmark
+
+### 7. [lorenz1960_baseline/README.md](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/README.md)
+
+What it does:
+
+- gives a short folder-level explanation
+- lists the main files
+- states the scope clearly
+
+What was changed:
+
+- this file was newly created
+
+Why that change was necessary:
+
+- it gives fast orientation when opening the folder later
+
+### 8. [lorenz1960_baseline/IMPLEMENTATION_PLAN.md](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/IMPLEMENTATION_PLAN.md)
+
+What it does:
+
+- records the short implementation plan
+- states the chosen benchmark setup
+- states the validation strategy
+- records main risks and assumptions
+
+What was changed:
+
+- this file was newly created
+
+Why that change was necessary:
+
+- it preserves the implementation intent and prevents later confusion about why certain settings were chosen
+
+### 9. [scripts/generate_lorenz1960_baseline_notebooks.py](E:/University/FYDP/fydp-1-implementation/scripts/generate_lorenz1960_baseline_notebooks.py)
+
+What it does:
+
+- programmatically builds the four notebooks as JSON
+- keeps the notebook structure reproducible
+- acts as the source of truth for notebook content
+
+What was changed:
+
+- this file was newly created
+
+Why that change was necessary:
+
+- notebooks are hard to maintain manually when many cells share common wording or logic
+- a script makes future notebook regeneration much cleaner
+- it gives you a text-based, versionable source instead of only notebook JSON
+
+### 10. Existing project files that were read but not changed
+
+These files were used as local context but were not modified:
+
+- [lorenz_1960_equations_learning_guide.md](E:/University/FYDP/fydp-1-implementation/lorenz_1960_equations_learning_guide.md)
+- [fydp_research_structure_plan.md](E:/University/FYDP/fydp-1-implementation/fydp_research_structure_plan.md)
+- [paper1.txt](E:/University/FYDP/fydp-1-implementation/paper1.txt)
+- [paper1.pdf](E:/University/FYDP/fydp-1-implementation/paper1.pdf)
+- [paper2.txt](E:/University/FYDP/fydp-1-implementation/paper2.txt)
+- [paper3.txt](E:/University/FYDP/fydp-1-implementation/paper3.txt)
+
+Why this matters:
+
+- these files provide the project framing
+- they are part of the reasoning context
+- but they were not edited as part of the implementation
+
+## Step-by-Step Implementation Process
+
+This section explains the actual implementation process in order.
+
+### Step 1: review local project context
+
+The first step was to inspect the existing FYDP workspace instead of assuming a generic Lorenz setup.
+
+The key findings from local files were:
+
+- the project is using Lorenz-1960, not Lorenz-1963
+- the benchmark should match Section 4.2 of `paper1`
+- the local guide explicitly warns that the appendix code snippet is not the right authority
+- the benchmark parameters are:
+  - `k = 2`
+  - `l = 1`
+  - `x(0) = 0.5`
+  - `y(0) = 0.75`
+  - `z(0) = 1`
+  - `t in [0, 1]`
+
+This was the most important setup decision, because if the equation definition is wrong, everything after it is wrong.
+
+### Step 2: freeze the benchmark
+
+After confirming the local context, the next step was to freeze one problem definition and use it everywhere.
+
+This led to the simplified numerical system:
+
+- `dx/dt = -0.1 yz`
+- `dy/dt = 1.6 xz`
+- `dz/dt = -0.75 xy`
+
+This simplified form was chosen because:
+
+- it comes directly from substituting `k = 2`, `l = 1`
+- it is easier to read
+- it reduces the risk of sign mistakes
+- it is closer to the actual code that must run
+
+### Step 3: create a small shared module
+
+Instead of coding the equations separately inside each notebook, the implementation introduced [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py).
+
+That module became the shared foundation for:
+
+- configuration
+- equations
+- RK4 logic
+- SciPy logic
+- comparison logic
+- plotting logic
+
+This was important because the baseline needs consistency more than cleverness.
+
+### Step 4: choose the numerical settings
+
+The chosen settings were:
+
+- interval: `[0, 1]`
+- RK4 step: `1e-3`
+- evaluation grid: 1001 points
+- SciPy method: `DOP853`
+- SciPy tolerances: `rtol=1e-10`, `atol=1e-12`
+
+Why these were chosen:
+
+- `[0,1]` came from local project context
+- `1e-3` gives a simple fixed-step RK4 baseline and naturally matches 1001 points
+- the shared grid avoids unfair point alignment issues
+- `DOP853` is a strong high-accuracy explicit solver for this short interval
+
+### Step 5: write the notebook plan
+
+The notebook order was chosen very deliberately:
+
+1. define the problem
+2. run RK4
+3. run SciPy
+4. compare and validate
+
+This order matters because it mirrors the research logic:
+
+- define first
+- solve second
+- validate third
+- only then treat the baseline as trustworthy
+
+### Step 6: create the notebook generator
+
+The next step was to write [generate_lorenz1960_baseline_notebooks.py](E:/University/FYDP/fydp-1-implementation/scripts/generate_lorenz1960_baseline_notebooks.py).
+
+This script:
+
+- builds notebook cell structures
+- writes them as `.ipynb` files
+- keeps the notebook content editable in a normal Python script
+
+This is a maintenance choice, not a research requirement. It makes later edits easier.
+
+### Step 7: generate the notebooks
+
+After the generator script was written, it was run to create the four notebooks in the baseline folder.
+
+At that point the folder contained:
+
+- the notebooks
+- the shared module
+- the README
+- the implementation plan
+
+### Step 8: validate dependency availability
+
+Before executing notebook code, the environment was checked for the needed packages:
+
+- `numpy`
+- `pandas`
+- `matplotlib`
+- `scipy`
+
+These were available locally.
+
+`jupyter` was not available locally.
+
+This matters because it meant the notebooks could not be executed through `nbconvert` in the workspace at that time.
+
+### Step 9: execute notebook code paths manually
+
+Because `jupyter` was unavailable, the notebook code cells were executed sequentially in a clean Python process instead.
+
+This is weaker than a full Jupyter execution in one sense because the notebook files were not saved with outputs, but it still verified the actual code paths top-to-bottom.
+
+What this confirmed:
+
+- imports worked
+- the module functions worked
+- the notebooks ran in order
+- the comparison metrics were produced
+
+### Step 10: catch and fix a real bug
+
+During validation, a real bug appeared:
+
+- the SciPy notebook logic tried to read `scipy_solution.method`
+- SciPy's returned object did not expose that attribute in this environment
+
+What was done:
+
+- the notebook generator was corrected to use `config.scipy_method` instead
+- the notebooks were regenerated
+- the validation run was repeated
+
+This is important because it shows the notebooks were not just written and assumed correct. A failure happened, it was investigated, and it was fixed.
+
+### Step 11: refine the step-halving interpretation
+
+The first reliability message in the comparison notebook was too harsh. It treated an almost unchanged fine-step RMSE as a warning.
+
+But the actual numbers were already extremely small, so the more likely interpretation was that the comparison had hit a numerical floor.
+
+What was done:
+
+- the comparison logic was updated
+- the reliability note now distinguishes:
+  - clear improvement
+  - essentially unchanged at a tiny scale
+  - unexpected change
+
+This made the interpretation more honest and technically better aligned with the observed results.
+
+### Step 12: record the result and produce handoff documentation
+
+After the implementation and validation were stable, the final step was to create documentation files:
+
+- the short folder README
+- the short implementation plan
+- this detailed guide
+
+
+## How It Works
+
+This section explains how the implementation works internally.
+
+### High-level architecture
+
+The baseline has three layers:
+
+1. local context layer
+   - existing FYDP notes and paper extracts
+   - used to decide the correct benchmark
+
+2. shared logic layer
+   - [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+   - contains the equations and reusable solver utilities
+
+3. notebook layer
+   - four notebooks that use the shared logic for explanation, execution, and comparison
+
+### Logic flow
+
+The internal flow is:
+
+1. read the default config
+2. build the Lorenz-1960 coefficients from `k` and `l`
+3. define the right-hand side function `lorenz1960_rhs`
+4. choose a time grid
+5. run RK4 or SciPy
+6. collect outputs as arrays of time and state values
+7. compute final-state summaries and error metrics
+8. plot trajectories and error curves
+9. interpret whether the baseline looks trustworthy
+
+### Input -> processing -> output
+
+#### Inputs
+
+The main inputs are:
+
+- `k`, `l`
+- initial state `(x0, y0, z0)`
+- time interval `(t0, t1)`
+- RK4 step size
+- SciPy method and tolerances
+
+These live mainly in `Lorenz1960Config`.
+
+#### Processing
+
+Processing happens in these main stages:
+
+- `lorenz1960_coefficients` computes the three fixed coefficients
+- `lorenz1960_rhs` computes the derivative vector from the current state
+- `rk4_solve` advances the state one fixed step at a time
+- `solve_lorenz1960_scipy` delegates to SciPy's adaptive solver
+- `compute_error_metrics` compares one full trajectory to another
+- plotting functions turn arrays into visuals
+
+#### Outputs
+
+The main outputs are:
+
+- time arrays
+- state arrays with columns for `x`, `y`, `z`
+- final-state tables
+- error-metric tables
+- plots
+- a short verbal reliability note
+
+### How the files connect
+
+#### Shared module to notebooks
+
+Each notebook imports the shared module instead of reimplementing logic.
+
+That means:
+
+- if you change the equations in the module, all notebooks use the updated equations
+- if you change solver defaults in the config, the notebooks inherit them
+- if you change plotting helpers, notebook plots change too
+
+#### Generator script to notebooks
+
+The generator script creates the notebook files.
+
+That means:
+
+- if you edit the notebooks directly and later rerun the generator, your manual notebook edits may be overwritten
+- if you want notebook changes to persist cleanly, change the generator script and regenerate
+
+This is one of the most important maintenance facts in the whole implementation.
+
+### How the user interacts with it
+
+The intended user workflow is:
+
+1. open the baseline folder
+2. read [README.md](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/README.md) if quick orientation is needed
+3. run notebooks in order:
+   - [01_problem_setup.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/01_problem_setup.ipynb)
+   - [02_rk4_implementation.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/02_rk4_implementation.ipynb)
+   - [03_python_solver_baseline.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/03_python_solver_baseline.ipynb)
+   - [04_validation_and_comparison.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/04_validation_and_comparison.ipynb)
+4. use the shared module if custom experiments are needed
+
+### Dependencies that matter
+
+The baseline currently depends on:
+
+- Python
+- `numpy`
+- `pandas`
+- `matplotlib`
+- `scipy`
+
+It does not currently depend on:
+
+- PyTorch
+- TensorFlow
+- JAX
+- ANN libraries
+
+`jupyter` is needed only if you want to execute notebooks in a standard notebook workflow inside the local environment.
+
+## Why This Approach Works
+
+### Why this design was chosen
+
+This design was chosen because the goal was not to build a large framework. The goal was to build a trustworthy first baseline.
+
+The approach works because it follows a clean research sequence:
+
+- fix the benchmark
+- implement one transparent manual solver
+- implement one standard library solver
+- compare them directly
+- document the assumptions and the limits
+
+### Why the shared module was the right choice
+
+Putting the numerical logic in one shared file makes the implementation more reliable.
+
+Benefits:
+
+- one source of truth for the equations
+- one source of truth for default configuration
+- easier debugging
+- easier future modification
+- less repetition across notebooks
+
+### Why RK4 was included
+
+RK4 was included because:
+
+- it is a standard reference method
+- it is easy to inspect
+- it demonstrates numerical understanding rather than only tool usage
+- it is useful later for teaching, debugging, and ANN target generation
+
+### Why SciPy `solve_ivp` was included
+
+SciPy was included because:
+
+- it is standard scientific Python tooling
+- it provides a credible baseline that is not custom hand-written logic
+- it helps check whether the manual RK4 solver behaves as expected
+
+### Why both methods on the same grid matter
+
+This is one of the most important design choices.
+
+If two solvers are compared at different time points, part of the error may come from misalignment rather than true solver difference.
+
+Using the same grid means:
+
+- the comparison is fair
+- the metrics are interpretable
+- the visual overlays are meaningful
+
+### Alternatives that existed
+
+Possible alternatives included:
+
+- only use SciPy and skip manual RK4
+- only use RK4 and skip SciPy
+- use `RK45` instead of `DOP853`
+- use a much smaller RK4 step by default
+- create scripts instead of notebooks
+
+Why those were not chosen:
+
+- only SciPy would make the baseline less transparent
+- only RK4 would remove the independent library comparison
+- `RK45` would also have been valid, but `DOP853` fit the high-accuracy short-interval goal better
+- a much smaller default RK4 step would increase runtime and clutter before proving it is needed
+- notebooks were explicitly requested for Colab use
+
+
+## Important Decisions, Tradeoffs, and Constraints
+
+This section is intentionally blunt.
+
+### Decision: use the printed equations, not the appendix code snippet
+
+Why:
+
+- the local guide explicitly warned about inconsistency
+
+Risk:
+
+- if the local guide is wrong, the whole baseline would inherit that mistake
+
+Current confidence:
+
+- reasonably high, because the local guide, research structure file, and paper extract align on the benchmark definition
+
+### Decision: use `[0,1]` as the benchmark interval
+
+Why:
+
+- it matches the local project framing and paper context
+
+Tradeoff:
+
+- a short interval is easier to validate, but it does not test long-time numerical behavior
+
+Implication:
+
+- this baseline is valid for the chosen benchmark interval, not as a claim about all future time horizons
+
+### Decision: use `h = 1e-3` for the primary RK4 baseline
+
+Why:
+
+- simple
+- aligned to 1001 points
+- easy to explain
+
+Tradeoff:
+
+- not necessarily the only good choice
+- if future work needs stronger guarantees, this may need tightening
+
+### Decision: use `DOP853` as the reference-style SciPy solver
+
+Why:
+
+- explicit
+- high-order
+- suitable for high-accuracy comparison on a short interval
+
+Tradeoff:
+
+- some readers may expect `RK45` because it is more common in simple examples
+- supervisor preferences may differ
+
+Safe interpretation:
+
+- this is a numerical reference choice, not a universal claim that `DOP853` is always the best option
+
+### Tradeoff: notebooks plus a generator script
+
+Benefits:
+
+- notebooks are easy to run in Colab
+- the generator script is easier to maintain in version control
+
+Cost:
+
+- there are now two surfaces a future editor must understand:
+  - generated notebooks
+  - the generator that produces them
+
+Main maintenance rule:
+
+- do not casually edit the notebook and the generator independently without deciding which one is your real source of truth
+
+### Constraint: local Jupyter execution was unavailable
+
+What this means:
+
+- notebook code paths were executed successfully
+- but the notebook files were not saved with executed outputs through a standard Jupyter runner in the local workspace
+
+Risk:
+
+- if Colab or Jupyter behaves differently in rendering, some notebook presentation details still deserve a final visual check there
+
+### Limitation: no saved baseline dataset yet
+
+What this means:
+
+- the implementation solves and compares the system
+- but it does not yet save a canonical `.csv` or `.npz` reference trajectory file for ANN training
+
+This is not a bug. It is just not part of the completed FYDP 1 scope.
+
+### Limitation: validation is numerical, not analytical
+
+There is no analytical exact solution being used here.
+
+So the right interpretation is:
+
+- RK4 and SciPy agree extremely closely
+- that gives high confidence in the implementation on this interval
+- but it is still numerical agreement, not mathematical proof
+
+
+## Validation and Evidence
+
+### What was actually verified
+
+The following was actually checked:
+
+- the shared module imports successfully
+- the four notebook code paths run in order when executed sequentially in Python
+- the RK4 solver produces a full trajectory
+- the SciPy solver produces a full trajectory
+- both solvers can be compared on the same grid
+- the validation notebook computes metrics and prints a reliability note
+
+### Actual numerical evidence observed
+
+Observed comparison values from the validation run:
+
+- primary combined `L2` RMSE: about `2.3346772916667593e-11`
+- fine-step combined `L2` RMSE: about `2.33469050994362e-11`
+- relative gap between those RMSE values: about `5.66168269607804e-06`
+
+Observed final-state absolute differences at `t=1`:
+
+- `x`: about `1.039168751049e-13`
+- `y`: about `2.053912595557e-12`
+- `z`: about `3.333999742949e-13`
+
+Observed final state from the implementation:
+
+- `x(1) ˜ 0.4120105447758`
+- `y(1) ˜ 1.3588439851225`
+- `z(1) ˜ 0.6309874543508`
+
+### How strong this evidence is
+
+Reasonable confidence level:
+
+- high confidence that the implementation is internally consistent on `[0,1]`
+- high confidence that the custom RK4 code is working as intended for this benchmark
+- moderate confidence that the notebooks will behave the same in Colab, since they rely only on common packages
+
+### What was not verified
+
+The following were not fully verified:
+
+- notebook execution through local `jupyter nbconvert`
+- Colab rendering and execution behavior directly
+- behavior on longer time intervals
+- behavior under changed parameters or changed initial conditions
+- ANN-readiness of a saved dataset file, because no dataset file was created yet
+
+### What bug was found during validation
+
+A real bug was found and fixed:
+
+- the code tried to access `scipy_solution.method`
+- that attribute was not available in the local SciPy result object
+- the notebook content was updated to use `config.scipy_method`
+
+This is useful to remember because it proves the validation found a real issue rather than merely confirming success.
+
+## Where to Modify in the Future
+
+This is one of the most important sections in the document.
+
+### If you want to change the Lorenz-1960 problem definition
+
+Edit:
+
+- [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+
+Main places:
+
+- `Lorenz1960Config`
+- `lorenz1960_coefficients`
+- `lorenz1960_rhs`
+
+What each controls:
+
+- `Lorenz1960Config` controls defaults such as `k`, `l`, initial state, interval, RK4 step, and SciPy settings
+- `lorenz1960_coefficients` controls how the coefficients are derived from `k` and `l`
+- `lorenz1960_rhs` controls the actual ODE being solved
+
+What to watch out for:
+
+- if you change the equations, all solver comparisons change
+- if you change `k` and `l`, make sure the simplified equation interpretation still matches your intention
+- do not change the RHS in the notebooks only; change it in the shared module
+
+### If you want to change the default numerical settings
+
+Edit:
+
+- [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+
+Main place:
+
+- `Lorenz1960Config`
+
+Examples:
+
+- change `rk4_step`
+- change `n_eval`
+- change `scipy_method`
+- change `scipy_rtol`
+- change `scipy_atol`
+- change `t_span`
+
+Side effects:
+
+- the notebooks import `DEFAULT_CONFIG`, so changing config values changes notebook behavior
+- if the step no longer divides the interval exactly, `make_uniform_grid` will raise an error
+
+### If you want to change RK4 behavior
+
+Edit:
+
+- [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+
+Functions:
+
+- `rk4_step`
+- `rk4_solve`
+
+What belongs here:
+
+- changing the RK4 formula
+- adding extra numerical checks
+- logging or returning more metadata
+
+What should not be changed casually:
+
+- the RK4 update weights
+- the step-loop ordering
+
+If these are changed incorrectly, the solver stops being RK4.
+
+### If you want to change the SciPy baseline behavior
+
+Edit:
+
+- [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+
+Function:
+
+- `solve_lorenz1960_scipy`
+
+What belongs here:
+
+- changing solver method
+- changing tolerances
+- adding dense output logic
+- adding extra solver diagnostics
+
+Watch out for:
+
+- fair comparison requires using the same equations and aligned evaluation points
+
+### If you want to change comparison metrics
+
+Edit:
+
+- [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+
+Functions:
+
+- `compute_error_metrics`
+- `subsample_uniform_solution`
+
+What belongs here:
+
+- new metrics like relative error
+- additional trajectory norms
+- alternative alignment logic
+
+Risk:
+
+- if you change metric definitions, keep the notebook interpretation text in sync
+
+### If you want to change plots
+
+Edit:
+
+- [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+
+Functions:
+
+- `plot_state_time_series`
+- `plot_3d_trajectory`
+- `plot_error_curves`
+
+What belongs here:
+
+- labels
+- colors
+- line styles
+- figure size
+- legend behavior
+
+This is usually safe to modify.
+
+### If you want to change notebook text or structure
+
+Primary edit location:
+
+- [generate_lorenz1960_baseline_notebooks.py](E:/University/FYDP/fydp-1-implementation/scripts/generate_lorenz1960_baseline_notebooks.py)
+
+Main functions:
+
+- `build_problem_setup`
+- `build_rk4_notebook`
+- `build_scipy_notebook`
+- `build_validation_notebook`
+
+Why edit here:
+
+- this script regenerates the notebooks
+- direct notebook edits may be overwritten later
+
+Maintenance rule:
+
+- if you want durable notebook changes, edit the generator first and then regenerate
+
+### If you want to regenerate the notebooks
+
+Run:
+
+```powershell
+python scripts/generate_lorenz1960_baseline_notebooks.py
+```
+
+What this does:
+
+- rewrites all four notebooks from the script
+
+What to watch out for:
+
+- manual edits inside the `.ipynb` files can be lost
+
+### If you want to create an ANN-ready reference dataset later
+
+Likely edit locations:
+
+- add a new save function in [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+- add an export section to [04_validation_and_comparison.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/04_validation_and_comparison.ipynb) or a new notebook
+
+Suggested but not yet implemented:
+
+- save a canonical trajectory file
+- record solver settings with the saved data
+- version the exported dataset clearly
+
+### What not to change casually
+
+Do not casually change:
+
+- the benchmark equations
+- the initial conditions
+- the interval `[0,1]`
+- the fact that both solvers compare on the same grid
+- the shared-module-first design
+
+Why:
+
+- those are the foundations of fairness and reproducibility in this implementation
+
+
+## What to Learn From This
+
+### Main lesson 1: baseline first, ANN second
+
+The most important lesson is methodological:
+
+- the ANN is not the first solver
+- the numerical baseline is the first solver
+
+If you remember one thing from this implementation, remember that.
+
+### Main lesson 2: shared source of truth matters
+
+Putting the equations and defaults in one shared module reduced the chance of drift.
+
+This pattern is worth reusing in later FYDP phases:
+
+- shared definitions in code
+- explanations in notebooks
+- comparison logic separated from model logic
+
+### Main lesson 3: fair comparison is about alignment, not just using two methods
+
+Comparing two solvers only makes sense if:
+
+- they solve the same system
+- they start from the same initial state
+- they are observed on the same grid
+
+This is a reusable lesson for later ANN evaluation too.
+
+The ANN should also be compared on aligned targets, not on mismatched samples.
+
+### Main lesson 4: validation should be honest
+
+The implementation avoided fake confidence.
+
+Examples:
+
+- the SciPy result was not described as analytical truth
+- the Jupyter limitation was stated explicitly
+- a real bug was surfaced and fixed
+- the step-halving interpretation was refined instead of forcing a dramatic conclusion
+
+This is the right habit for research code.
+
+### Main lesson 5: plain text source for notebooks is valuable
+
+Notebook JSON is hard to maintain directly.
+
+Using a generator script means:
+
+- easier diffs
+- easier future edits
+- easier regeneration
+
+That is a practical engineering lesson worth keeping.
+
+### Mistakes avoided
+
+The implementation deliberately avoided:
+
+- mixing Lorenz-1960 with Lorenz-1963
+- silently changing the benchmark across notebooks
+- comparing unaligned trajectories
+- jumping to ANN work before the baseline existed
+- claiming stronger validation than what was actually done
+
+### Mistakes made or issues encountered
+
+The main issue encountered was:
+
+- incorrect assumption that `scipy_solution.method` would be available
+
+What to learn from that:
+
+- even simple metadata access should be validated in the real environment
+
+## Quick Re-entry Summary
+
+This section is for future fast context recovery.
+
+### What this project part does
+
+It builds the FYDP 1 numerical baseline for the Lorenz-1960 ODE system using:
+
+- a custom RK4 solver
+- a SciPy `solve_ivp` solver
+- a validation notebook that compares them
+
+### Where the important files are
+
+Main folder:
+
+- [lorenz1960_baseline](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline)
+
+Main code:
+
+- [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+
+Main notebooks:
+
+- [01_problem_setup.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/01_problem_setup.ipynb)
+- [02_rk4_implementation.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/02_rk4_implementation.ipynb)
+- [03_python_solver_baseline.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/03_python_solver_baseline.ipynb)
+- [04_validation_and_comparison.ipynb](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/04_validation_and_comparison.ipynb)
+
+Notebook source:
+
+- [generate_lorenz1960_baseline_notebooks.py](E:/University/FYDP/fydp-1-implementation/scripts/generate_lorenz1960_baseline_notebooks.py)
+
+### Where to edit
+
+- change equations or defaults in [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py)
+- change notebook wording or structure in [generate_lorenz1960_baseline_notebooks.py](E:/University/FYDP/fydp-1-implementation/scripts/generate_lorenz1960_baseline_notebooks.py)
+
+### Biggest risks
+
+- editing notebook JSON directly and later overwriting it by regenerating
+- changing the benchmark definition without understanding the validation impact
+- assuming the baseline is validated for time intervals beyond `[0,1]`
+- forgetting that the current implementation does not yet save an ANN training dataset
+
+### What to remember before touching it
+
+- this baseline is intentionally small and controlled
+- fairness depends on shared equations and aligned grids
+- the notebooks are generated from a script
+- no ANN code is included here yet
+
+
+## Final Takeaways
+
+- FYDP 1 implemented a numerical baseline, not an ANN system.
+- The authoritative benchmark was taken from local Lorenz-1960 project context, especially `paper1` Section 4.2 and the local guide.
+- The important implementation center is [lorenz1960_baseline.py](E:/University/FYDP/fydp-1-implementation/lorenz1960_baseline/lorenz1960_baseline.py).
+- The important maintenance center for notebook content is [generate_lorenz1960_baseline_notebooks.py](E:/University/FYDP/fydp-1-implementation/scripts/generate_lorenz1960_baseline_notebooks.py).
+- The comparison between RK4 and SciPy was actually executed and showed extremely close agreement on `[0,1]`.
+- Local Jupyter execution was not available, so notebook code paths were validated through sequential Python execution instead.
+- The implementation is a solid base for the next step, but the next step is still not ANN training itself. The next clean step is to define and export a canonical reference dataset from this validated baseline.
