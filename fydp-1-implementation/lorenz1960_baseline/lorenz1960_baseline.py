@@ -28,7 +28,7 @@ STATE_LABELS = ("x", "y", "z")
 def lorenz1960_coefficients(k: float = DEFAULT_CONFIG.k, l: float = DEFAULT_CONFIG.l) -> np.ndarray:
     coeff_x = k * l * (1.0 / (k**2 + l**2) - 1.0 / (k**2))
     coeff_y = k * l * (1.0 / (l**2) - 1.0 / (k**2 + l**2))
-    coeff_z = 0.5 * k * (l**2) * (1.0 / (k**2) - 1.0 / (l**2))
+    coeff_z = 0.5 * k * l * (1.0 / (k**2) - 1.0 / (l**2))
     return np.array([coeff_x, coeff_y, coeff_z], dtype=float)
 
 
