@@ -32,6 +32,11 @@ type: reference
 2. Verify every citation against `paper/fydp.bib` and the files in `references/`
 3. Use the UIU FYDP LaTeX template in `paper/` — do not reformat the document structure
 4. The 5 research gaps in `CONTEXT.md § Research Gaps Addressed` define the paper's contribution — do not stray from them
+5. **Chapter 3 decisions are fully locked** — read `CONTEXT.md § Chapter 3 Design Decisions` before writing any part of Chapter 3. Do not invent or change any experimental parameter, requirement, or design choice not recorded there.
+6. Chapter 3 section 3.1.4 (UI Design) is explicitly omitted — this project has no user interface.
+7. ANN input = scalar t only. ANN output = (x(t), y(t), z(t)). x, y, z are state variable predictions, not inputs. Do not confuse.
+8. Total experiments = 69 (60 Phase 1 + 9 Phase 2). Do not cite 60 as the total.
+9. Normalization: z-score on output targets during training; all reported metrics are in original physical units.
 
 ### For `triage`, `to-issues`, `to-prd` skills
 

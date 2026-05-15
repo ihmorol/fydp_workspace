@@ -1,17 +1,191 @@
 \chapter{Project Design}
 
-[Must be present in FYDP-1 Report and also in Final Report]
+[\textit{Must be present in FYDP-1 Report and also in Final Report}]
 
-Every chapter should start with 1-2 sentences on the outline of the chapter.
+This chapter presents the project design for the systematic investigation of feedforward ANN architectures applied to the Lorenz-1960 ODE system. It states the research requirements, describes the experimental pipeline and its surrounding context, defines the methodology used for architecture search and optimizer comparison, and outlines the project plan with task allocation across the team.
 
 \section{Requirement Analysis}
+
+The requirements for this project describe what the experimental pipeline must produce, the quality those outputs must reach, and the constraints under which the work is performed. Because this is a computational research project rather than an interactive software product, the requirements are framed around scientific reproducibility, numerical fidelity, and disciplined experimentation rather than user-facing features.
+
 \subsection{Functional and Nonfunctional Requirements}
+
+The functional requirements list what the pipeline must do at each stage of the workflow, from generating the reference solution to producing the final comparative report. The nonfunctional requirements list the quality attributes that the same pipeline must satisfy, with reproducibility and reference accuracy treated as the two strictest constraints.
+
+\begin{table}[!ht]
+\centering
+\caption{Functional Requirements of the Research Pipeline}
+\label{tab:fr}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{1.2cm}|p{12.5cm}|}
+\hline
+\textbf{ID} & \textbf{Requirement} \\
+\hline
+FR1 & The system shall generate a high-accuracy numerical reference solution for the Lorenz-1960 ODE system using the fourth-order Runge-Kutta method and SciPy DOP853, evaluated over $t \in [0, 1]$ at $1001$ uniformly spaced points. \\
+\hline
+FR2 & The system shall partition the reference dataset into training and validation subsets using an 80/20 random split with a fixed random seed. \\
+\hline
+FR3 & The system shall construct feedforward ANN models with systematically varied depth (1 to 4 hidden layers), width (20, 50, or 100 neurons per layer), and activation function (tanh, ReLU, sigmoid, GELU, Swish). \\
+\hline
+FR4 & The system shall train all Phase 1 models under identical conditions using the Adam optimizer and record convergence behaviour for each run. \\
+\hline
+FR5 & The system shall conduct a Phase 2 optimizer comparison on the three best Phase 1 architectures, training each with Adam, L-BFGS, and SGD with momentum. \\
+\hline
+FR6 & The system shall evaluate each trained model using MSE, MAE, maximum absolute error, training time, and inference time against the RK4 reference. \\
+\hline
+FR7 & The system shall produce comparison tables, solution trajectory plots, and error curves for every evaluated model. \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\centering
+\caption{Nonfunctional Requirements of the Research Pipeline}
+\label{tab:nfr}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{1.5cm}|p{12.2cm}|}
+\hline
+\textbf{ID} & \textbf{Requirement} \\
+\hline
+NFR1 & All experiments shall be fully reproducible using a single fixed random seed ($\text{seed}=42$) applied to weight initialization and data splitting. \\
+\hline
+NFR2 & The numerical reference solution shall maintain solver agreement of RMSE below $10^{-10}$ between the custom RK4 implementation and SciPy DOP853. \\
+\hline
+NFR3 & All results, model configurations, and metrics shall be logged systematically so that an independent reader can verify the reported findings. \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsection{Context Diagram}
+
+The context diagram in Figure~\ref{fig:context} shows the research pipeline as a single bounded system with two external entities. The first entity is the research team, which configures the experimental parameters, triggers each run, and receives the resulting models and metrics. The second entity is the wider academic and research community, which consumes the published findings, reuses the methodology, and builds further work on top of the comparative results. The pipeline itself contains every internal step from reference generation to final reporting, so no other actor lies outside the system boundary.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.85\textwidth]{context_diagram.png}
+\caption{Context diagram of the research pipeline. The Research Team supplies configurations and receives outputs. The Academic/Research Community receives the published findings and methodology.}
+\label{fig:context}
+\end{figure}
+
 \subsection{Data Flow Diagram Level 1}
+
+The Level 1 data flow diagram in Figure~\ref{fig:dfd1} decomposes the research pipeline into five sequential processes. Process P1 generates the reference trajectory using the RK4 and SciPy DOP853 solvers. Process P2 preprocesses that trajectory by performing the 80/20 split and applying z-score normalization to the output targets. Process P3 trains the ANN models, first across the full Phase 1 grid and then across the Phase 2 optimizer comparison. Process P4 evaluates every trained model against the reference solution using the metrics listed in FR6. Process P5 compares the results, identifies the best architecture, and produces the final report for the academic community.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.95\textwidth]{dfd_level1.png}
+\caption{Data Flow Diagram (Level 1) showing the five internal processes of the research pipeline.}
+\label{fig:dfd1}
+\end{figure}
+
 \subsection{UI Design}
+
+This project does not include any user interface. The pipeline is executed entirely from Python scripts and Jupyter notebooks, with results stored as figures, tables, and serialized model files. UI design is therefore not applicable to the present work.
+
 \section{Detailed Methodology and Design}
-You have to mention alternate solutions that you have considered. Why you have selected the specific solution, etc.
+
+The methodology is organized as a two-phase comparative experiment. Phase 1 performs an architecture search across depth, width, and activation function using a fixed optimizer, while Phase 2 isolates the effect of the optimizer by retraining the best Phase 1 architectures under different optimization algorithms. This separation keeps the architecture comparison and the optimizer comparison from confounding each other, so that any improvement in Phase 2 can be attributed to the optimizer rather than to a change in network structure.
+
+\subsection{Reference Solution Generation}
+
+The reference solution is computed from the Lorenz-1960 system using the parameter setting $k=2$, $l=1$, initial conditions $x(0)=0.5$, $y(0)=0.75$, $z(0)=1$, and the time interval $t \in [0, 1]$, as defined in Chapter~2. Two independent solvers are used to ensure numerical reliability. The first is a custom fourth-order Runge-Kutta integrator with step size $h=10^{-3}$, evaluated on a uniform grid of $1001$ points. The second is the SciPy \texttt{solve\_ivp} routine using the DOP853 (eighth-order Dormand-Prince) method with $\text{rtol}=10^{-10}$ and $\text{atol}=10^{-12}$, sampled on the same grid. Agreement between the two solvers is required at RMSE below $10^{-10}$, and the RK4 trajectory is then used as the canonical reference for ANN training and evaluation. This dual-solver verification guards against accidental errors in either implementation and provides a defensible ground truth for the rest of the study.
+
+\subsection{Dataset Preparation}
+
+The reference trajectory yields $1001$ rows of the form $(t, x(t), y(t), z(t))$, which together form the training set for the ANN models. The dataset is partitioned into an 80\% training subset (approximately $800$ points) and a 20\% validation subset (approximately $201$ points) using a uniform random split with a fixed seed of $42$. The split is performed once before any model is trained, so every ANN configuration sees the same training points, the same validation points, and the same order of presentation. After splitting, each of the three target variables is standardized using its training-set mean and standard deviation. This z-score normalization places $x$, $y$, and $z$ on a comparable numerical scale so that the loss is not dominated by the variable with the widest range. All reported errors, however, are computed after unnormalization, so the published metrics remain in the original physical units of the system.
+
+\subsection{Model Family and Architecture Search Grid}
+
+Each candidate ANN is a plain feedforward network that maps the scalar time $t$ to the three-dimensional state vector $(x(t), y(t), z(t))$. The hidden structure varies along three axes: the number of hidden layers, the number of neurons per hidden layer (held constant across layers within a single model), and the activation function applied to every hidden layer. Table~\ref{tab:phase1grid} lists the values explored in Phase 1. The Cartesian product of these axes defines $4 \times 3 \times 5 = 60$ distinct architectures, which are trained independently under identical optimization settings. The output layer is always linear with three units, and no skip connections, normalization layers, or regularization terms are introduced. This deliberately spare design keeps the comparison focused on the three architectural axes named in the research question.
+
+\begin{table}[!ht]
+\centering
+\caption{Phase 1 Architecture Search Grid}
+\label{tab:phase1grid}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Axis} & \textbf{Values} \\
+\hline
+Depth (hidden layers) & 1, 2, 3, 4 \\
+\hline
+Width (neurons per layer) & 20, 50, 100 \\
+\hline
+Activation function & tanh, ReLU, sigmoid, GELU, Swish \\
+\hline
+Total configurations & $4 \times 3 \times 5 = 60$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Optimizer Comparison (Phase 2)}
+
+Phase 2 takes the three architectures with the lowest combined validation MSE from Phase 1 and retrains each one under two additional optimizers, namely L-BFGS and SGD with momentum, while keeping all other settings identical to Phase 1. The Adam result from Phase 1 is reused as the third point of comparison, so each of the three architectures is reported against three optimizers, giving $3 \times 3 = 9$ Phase 2 runs in total. L-BFGS is included because it is a strong baseline for smooth, low-dimensional regression problems and is commonly cited as an effective optimizer for ANN-based ODE solvers. SGD with momentum is included as a classical reference. This phase isolates the effect of the optimizer from the effect of network architecture, which would not be possible if optimizer choice were folded into the Phase 1 grid.
+
+\subsection{Loss Function and Training Protocol}
+
+The training loss is the mean squared error between the (normalized) predicted state and the (normalized) reference state, computed jointly over all three output components. No initial-condition penalty term and no physics-based residual is added, which is consistent with the plain-ANN scope defined in Chapter~2 and avoids the loss-balancing problem that is well known in physics-informed approaches. The Phase 1 optimizer is Adam with learning rate $10^{-3}$ and default momentum parameters. Each model is trained for at most $10{,}000$ epochs, with early stopping on the validation loss using a patience of $500$ epochs and restoration of the best-validation weights upon termination. The training step uses full-batch gradient descent, which is appropriate for the small training set and removes minibatch noise as a confounding variable across configurations. The PyTorch random seed is set to $42$ before each model is constructed, so weight initialization is also reproducible.
+
+\subsection{Evaluation Metrics}
+
+Each trained model is evaluated against the RK4 reference using five metrics, listed in Table~\ref{tab:metrics}. The mean squared error is reported as the primary indicator because it is the quantity minimized during training and therefore allows direct comparison across configurations. The mean absolute error and the maximum absolute error are reported per state variable to give a more interpretable picture of typical and worst-case deviation. Training time captures the cost of fitting a given architecture, and inference time captures the cost of using the trained model to predict the full trajectory. All five metrics together support the trade-off analysis between accuracy, training cost, and inference cost that is required to answer the research question.
+
+\begin{table}[!ht]
+\centering
+\caption{Evaluation Metrics Used for Each Trained Model}
+\label{tab:metrics}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|p{9.5cm}|}
+\hline
+\textbf{Metric} & \textbf{Purpose} \\
+\hline
+MSE (per variable and combined) & Primary loss; consistent comparison across all $69$ runs \\
+\hline
+MAE (per variable) & Interpretable error magnitude in original physical units \\
+\hline
+Maximum absolute error & Worst-case deviation along the trajectory \\
+\hline
+Training time (seconds) & Computational cost of fitting a given architecture \\
+\hline
+Inference time (seconds) & Cost of predicting the full $1001$-point trajectory after training \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Alternative Solutions Considered}
+
+Several alternative designs were considered before settling on the plain feedforward ANN with a pure MSE loss. A physics-informed neural network was rejected because it would add a residual term to the loss and reintroduce the hyperparameter balancing problem that is described in the literature reviewed in Chapter~2; this would also blur the distinction between our work and the existing PinnDE study. An operator-learning formulation such as DeepONet was rejected for the same reason, since the PinnDE work already evaluates a DeepONet on the same equation, and reproducing that design would not address the architecture-selection gap identified in our review. A Neural ODE formulation was considered because it represents a different and elegant paradigm, but it parameterizes the derivative rather than the solution function and therefore does not answer the same question. Finally, we considered combining architecture search and optimizer selection into a single large grid, but rejected this option because it would inflate the total number of experiments and would confound the two effects we want to measure separately. The two-phase design adopted here keeps the number of runs at $69$ while still producing a clean attribution of the observed differences.
+
 \section{Project Plan}
+
+The project follows the waterfall methodology already introduced in Chapter~1 and is delivered across the three FYDP segments defined by the department. FYDP-I covers the literature review, the concept development, and the design phase. The outputs of FYDP-I are Chapters~1 to~3 of this report and the verified numerical baseline. FYDP-II covers the implementation and testing phases. Its outputs are the trained ANN models from the $69$-run experimental campaign, the metric tables, the convergence plots, and Chapter~4. FYDP-III covers the deployment phase, which in a research context corresponds to results consolidation, comparative analysis against the PINN baseline drawn from the literature, the writing of Chapters~5 and~6, and the submission of the final report. Because the project does not deliver a deployable product, a calendar-based Gantt chart is not used; the FYDP-I, FYDP-II, and FYDP-III boundaries already provide the milestones that the supervisor and the department review against.
+
 \section{Task Allocation}
 
+The team is composed of five members. Responsibilities are grouped by skill area rather than by individual chapter, so that each member owns a coherent slice of the pipeline across both FYDP-II and FYDP-III. Table~\ref{tab:tasks} summarizes the allocation. The implementation lead is responsible for the baseline solver, the data preprocessing code, the PyTorch model definitions, the training loop, and the experiment runner that produces the $69$ result records. The analysis members are responsible for computing and interpreting the metrics, building the comparison tables, and producing the figures that appear in the final report. The writing and research members are responsible for preparing the manuscript, maintaining the literature review and citations, and compiling the final report. All members participate in supervisor meetings and in joint review of the results before each FYDP submission.
+
+\begin{table}[!ht]
+\centering
+\caption{Task Allocation Across Team Members}
+\label{tab:tasks}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|p{4.0cm}|p{3.0cm}|p{6.5cm}|}
+\hline
+\textbf{Member} & \textbf{Role} & \textbf{Primary Responsibilities} \\
+\hline
+Ikramul Hasan Moral & Implementation lead & Baseline solver, data preprocessing, PyTorch model implementation, training loop, experiment runner \\
+\hline
+Md. Abu Bakar & Analysis & Evaluation pipeline, metric computation, architecture comparison \\
+\hline
+Samiur Rahman Omlan & Analysis & Results interpretation, visualization, plots and figures \\
+\hline
+Fariha Islam & Writing and research & Manuscript writing, literature review, citation management \\
+\hline
+Md. Touhidul Islam & Writing and research & Chapter drafting, report compilation, manuscript writing \\
+\hline
+\end{tabular}
+\end{table}
+
 \section{Summary}
+
+This chapter has translated the research question from Chapter~1 and the literature gap from Chapter~2 into a concrete experimental design. The functional and nonfunctional requirements describe what the pipeline must produce and the quality it must reach. The context diagram and the Level 1 data flow diagram place the pipeline in its surrounding research setting. The methodology defines a two-phase comparative study: a $60$-run architecture search across depth, width, and activation function, followed by a $9$-run optimizer comparison on the three best architectures, for a total of $69$ controlled experiments. Reference data is generated and verified across two independent solvers; training, loss, and evaluation settings are held constant across runs so that the observed differences can be attributed to the variables under study. The project plan maps the work onto the three FYDP segments, and the task allocation assigns ownership of the implementation, analysis, and writing tracks to specific team members. The next chapter reports the implementation of this design and the experimental results obtained from the $69$ runs.
