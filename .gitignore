@@ -1,6 +1,44 @@
+# Tool directories (skill providers, agent frameworks)
 .agent
 .agents
 .omx
 .sisyphus
 .tmp-skill-providers
 AGENTS.md
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+*.egg-info/
+.venv/
+venv/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.idx
+*.ilg
+*.ind
+*.lof
+*.lot
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+_minted-*/
+
+# Generated datasets (large, regenerable)
+data/*.csv
+data/*.npz
+data/*.npy
+data/*.h5
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+__MACOSX/
