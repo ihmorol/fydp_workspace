@@ -92,3 +92,60 @@ Our project is a purely academic study that trains small neural networks on a pe
 \subsubsection{A5: Familiarity --- Applicable ($\checkmark$)}
 
 This is not a standard textbook problem. The Lorenz-1960 system is nonlinear and chaotic. There is no ready-made ANN setup that we can just use. We have to figure out the best architecture through experiments, and the results need careful interpretation because low training loss does not always mean the solution is correct everywhere.
+
+\subsection{Knowledge and Attitude Profile}
+
+Table~\ref{tab:k_profile} shows how this project maps to the knowledge and attitude profile categories.
+
+\begin{center}
+    \begin{table}[ht]
+        \centering
+        \caption{Mapping with knowledge and attitude profile.}
+        \begin{tabular}{|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|}
+        \hline
+        WK1& WK2& WK3& WK4& WK5& WK6& WK7& WK8& WK9\\
+        Natural Sciences & Math \& Analysis & Eng. Funda- mentals & Specialist Knowledge & Resource Use & Eng. Practice & Role in Society & Research Lit. & Ethics\\
+        \hline 
+        $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ & $\checkmark$ & $\times$ & $\checkmark$ & $\checkmark$\\
+        &&&&&&&&\\
+        \hline 
+        \end{tabular}
+        \label{tab:k_profile}
+    \end{table}
+\end{center}
+
+\subsubsection{WK1: Natural Sciences --- Applicable ($\checkmark$)}
+
+Our project requires a solid understanding of the natural sciences, specifically the physics behind the Lorenz-1960 system, which is a simplified meteorological model representing atmospheric convection. We must understand the theory governing nonlinear coupled ODEs to model these physical phenomena correctly.
+
+\subsubsection{WK2: Mathematics and Numerical Analysis --- Applicable ($\checkmark$)}
+
+This project heavily relies on conceptually based mathematics and numerical analysis. We use advanced calculus for ODEs, the Runge-Kutta method for generating reference numerical solutions, and statistics for evaluating the mean squared error of our ANN predictions. Data analysis is central to evaluating training convergence and model accuracy.
+
+\subsubsection{WK3: Engineering Fundamentals --- Applicable ($\checkmark$)}
+
+We apply a systematic formulation of engineering fundamentals by taking a well-defined mathematical problem and systematically solving it through computational means. The process of translating the Lorenz-1960 mathematical equations into a computational model requires core engineering methodology.
+
+\subsubsection{WK4: Specialist Knowledge --- Applicable ($\checkmark$)}
+
+Our work operates at the forefront of the discipline by exploring the capabilities of artificial neural networks in solving complex ODE systems. This requires specialist engineering knowledge in deep learning frameworks like PyTorch, optimization algorithms like Adam, and network architectures.
+
+\subsubsection{WK5: Engineering Design (Sustainability) --- Not Applicable ($\times$)}
+
+This project is a computational research study on a theoretical mathematical benchmark. It does not involve physical resource use, environmental impact assessments, or whole-life cost considerations. Therefore, this criterion does not apply.
+
+\subsubsection{WK6: Engineering Practice (Technology) --- Applicable ($\checkmark$)}
+
+We extensively use modern engineering practice and technology. We utilize programming languages and scientific computing libraries (SciPy, NumPy, Matplotlib) that are standard practice in the field of computational engineering and data science.
+
+\subsubsection{WK7: Role of Engineering in Society --- Not Applicable ($\times$)}
+
+The Lorenz-1960 system benchmark does not directly impact public safety, societal issues, or sustainable development. It is an academic exercise in algorithm evaluation, so there are no direct societal stakeholders whose safety must be considered. This criterion does not apply.
+
+\subsubsection{WK8: Engagement with Research Literature --- Applicable ($\checkmark$)}
+
+We conducted an extensive literature review, analyzing 13 research papers, to understand the current state-of-the-art in PINNs and standard ANNs for ODE solving. We applied critical thinking to identify the research gap---specifically, evaluating plain ANNs on the Lorenz-1960 system without physics-informed loss functions.
+
+\subsubsection{WK9: Ethics and Professional Conduct --- Applicable ($\checkmark$)}
+
+We adhere to professional ethics and academic integrity by properly citing all research papers and methodologies used. We ensure our experiments are reproducible, and our results are reported honestly without manipulation.
