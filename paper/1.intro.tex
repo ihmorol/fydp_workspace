@@ -1,35 +1,124 @@
 \chapter{Introduction}
-[\textit{Must be present in FYDP-1 Report and also in Final Report}]
 
-
-This chapter introduces the research problem, explains why it is important in a real computational setting, and defines the objectives and expected outcomes of the project. It also presents a concise summary of the proposed methodology and outlines the structure of the remaining report.
+This chapter introduces the research topic, provides an overview and motivation for the study, and outlines the main objectives and expected outcomes. It also outlines the methodology and briefly describes how the rest of the report is organized.
 
 \section{Project Overview}
-Ordinary differential equations (ODEs) are used to model time-dependent phenomena across physics, engineering, and applied mathematics. Many physically meaningful systems, including atmospheric circulation, fluid interaction, and coupled dynamical processes, are naturally expressed as initial value problems whose states evolve continuously with time. In practice, such systems are usually solved with numerical techniques such as Euler-type methods and Runge-Kutta schemes because closed-form solutions are rarely available for nonlinear coupled equations.
+Ordinary Differential Equations (ODEs) describe how a system change with over time. They are widely used in fields such as physics, engineering, and mathematics. In many 
+real-world problems, particularly those involving complex or nonlinear equations, it is often 
+not possible to obtain exact solutions. That is why methods such as Euler’s method and 
+Runge-Kutta are used to obtain approximate solutions. In this project, we examine a 
+particular system consisting of three nonlinear equations known as the Lorenz-1960 system 
+(i.e., one of the first meteorological models). The system is small, but complex enough to 
+make a good testing ground for various solution methods. The Lorenz-1960 system is a 
+great candidate for evaluating how well ANNs learn and predict behavior. Classical 
+numerical methods address these problems step by step. Also they are typically accurate, but 
+they are likely very slow and require more computational cost. We use numerical methods like Runge-Kutta to generate data that can be used to train artificial neural networks to learn how variables change over time.
+The ANN learns to match its predictions with the results of the numerical solver during training. After training, the ANN can quickly predict results for any time without solving the equations again.
+Therefore, the primary aim  of this project is to solve the Lorenz-1960 system 
+and to see how well a plain ANN can learn its behavior and which ANN architecture provides
+optimal results. 
 
-This project focuses on the Lorenz-1960 ODE system, a reduced meteorological model that represents nonlinear interactions among three coupled state variables. The system is a useful research case because it is small enough to study carefully, but still complex enough to expose the strengths and weaknesses of different approximation strategies. Existing numerical solvers can produce accurate trajectories for the Lorenz-1960 system, yet they must be executed again for every new setup and do not directly provide a reusable learned mapping from time to state values. Recent machine learning research has shown that neural networks can approximate the solutions of differential equations, either by embedding physical laws into the loss function or by learning solution functions directly from data \cite{matthews2025pinnde,pratama2022ann,chen2019neural}.
-
-The problem addressed in this project is therefore not whether the Lorenz-1960 system can be solved at all, but whether a plain artificial neural network (ANN) can learn this solution accurately enough to serve as a practical alternative approximation model, and which ANN architecture performs best for this task. The study is framed around architecture selection, because current related work does not clearly establish how depth, width, and activation choice affect plain ANN performance on this specific ODE system. The proposed work therefore aims to identify an ANN architecture that approximates the Lorenz-1960 solution with high accuracy while remaining simpler and easier to train than physics-informed alternatives.
 
 \section{Motivation}
-The computational motivation of this work comes from the growing need for efficient surrogate models for scientific computation. Classical numerical methods are highly reliable, but they are solver-driven rather than model-driven: when the equation, the time interval, or the initial condition changes, the numerical process must be repeated. This is acceptable for one simulation, but it becomes expensive in repeated experimentation, parameter sweeps, and learning-based pipelines where many evaluations may be required. A trained ANN offers a different possibility by learning a direct approximation from time to solution state, allowing rapid inference after training.
+This project is motivated by both research and practical sides. Classic numerical methods are reliable and accurate. They work well for directly simulating equations. However, they can be slow when we need to run them many times. A trained artificial neural network (ANN), on the other hand, can solve the equation on its own. It makes predictions and acts like a copy of the real system. Many studies now use neural networks to solve differential equations, including physics-informed neural networks (PINNs), operator learning, and ANN-based approximators. This makes the topic both relevant and interesting to explore. Another reason for this project is the learning and hands-on benefits it offers. It helps build skills in solving ordinary differential equations (ODEs). It also teaches how to build and use neural network models. The project involves running experiments and studying the results. Comparing different methods is helpful. Even if simple ANNs are not as powerful as advanced methods, they help us understand their strengths and weaknesses.
 
-There is also a clear research motivation. In the recent literature, one branch of work emphasizes physics-informed neural networks and operator-learning frameworks, while another branch studies pure ANN-based approximators for differential equations. Physics-informed approaches are attractive because they inject equation residuals into the learning objective, but they also introduce additional optimization complexity and hyperparameter balancing requirements. Since the supervisor guidance already points to PINNs as an important reference direction, a meaningful and well-scoped FYDP contribution is to investigate the opposite design choice: removing the physics term and evaluating how far a plain ANN can go on a well-defined ODE benchmark. This makes the project both educational and scientifically useful because it clarifies whether model architecture alone can deliver competitive approximation quality on the Lorenz-1960 problem.
 
-The project is also beneficial from an application perspective. Understanding how ANN architectures behave on a nonlinear physical system can support later work on more complex scientific machine learning tasks, including surrogate modeling, reduced-order simulation, and data-driven forecasting. Even if the final conclusion is that plain ANNs are insufficient for this class of problem, that result is still valuable because it helps justify when more advanced physics-informed or operator-learning models are actually necessary.
 
 \section{Objectives}
-The objectives of this study are fivefold. First, the project aims to formulate the Lorenz-1960 ODE system as a supervised approximation problem by generating a high-accuracy numerical reference solution over the target time interval. Second, it aims to design and train multiple ANN architectures that take time as input and predict the corresponding state variables of the system. Third, it seeks to compare these architectures systematically by varying depth, width, activation function, and training strategy in order to measure their effect on approximation accuracy. Fourth, it aims to identify the architecture that achieves the best overall performance against the numerical reference solution. Fifth, it intends to position the resulting best architecture against the most relevant published approaches, especially the physics-informed DeepONet-based treatment of the same Lorenz-1960 system and the broader ANN literature on differential equation solving.
+The primary objectives of this project are:
+
+\begin{itemize}
+    \item To solve the Lorenz equation, which is a coupled and nonlinear system.
+\end{itemize}
+
+\begin{itemize}
+    \item To use ODE concepts, numerical methods like Runge-Kutta and SciPy solvers, and an ANN for solving the Lorenz equations.
+\end{itemize}
+
+\begin{itemize}
+    \item To create accurate data using the Runge-Kutta method and use it to validate the ANN  performance and compare its results.
+\end{itemize}
+
+\begin{itemize}
+    \item To compare different ANN architectures by changing the number of layers, the number of neurons per layer, and trying different activation functions to find the most accurate model.
+\end{itemize}
+
+\begin{itemize}
+    \item To evaluate the model’s performance using mean squared error, learning stability, and computational cost, and see if a plain ANN can learn the Lorenz equation.
+\end{itemize}
+
+\begin{itemize}
+    \item To compare the results with PINN based methods from other research to understand how this approach performs compared to recent techniques.
+\end{itemize}
+
 
 \section{Methodology}
-The methodology of the project is based on a comparative experimental design. The Lorenz-1960 system will first be defined as an initial value problem using the parameter setting discussed in the reference study. A high-accuracy numerical solution will then be generated using a Runge-Kutta based solver and treated as ground truth for model training and evaluation. After that, a family of feedforward ANN models will be constructed with different numbers of hidden layers, different neuron counts, and different activation functions. Each model will be trained to learn the mapping from time to the three solution components of the Lorenz-1960 system.
+We are following the “Waterfall Methodology.”Here, each phase is completed sequentially in a fixed order. It is suitable because our goals and requirements are clear from the start. Here, every step produces outputs that guide the next. This makes the process structured, simple to track, and easy to manage.
 
-Once training is complete, the candidate architectures will be evaluated with quantitative error metrics such as mean squared error, along with convergence behavior, parameter count, and inference efficiency. The best-performing configuration will then be analyzed in relation to the recent literature in order to understand whether a plain ANN can provide a useful approximation baseline for this problem and how its strengths and limitations compare with more structured neural differential equation methods.
+ First, during the Literature Review phase, we studied the Lorenz-1960 equation and its numerical solution methods, like RK4 and SciPy solvers. We also reviewed multiple ANN designs, activation functions, and training methods. 
+ 
+  
+  Next, in the Concept Development phase, the research problem and objectives were clearly defined. We focused on approximating the Lorenz-1960 equation using ANNs. We also worked on setting up the network layers, choosing the number of neurons, activation functions, learning rates, and training epochs, and generating training and validation data.
+  
+   
+   In the Design phase, we developed the ANN models and training workflow, covering data preprocessing and optimized architecture. We established a numerical baseline using RK4 and SciPy to compare results. Assessment measures, visualization tools, and statistical tests were also defined to guarantee fair model comparison.
+   
+    
+    In the Implementation phase, the numerical solvers and ANN models were implemented in Python . All models were trained on generated datasets . Accuracy, training time, number of parameters, and convergence were recorded. Each model was executed systematically according to the design.
+    
+    
+    Then, in the Testing phase, we measured each ANN model's performance and predicted its performance using mean square error. We tested generalization on new data and analyzed the models' sensitivity to different parameter settings. The best models were compared with results from published studies.
+   
+    
+    Finally, in the Deployment phase, we put all results, plots, and analyses into the final project report. We organized and documented the code to make it easy to reproduce our work. We included instructions for repeating the experiments and retraining the models. We also gave our final recommendations for the best ANN architecture. This phase ensures that the project is complete and ready.
+
+
+For better understanding, a diagram of our methodology is given below:-
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{methodology.jpeg}
+    \caption{Methodology Diagram}
+    \label{fig:methodology}
+\end{figure}
+
 
 \section{Project Outcome}
-The expected outcome of this project is an evidence-based identification of an ANN architecture that is most suitable for approximating the Lorenz-1960 ODE solution within the chosen experimental setting. More specifically, the project should produce a reproducible dataset generation process, a set of trained ANN baselines, a comparative analysis of architectural choices, and a final recommendation regarding which configuration gives the best trade-off between simplicity and accuracy.
+The expected outcome of the project will be the clear and the justified 
+determination of the most appropriate architecture for the ANN in estimating 
+the solution to the Lorenz-1960 system of Ordinary Differential Equations 
+(ODEs) within the scope of the experiment. This project must also include a 
+numerical reference solution to the ODEs, the establishment of ANN 
+baselines, and a comparative analysis of the results. \\[1pt]
 
-In addition to the best-model result, the project is expected to produce a clearer scientific positioning of plain ANN solvers within the broader landscape of differential equation learning methods. If the proposed ANN models perform well, the work will demonstrate that a relatively simple data-driven solver can serve as a useful approximation tool for this benchmark system. If the performance is weak or unstable, the work will still yield a valuable conclusion by showing why additional structure, such as physics-informed losses or operator-learning designs, may be necessary. In either case, the project outcome will be a justified research contribution rather than only an implementation exercise.
+The project will also contribute to the current understanding of the aptitude 
+and limitations of ANN models in the approximation and solution of differential 
+equations. If the ANN models are able to get a satisfactory level of accuracy in 
+approximating the solution to the ODEs, the project will have demonstrated 
+the capability of a simple ANN architecture to effectively act as an alternative 
+numerical solver. This would suggest that a plain ANN, without the need for 
+physics-informed loss terms or traditional mesh-dependent numerical 
+methods, can on its own approximate ODE solutions with sufficient accuracy 
+while being computationally less expensive in terms of inference time and the 
+avoidance of iterative re-solving for each query. But if the models cannot 
+achieve satisfactory accuracy in approximating the solution to the ODEs then 
+the study will clearly outline the constraints of simple ANN architectures and 
+underscore the need for advanced methods like PINNs. \\[1pt]
+
+The expected outcome of the project will therefore be more than just the 
+coding and experiment itself but will also involve a research based 
+understanding of how ANN architectural choices like depth, width, and 
+activation function can impact solution accuracy for coupled nonlinear ODE 
+systems.
+
 
 \section{Organization of the Report}
-The remainder of this report is organized as follows. Chapter 2 presents the theoretical background required for the study, including ODE fundamentals, ANN concepts, and the most relevant related research on neural approaches for differential equations. Chapter 3 will describe the project design in detail, including requirement analysis, the selected solution strategy, project planning, and task allocation. Chapter 4 will present the implementation of the proposed system and the experimental setup used to train and evaluate the candidate architectures. Chapter 5 will discuss the obtained results, compare the architectures, and interpret the findings in relation to the stated objectives and the literature. Finally, Chapter 6 will summarize the overall contribution, highlight the main limitations, and suggest directions for future work.
+The rest of this report is outlined as follows. Chapter 2 outlines the theoretical 
+background and literature review on Ordinary Differential Equations (ODE) 
+solving, artificial neural networks, and existing neural methods for differential 
+equations. Chapter 3 discusses about the project design, requirements, 
+methodological plan, and task assignment. Chapter 4 outlines the 
+implementation \& experiment design used in this research. Chapter 5 outlines 
+the results and analysis on the tested ANN structures. Finally, Chapter 6 
+concludes this report by focusing the main results, limitations, and potential 
+directions for the future research. 
