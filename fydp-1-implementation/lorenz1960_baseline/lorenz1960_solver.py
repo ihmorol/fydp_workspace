@@ -1,12 +1,3 @@
-"""
-FYDP-I: Lorenz-1960 Numerical Baseline
-Single-file implementation with RK4 and SciPy solvers.
-
-Generates comparison plots showing:
-- Left: RK4 solution vs SciPy reference
-- Right: Error curves with MSE annotation
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import solve_ivp
@@ -41,14 +32,6 @@ SCIPY_ATOL = 1e-12
 
 
 def lorenz1960_rhs(t, state):
-    """
-    Compute derivatives for Lorenz-1960 system.
-
-    With k=2, l=1, the reduced system is:
-        dx/dt = -0.1 * y * z
-        dy/dt =  1.6 * x * z
-        dz/dt = -0.75 * x * y
-    """
     x, y, z = state
 
     # Coefficients computed from k=2, l=1
@@ -67,7 +50,6 @@ def lorenz1960_rhs(t, state):
 
 
 def rk4_step(f, t, y, h):
-    """Single step of 4th-order Runge-Kutta method."""
     k1 = f(t, y)
     k2 = f(t + 0.5 * h, y + 0.5 * h * k1)
     k3 = f(t + 0.5 * h, y + 0.5 * h * k2)
@@ -76,27 +58,6 @@ def rk4_step(f, t, y, h):
 
 
 def rk4_solve(f, t_span, y0, h):
-    """
-    Solve ODE using fixed-step RK4.
-
-    Parameters
-    ----------
-    f : callable
-        Right-hand side function f(t, y)
-    t_span : tuple
-        (t_start, t_end)
-    y0 : array-like
-        Initial condition
-    h : float
-        Step size
-
-    Returns
-    -------
-    t_array : ndarray
-        Time points
-    y_array : ndarray
-        Solution array, shape (n_points, 3)
-    """
     t_start, t_end = t_span
     n_steps = int(round((t_end - t_start) / h))
 
@@ -114,27 +75,6 @@ def rk4_solve(f, t_span, y0, h):
 
 
 def scipy_solve(f, t_span, y0, t_eval):
-    """
-    Solve ODE using SciPy's high-accuracy DOP853 method.
-
-    Parameters
-    ----------
-    f : callable
-        Right-hand side function
-    t_span : tuple
-        (t_start, t_end)
-    y0 : array-like
-        Initial condition
-    t_eval : ndarray
-        Time points for output
-
-    Returns
-    -------
-    t_array : ndarray
-        Time points
-    y_array : ndarray
-        Solution array, shape (n_points, 3)
-    """
     sol = solve_ivp(
         f,
         t_span,
@@ -165,15 +105,7 @@ def compute_errors(reference, candidate):
 
 
 # Visualization
-
-
 def create_comparison_plot(t, rk4_sol, scipy_sol, save_path=None):
-    """
-    Create side-by-side comparison plot.
-
-    Left panel: RK4 vs SciPy solution time series
-    Right panel: Error curves with MSE annotation
-    """
     # Compute errors
     errors = compute_errors(scipy_sol, rk4_sol)
     mse_total = compute_mse(scipy_sol, rk4_sol)
@@ -237,7 +169,6 @@ def create_comparison_plot(t, rk4_sol, scipy_sol, save_path=None):
 
 
 def main():
-    """Run complete Lorenz-1960 baseline comparison."""
 
     print("=" * 70)
     print("FYDP-I: Lorenz-1960 Numerical Baseline")
