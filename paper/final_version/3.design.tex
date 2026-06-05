@@ -188,28 +188,113 @@ Finally, we thought about combining architecture search and optimizer selection 
 
 \section{Project Plan}
 
-The project follows the waterfall methodology introduced in Chapter~1. We map the work to the three FYDP segments in the university OBE curriculum. The curriculum places problem proposal, literature investigation, requirements, planning, interim reporting, and independent learning in FYDP-I. FYDP-II emphasizes analysis and design, teamwork, modern tools, and presentation of project outcomes. FYDP-III emphasizes verification and validation, professional and social impact analysis, ethics, sustainability, the final report, presentation, and the conclusion. Because this is a computational research project, ``deployment'' is interpreted conservatively as reproducible reporting, archived results, and final defense preparation rather than release of a software product.
+The project plan translates the research design into a 36-week execution schedule across FYDP-I, FYDP-II, and FYDP-III. The schedule groups the work into research and writing, baseline and data preparation, implementation, analysis and validation, presentation, and submission milestones, so the timeline follows the expected progression from problem framing and numerical baseline validation to ANN experiments, result verification, report completion, and defense preparation. Figure~\ref{fig:fydp_gantt} shows the task placement across the three 12-week trimesters, and Table~\ref{tab:gantt_task_ids} defines the identifiers used in the chart.
+
+\begin{figure}[H]
+\centering
+\caption{36-week FYDP Gantt chart using task IDs.}
+\label{fig:fydp_gantt}
+\resizebox{\textwidth}{!}{%
+\begin{ganttchart}[
+    hgrid,
+    vgrid,
+    x unit=0.24cm,
+    y unit chart=0.31cm,
+    bar height=0.42,
+    group height=0.24,
+    milestone height=0.34,
+    group label font=\bfseries\tiny,
+    bar label font=\bfseries\tiny,
+    milestone label font=\bfseries\tiny,
+    title label font=\tiny\bfseries,
+    title height=0.7,
+    group/.append style={fill=black!45},
+    milestone/.append style={fill=red!70},
+    progress label text={}
+]{1}{36}
+\gantttitle{FYDP-I}{12}
+\gantttitle{FYDP-II}{12}
+\gantttitle{FYDP-III}{12} \\
+\gantttitle{1}{1}
+\gantttitle{}{2}
+\gantttitle{4}{1}
+\gantttitle{}{3}
+\gantttitle{8}{1}
+\gantttitle{}{3}
+\gantttitle{12}{1}
+\gantttitle{}{3}
+\gantttitle{16}{1}
+\gantttitle{}{3}
+\gantttitle{20}{1}
+\gantttitle{}{3}
+\gantttitle{24}{1}
+\gantttitle{}{3}
+\gantttitle{28}{1}
+\gantttitle{}{3}
+\gantttitle{32}{1}
+\gantttitle{}{3}
+\gantttitle{36}{1} \\
+\ganttgroup{FYDP-I}{1}{12} \\
+\ganttbar[bar/.append style={fill=blue!55}]{T01}{1}{2} \\
+\ganttbar[bar/.append style={fill=blue!55}]{T02}{3}{6} \\
+\ganttbar[bar/.append style={fill=blue!55}]{T03}{7}{10} \\
+\ganttbar[bar/.append style={fill=teal!60}]{T04}{8}{12} \\
+\ganttbar[bar/.append style={fill=orange!70}]{T05}{11}{12} \\
+\ganttmilestone{M01}{12} \\
+\ganttgroup{FYDP-II}{13}{24} \\
+\ganttbar[bar/.append style={fill=teal!60}]{T06}{13}{14} \\
+\ganttbar[bar/.append style={fill=green!55}]{T07}{13}{18} \\
+\ganttbar[bar/.append style={fill=green!55}]{T08}{17}{21} \\
+\ganttbar[bar/.append style={fill=green!55}]{T09}{21}{23} \\
+\ganttbar[bar/.append style={fill=purple!55}]{T10}{18}{24} \\
+\ganttbar[bar/.append style={fill=orange!70}]{T11}{22}{24} \\
+\ganttmilestone{M02}{24} \\
+\ganttgroup{FYDP-III}{25}{36} \\
+\ganttbar[bar/.append style={fill=purple!55}]{T12}{25}{28} \\
+\ganttbar[bar/.append style={fill=purple!55}]{T13}{27}{30} \\
+\ganttbar[bar/.append style={fill=blue!55}]{T14}{29}{32} \\
+\ganttbar[bar/.append style={fill=blue!55}]{T15}{31}{35} \\
+\ganttbar[bar/.append style={fill=orange!70}]{T16}{34}{36} \\
+\ganttmilestone{M03}{36}
+\end{ganttchart}%
+}
+
+\vspace{0.5em}
+\scriptsize
+\begin{tabular}{lll}
+\textcolor{blue!70}{\rule{1em}{0.8em}} Research and writing &
+\textcolor{teal!70}{\rule{1em}{0.8em}} Baseline and data &
+\textcolor{green!70}{\rule{1em}{0.8em}} Implementation \\
+\textcolor{purple!70}{\rule{1em}{0.8em}} Analysis and validation &
+\textcolor{orange!80}{\rule{1em}{0.8em}} Presentation &
+\textcolor{red!75}{\rule{1em}{0.8em}} Milestone
+\end{tabular}
+\end{figure}
 
 \begin{table}[H]
 \centering
-\caption{FYDP Segment-wise Research Work Allocation}
-\label{tab:fydp_segment_plan}
-\small
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|p{2.2cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\textbf{FYDP Segment} & \textbf{Curriculum Emphasis} & \textbf{Project Work and Deliverables} \\
-\hline
-FYDP-I & Problem proposal, existing-solution review, gap analysis, requirements, component breakdown, timeline, budget, interim report, presentation, and independent learning. & Define the Lorenz-1960 problem and research question; review ANN, PINN, and numerical ODE literature; identify the architecture-selection gap; finalize the functional and nonfunctional requirements; design the two-phase experiment; validate the RK4 and SciPy DOP853 numerical baseline; specify the dataset generation process; prepare Chapters~1--3 and the interim presentation. \\
-\hline
-FYDP-II & Analysis and design with specifications, team management, modern tool use, written documentation, and oral presentation of project outcomes. & Generate the canonical reference dataset; implement the data preprocessing and ANN training pipeline; run the Phase~1 architecture search over depth, width, and activation function; run the Phase~2 optimizer comparison on the best Phase~1 architectures; log model configurations, errors, convergence histories, training time, and inference time; draft Chapter~4 with implementation details and preliminary result tables. \\
-\hline
-FYDP-III & Verification and validation, professional and social impact analysis, ethical responsibility, environmental and sustainability assessment, final report, presentation, and conclusion. & Verify the experimental records against the requirements; consolidate final metric tables, plots, and interpretation; compare the plain ANN findings with the Lorenz-1960 PINN baseline from the literature \cite{matthews2024pinnde}; complete the constraints and complex engineering analysis in Chapter~5; revise the full report; finalize Chapter~6; prepare the final presentation and defense materials. \\
-\hline
+\caption{Task and Milestone IDs Used in the Gantt Chart}
+\label{tab:gantt_task_ids}
+\scriptsize
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{@{}p{0.7cm}>{\raggedright\arraybackslash}X>{\centering\arraybackslash}p{1.0cm}p{0.7cm}>{\raggedright\arraybackslash}X>{\centering\arraybackslash}p{1.0cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Task or Milestone} & \textbf{Weeks} &
+\textbf{ID} & \textbf{Task or Milestone} & \textbf{Weeks} \\
+\midrule
+T01 & Problem framing and objectives & 1--2 & T10 & Metrics, logging, and visualizations & 18--24 \\
+T02 & Literature review and gap analysis & 3--6 & T11 & Chapter 4 draft and presentation & 22--24 \\
+T03 & Requirements and standards mapping & 7--10 & M02 & FYDP-II submission milestone & 24 \\
+T04 & Baseline validation and dataset specification & 8--12 & T12 & Result verification and reproducibility review & 25--28 \\
+T05 & Interim report and presentation & 11--12 & T13 & Comparative analysis and final figures & 27--30 \\
+M01 & FYDP-I submission milestone & 12 & T14 & Standards, constraints, and impact analysis & 29--32 \\
+T06 & Canonical dataset generation & 13--14 & T15 & Final report revision and conclusion & 31--35 \\
+T07 & ANN training pipeline implementation & 13--18 & T16 & Final presentation and defense preparation & 34--36 \\
+T08 & Phase 1 architecture search & 17--21 & M03 & Final submission and defense & 36 \\
+T09 & Phase 2 optimizer comparison & 21--23 & & & \\
+\bottomrule
 \end{tabularx}
 \end{table}
-
-This allocation keeps the early trimester focused on research framing and de-risking the numerical baseline, the middle trimester focused on implementation and experiments, and the final trimester focused on verification, interpretation, report completion, and defense.
 
 \section{Task Allocation}
 
