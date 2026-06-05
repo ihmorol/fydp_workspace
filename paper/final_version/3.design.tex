@@ -188,43 +188,57 @@ Finally, we thought about combining architecture search and optimizer selection 
 
 \section{Project Plan}
 
-The project follows the waterfall methodology introduced in Chapter~1. We deliver it across the three FYDP segments defined by the department.
-
-FYDP-I covers the literature review, concept development, and design phase. Its outputs are Chapters~1 through~3 of this report, Section~5.4 (Complex Engineering Problem), Chapter~6, and the verified numerical baseline.
-
-FYDP-II covers implementation and testing. Its outputs are the trained ANN models from the $69$-run experimental campaign, the metric tables, the convergence plots, and Chapter~4.
-
-FYDP-III covers deployment. In a research context, that means results consolidation, comparative analysis against the PINN baseline from the literature, writing Chapters~5 and~6, and submitting the final report.
-
-We do not use a calendar-based Gantt chart because this project does not deliver a deployable product. The FYDP-I, II, and III deadlines already act as our project milestones.
-
-\section{Task Allocation}
-
-The team has five members. We grouped responsibilities by skill area, not by chapter. That way each person owns a coherent slice of the pipeline across both FYDP-II and FYDP-III. Table~\ref{tab:tasks} shows the breakdown.
-
-The implementation lead handles the baseline solver, data preprocessing code, PyTorch model definitions, the training loop, and the experiment runner that produces the $69$ result records. The analysis members compute and interpret the metrics, build comparison tables, and produce the figures for the final report. The writing and research members prepare the manuscript, maintain the literature review and citations, and compile the final report. Everyone participates in supervisor meetings and joint result reviews before each FYDP submission.
+The project follows the waterfall methodology introduced in Chapter~1. We map the work to the three FYDP segments in the university OBE curriculum. The curriculum places problem proposal, literature investigation, requirements, planning, interim reporting, and independent learning in FYDP-I. FYDP-II emphasizes analysis and design, teamwork, modern tools, and presentation of project outcomes. FYDP-III emphasizes verification and validation, professional and social impact analysis, ethics, sustainability, the final report, presentation, and the conclusion. Because this is a computational research project, ``deployment'' is interpreted conservatively as reproducible reporting, archived results, and final defense preparation rather than release of a software product.
 
 \begin{table}[H]
 \centering
-\caption{Task Allocation Across Team Members}
-\label{tab:tasks}
+\caption{FYDP Segment-wise Research Work Allocation}
+\label{tab:fydp_segment_plan}
+\small
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{|p{4.0cm}|p{3.0cm}|p{6.5cm}|}
+\begin{tabularx}{\textwidth}{|p{2.2cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
 \hline
-\textbf{Member} & \textbf{Role} & \textbf{Primary Responsibilities} \\
+\textbf{FYDP Segment} & \textbf{Curriculum Emphasis} & \textbf{Project Work and Deliverables} \\
 \hline
-Ikramul Hasan Moral & Implementation lead & Baseline solver, data preprocessing, PyTorch model implementation, training loop, experiment runner \\
+FYDP-I & Problem proposal, existing-solution review, gap analysis, requirements, component breakdown, timeline, budget, interim report, presentation, and independent learning. & Define the Lorenz-1960 problem and research question; review ANN, PINN, and numerical ODE literature; identify the architecture-selection gap; finalize the functional and nonfunctional requirements; design the two-phase experiment; validate the RK4 and SciPy DOP853 numerical baseline; specify the dataset generation process; prepare Chapters~1--3 and the interim presentation. \\
 \hline
-Md. Abu Bakar & Analysis & Evaluation pipeline, metric computation, architecture comparison \\
+FYDP-II & Analysis and design with specifications, team management, modern tool use, written documentation, and oral presentation of project outcomes. & Generate the canonical reference dataset; implement the data preprocessing and ANN training pipeline; run the Phase~1 architecture search over depth, width, and activation function; run the Phase~2 optimizer comparison on the best Phase~1 architectures; log model configurations, errors, convergence histories, training time, and inference time; draft Chapter~4 with implementation details and preliminary result tables. \\
 \hline
-Samiur Rahman Omlan & Analysis & Results interpretation, visualization, plots and figures \\
+FYDP-III & Verification and validation, professional and social impact analysis, ethical responsibility, environmental and sustainability assessment, final report, presentation, and conclusion. & Verify the experimental records against the requirements; consolidate final metric tables, plots, and interpretation; compare the plain ANN findings with the Lorenz-1960 PINN baseline from the literature \cite{matthews2024pinnde}; complete the constraints and complex engineering analysis in Chapter~5; revise the full report; finalize Chapter~6; prepare the final presentation and defense materials. \\
 \hline
-Fariha Islam & Writing and research & Manuscript writing, literature review, citation management \\
-\hline
-Md. Touhidul Islam & Writing and research & Chapter drafting, report compilation, manuscript writing \\
-\hline
-\end{tabular}
+\end{tabularx}
 \end{table}
+
+This allocation keeps the early trimester focused on research framing and de-risking the numerical baseline, the middle trimester focused on implementation and experiments, and the final trimester focused on verification, interpretation, report completion, and defense.
+
+\section{Task Allocation}
+
+The team has five members. We grouped responsibilities by skill area while also mapping each member's work across FYDP-I, FYDP-II, and FYDP-III. This avoids treating the report chapters as isolated tasks. Each member contributes to the same research pipeline from planning to final defense, but with different primary ownership.
+
+\begin{table}[H]
+\centering
+\caption{Task Allocation Across Team Members and FYDP Segments}
+\label{tab:tasks}
+\scriptsize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|p{2.4cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Member} & \textbf{FYDP-I Responsibilities} & \textbf{FYDP-II Responsibilities} & \textbf{FYDP-III Responsibilities} \\
+\hline
+Ikramul Hasan Moral & Lead numerical baseline validation; verify the Lorenz-1960 equation setup; define data-generation requirements. & Implement preprocessing, model definitions, training loop, and experiment runner for the $69$ planned runs. & Recheck reproducibility, archive scripts and results, and support technical defense of the implementation. \\
+\hline
+Md. Abu Bakar & Support requirements analysis and metric selection; review literature related to evaluation criteria. & Build the evaluation pipeline; compute MSE, MAE, maximum error, training time, and inference time. & Consolidate final tables; verify result consistency against the requirements; support analysis discussion. \\
+\hline
+Samiur Rahman Omlan & Prepare methodology diagrams and initial experimental workflow documentation. & Produce convergence plots, solution trajectory plots, and architecture-comparison figures. & Finalize visual evidence for Chapter~4 and presentation slides; support result interpretation. \\
+\hline
+Fariha Islam & Lead literature review, gap analysis, citation tracking, and Chapters~1--2 drafting. & Maintain citation consistency while implementation details are added to Chapter~4. & Revise the final report for academic tone, citation coverage, and defense-readiness. \\
+\hline
+Md. Touhidul Islam & Compile Chapter~3 planning material, task allocation, and interim-report structure. & Coordinate weekly documentation, report updates, and experiment-log summaries. & Compile the final report, Chapter~5 constraints, Chapter~6 conclusion, and final presentation narrative. \\
+\hline
+\end{tabularx}
+\end{table}
+
+All members participate in supervisor meetings, progress journals, internal result reviews, and FYDP presentations. Shared review is necessary because an error in the solver, dataset, model configuration, or interpretation would affect the whole research conclusion.
 
 \section{Summary}
 
