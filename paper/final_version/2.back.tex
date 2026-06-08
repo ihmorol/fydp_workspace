@@ -19,7 +19,7 @@ where $y(t)$ is the unknown function, $t$ is the independent variable, and $y_0$
 
 \subsection{The Lorenz-1960 System}
 
-The Lorenz-1960 system consists of three coupled nonlinear ODEs for meteorological modeling. We target the formulation from \cite{matthews2024pinnde} (Section 4.2):
+The Lorenz-1960 system \cite{lorenz1960max} consists of three coupled nonlinear ODEs for meteorological modeling. We target the formulation from \cite{matthews2024pinnde} (Section 4.2):
 
 \begin{equation}
 \begin{aligned}
@@ -56,7 +56,7 @@ a_i(\mathbf{x}) = \sigma\left(\mathbf{w}^{(i)} \cdot \mathbf{x} + b^{(i)}\right)
 \label{eq:neuron}
 \end{equation}
 
-where $\mathbf{w}^{(i)}$ are weights, $b^{(i)}$ is bias, and $\sigma$ is an activation function \cite{lau2020oden}. The Universal Approximation Theorem \cite{lau2020oden, babni2025error} guarantees that a network with at least one hidden layer can approximate any continuous function to arbitrary accuracy. Common activation functions include:
+where $\mathbf{w}^{(i)}$ are weights, $b^{(i)}$ is bias, and $\sigma$ is an activation function \cite{lau2020oden}. The Universal Approximation Theorem \cite{lau2020oden, babni2025error, hornik1989multilayer} guarantees that a network with at least one hidden layer can approximate any continuous function to arbitrary accuracy. Common activation functions include:
 \begin{itemize}
     \item \textbf{Sigmoid}: $\sigma(x) = \frac{1}{1 + e^{-x}}$, maps inputs to $(0, 1)$
     \item \textbf{Tanh}: $\sigma(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$, maps inputs to $(-1, 1)$
@@ -68,7 +68,7 @@ Training minimizes a loss function $L(\theta)$ over network parameters $\theta$ 
 
 \subsection{ANN-Based ODE Solving}
 
-Instead of stepping through the domain, ANNs learn a continuous solution function over the entire domain. The standard approach \cite{mall2013comparison, okereke2021novel} constructs a trial solution:
+Instead of stepping through the domain, ANNs learn a continuous solution function over the entire domain. The standard approach \cite{lagaris1998ann, mall2013comparison, okereke2021novel} constructs a trial solution:
 
 \begin{equation}
 \psi_t(x, \mathbf{p}) = A(x) + F(x, N(x, \mathbf{p}))
@@ -86,7 +86,7 @@ Minimizing this loss yields a differentiable, closed-form approximate solution w
 
 \subsection{Physics-Informed Neural Networks}
 
-PINNs embed governing equations directly into the loss function \cite{matthews2024pinnde, babni2025error, audu2026neural}:
+PINNs embed governing equations directly into the loss function \cite{raissi2019pinn, matthews2024pinnde, babni2025error, audu2026neural}:
 
 \begin{equation}
 L(\theta) = L_{\text{data}} + \lambda_1 L_{\text{physics}} + \lambda_2 L_{\text{IC/BC}}
