@@ -220,7 +220,19 @@ Table~\ref{tab:gap_analysis_updated} summarizes what each reviewed paper covers 
         
         Murugesh et al. \cite{murugesh2025novel} & Hybrid: Combines different neural modeling techniques. & Solves ODEs using integrated hybrid approaches. & Architecture optimization is not the primary focus. & Does not utilize the Lorenz-1960 test case. & Incorporates external optimization methods. \\
         \hline
-        
+
+        Lagaris et al. \cite{lagaris1998ann} & ANN: Trial-solution method using a feedforward network. & Solves ODEs, ODE systems, and PDEs. & No systematic study of layers or neurons. & Does not test the Lorenz-1960 system. & Plain feedforward ANN trained on the ODE residual. \\
+        \hline
+
+        Raissi et al. \cite{raissi2019pinn} & PINN: Embeds governing equations in the loss function. & Targets forward and inverse nonlinear PDEs. & No systematic study of depth or width. & Not applied to the Lorenz-1960 model. & Uses physics-informed constraints, not a plain ANN. \\
+        \hline
+
+        Lorenz \cite{lorenz1960max} & Analytical: Reduces the vorticity equation to three ODEs. & Derives the coupled nonlinear Lorenz-1960 ODEs. & Predates neural network architecture studies. & Defines the original Lorenz-1960 system. & Uses no neural network of any kind. \\
+        \hline
+
+        Hornik et al. \cite{hornik1989multilayer} & Theory: Proves the universal approximation property. & Not concerned with differential equations. & Shows one hidden layer suffices for approximation. & Does not address the Lorenz-1960 system. & Covers feedforward networks in general, not a solver. \\
+        \hline
+
         \textbf{Our Work} & \textbf{Plain ANN: Traditional feedforward network.} & \textbf{Direct solution of coupled ODE systems.} & \textbf{Comprehensive study of hidden layers and density.} & \textbf{Primary test case for predicting chaotic dynamics.} & \textbf{Purely data-driven ANN without physics aids.} \\
         \hline
         
@@ -246,7 +258,7 @@ Our research fills these gaps by performing a systematic architecture comparison
 
 \section{Summary}
 
-This chapter established the necessary background for our research. We reviewed the mathematical foundations of ODEs, the Lorenz-1960 system, classical numerical methods, and ANN-based solving approaches. The literature review covered 13 research papers spanning physics-informed methods, pure ANN approaches, architecture studies, Lorenz system solvers, Neural ODEs, and hybrid techniques.
+This chapter established the necessary background for our research. We reviewed the mathematical foundations of ODEs, the Lorenz-1960 system, classical numerical methods, and ANN-based solving approaches. The literature review covered 17 research papers spanning physics-informed methods, pure ANN approaches, architecture studies, Lorenz system solvers, Neural ODEs, and hybrid techniques.
 
 The gap analysis reveals that no existing study performs a systematic architecture comparison of plain ANNs on the Lorenz-1960 ODE system. Existing works either use fixed architectures, focus on simpler equations, or rely on physics-informed loss terms. Our research directly addresses this gap by varying network depth, width, and activation functions to identify the optimal ANN architecture for solving the Lorenz-1960 system as an initial value problem.
 
