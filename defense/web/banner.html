@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FYDP-I Roll-Up Banner — Lorenz × ANN</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap');
+
+:root{
+  --ink:#0B1020; --ink2:#0E1530;
+  --surface:rgba(255,255,255,.045); --surface2:rgba(255,255,255,.07);
+  --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.16);
+  --text:#EAEEF7; --muted:#98A4BE; --dim:#6E7A95;
+  --coral:#FF6A3D; --teal:#1FC8AC; --indigo:#5B8CFF; --indigo2:#7EA2FF;
+  --disp:'Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#05070f}
+body{font-family:var(--body);color:var(--text);-webkit-font-smoothing:antialiased;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ====== ROLL-UP BANNER PAGE: 800 x 2000 mm ======
+   For other roll-up standards change BOTH @page size and .banner width:
+     850x2000 -> 850mm | 1000x2000 -> 1000mm | 1200x2000 -> 1200mm        */
+@page{ size:800mm 2000mm; margin:0; }
+
+.banner{
+  position:relative; width:800mm; height:2000mm; overflow:hidden;
+  background:
+    radial-gradient(1100mm 700mm at 84% 3%, rgba(91,140,255,.20), transparent 55%),
+    radial-gradient(900mm 700mm at -8% 60%, rgba(255,106,61,.13), transparent 50%),
+    radial-gradient(900mm 700mm at 110% 104%, rgba(31,200,172,.12), transparent 55%),
+    linear-gradient(168deg,#0E1530 0%, #0B1020 52%, #090D1C 100%);
+  color:var(--text);
+  /* extra bottom padding = roll-up base "quiet zone" that curls into the cassette */
+  padding:34mm 30mm 140mm;
+  display:flex; flex-direction:column; gap:9mm;
+}
+/* hairline inset frame (matches the slide deck) */
+.banner::after{content:"";position:absolute;inset:16mm 16mm 120mm;
+  border:1px solid rgba(255,255,255,.07);border-radius:22mm;pointer-events:none}
+
+/* shared accents */
+.eyebrow{font-family:var(--mono);font-size:20pt;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--coral);font-weight:600}
+.eyebrow .sep{color:var(--dim);margin:0 .55em}
+.rule{height:5pt;width:150mm;border-radius:3pt;
+  background:linear-gradient(90deg,var(--coral),var(--teal),var(--indigo));margin-top:6mm}
+strong{color:#fff;font-weight:600}
+em{color:var(--coral);font-style:normal;font-weight:600}
+
+/* ---------------- HEADER ---------------- */
+.head{position:relative;z-index:2}
+.head .hero-art{position:absolute;right:-40mm;top:-46mm;width:330mm;opacity:.42;
+  filter:saturate(1.15);pointer-events:none}
+.head .logo{position:absolute;right:0;top:0;height:46mm;background:rgba(255,255,255,.94);
+  border-radius:9mm;padding:5mm 6mm}
+.bigtitle{font-family:var(--disp);font-weight:700;font-size:70pt;line-height:1.02;
+  letter-spacing:-.02em;margin-top:9mm;max-width:560mm}
+.bigtitle .acc{color:var(--coral)}
+.subtitle{color:var(--muted);font-size:23pt;line-height:1.5;margin-top:8mm;max-width:560mm}
+.subtitle strong{color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:5mm;margin-top:10mm}
+.chip{font-family:var(--mono);font-size:16pt;color:var(--text);background:var(--surface2);
+  border:1px solid var(--line);border-radius:999px;padding:3mm 8mm}
+
+/* mentors & team grid */
+.mentors-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1.15fr 1fr;
+  gap: 8mm;
+  margin-top: 10mm;
+}
+.mentor-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8mm;
+  padding: 5mm 8mm;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5mm;
+}
+.mentor-card.team-card {
+  border-color: rgba(31, 200, 172, 0.2);
+  background: rgba(31, 200, 172, 0.02);
+}
+.mentor-card .m-role {
+  font-family: var(--mono);
+  font-size: 13pt;
+  color: var(--coral);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+}
+.mentor-card.team-card .m-role {
+  color: var(--teal);
+}
+.mentor-card .m-info {
+  display: flex;
+  flex-direction: column;
+}
+.mentor-card .m-name {
+  font-size: 19pt;
+  font-weight: 700;
+  color: #fff;
+}
+.mentor-card .m-name.accent-text {
+  color: var(--teal);
+}
+.mentor-card .m-desc {
+  font-size: 15pt;
+  color: var(--muted);
+  margin-top: 1mm;
+}
+
+/* ---------------- CARDS / SECTIONS ---------------- */
+.body{display:flex;flex-direction:column;gap:9mm;position:relative;z-index:2}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16mm;
+  padding:10mm 14mm;position:relative;backdrop-filter:blur(2px)}
+.bh{display:flex;align-items:center;gap:6mm;margin-bottom:6mm}
+.bh .bar{width:7mm;height:16mm;border-radius:3mm;background:var(--coral)}
+.card.teal .bh .bar{background:var(--teal)} .card.indigo .bh .bar{background:var(--indigo)}
+.bh h2{font-family:var(--disp);font-weight:600;font-size:32pt;letter-spacing:-.01em;color:#fff}
+.bh .tag{margin-left:auto;font-family:var(--mono);font-size:15pt;color:var(--coral);
+  background:rgba(255,106,61,.13);border:1px solid rgba(255,106,61,.34);border-radius:999px;padding:2mm 7mm}
+.card p{font-size:20pt;line-height:1.45;color:var(--muted)}
+
+/* Intro deck styles */
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8mm;
+  margin-bottom: 5mm;
+}
+.intro-col {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 9mm;
+  padding: 6mm 8mm;
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+}
+.intro-col p {
+  font-size: 17pt !important;
+  line-height: 1.4 !important;
+  color: var(--muted);
+}
+.icon-header {
+  display: flex;
+  align-items: center;
+  gap: 4mm;
+}
+.icon-header h3 {
+  font-family: var(--disp);
+  font-size: 19pt;
+  font-weight: 600;
+  color: #fff;
+}
+.icon-circle {
+  width: 11mm;
+  height: 11mm;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16pt;
+}
+.icon-circle.coral { background: rgba(255, 106, 61, 0.15); border: 1px solid rgba(255, 106, 61, 0.3); }
+.icon-circle.indigo { background: rgba(91, 140, 255, 0.15); border: 1px solid rgba(91, 140, 255, 0.3); }
+.icon-circle.teal { background: rgba(31, 200, 172, 0.15); border: 1px solid rgba(31, 200, 172, 0.3); }
+
+/* Objectives grid styles */
+.obj-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8mm;
+}
+.obj-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 9mm;
+  padding: 6mm 8mm;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
+}
+.obj-card h3 {
+  font-family: var(--disp);
+  font-size: 20pt;
+  font-weight: 600;
+  color: #fff;
+}
+.obj-card p {
+  font-size: 17pt !important;
+  line-height: 1.4 !important;
+  color: var(--muted);
+}
+.obj-num {
+  position: absolute;
+  right: 8mm;
+  top: 5mm;
+  font-family: var(--mono);
+  font-size: 24pt;
+  font-weight: 700;
+  color: rgba(31, 200, 172, 0.22);
+}
+
+/* Gap & questions styles */
+.gap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8mm;
+}
+.gap-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10mm;
+  padding: 8mm;
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+}
+.gap-card.questions {
+  border-color: rgba(31, 200, 172, 0.15);
+  background: rgba(31, 200, 172, 0.015);
+}
+.card-tag {
+  align-self: flex-start;
+  font-family: var(--mono);
+  font-size: 13pt;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 1.5mm 5mm;
+}
+.card-tag.gap {
+  color: var(--coral);
+  background: rgba(255, 106, 61, 0.12);
+  border: 1px solid rgba(255, 106, 61, 0.3);
+}
+.card-tag.quest {
+  color: var(--teal);
+  background: rgba(31, 200, 172, 0.12);
+  border: 1px solid rgba(31, 200, 172, 0.3);
+}
+.gap-desc {
+  font-size: 18pt !important;
+  line-height: 1.4 !important;
+  color: var(--text) !important;
+  margin-bottom: 1mm;
+}
+.gap-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
+}
+.gap-list li {
+  position: relative;
+  padding-left: 8mm;
+  font-size: 17pt;
+  line-height: 1.35;
+  color: var(--muted);
+}
+.gap-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--coral);
+  font-size: 20pt;
+  line-height: 1;
+  top: -1mm;
+}
+.gap-list.teal li::before {
+  color: var(--teal);
+}
+
+/* Status Checklist Styles */
+.status-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 8mm;
+}
+.status-col {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10mm;
+  padding: 6mm 8mm;
+}
+.status-col.future {
+  border-color: rgba(31, 200, 172, 0.15);
+  background: rgba(31, 200, 172, 0.015);
+}
+.status-col h3 {
+  font-family: var(--disp);
+  font-size: 21pt;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 5mm;
+}
+.status-col.future h3 {
+  color: var(--teal);
+}
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 4mm;
+}
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 4mm;
+}
+.check-icon {
+  width: 8mm;
+  height: 8mm;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14pt;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1mm;
+}
+.check-item.done .check-icon {
+  background: rgba(31, 200, 172, 0.15);
+  color: var(--teal);
+  border: 1px solid rgba(31, 200, 172, 0.3);
+}
+.check-item.todo .check-icon {
+  background: rgba(91, 140, 255, 0.15);
+  color: var(--indigo2);
+  border: 1px solid rgba(91, 140, 255, 0.3);
+}
+.check-text {
+  font-size: 17pt;
+  line-height: 1.35;
+  color: var(--muted);
+}
+.check-text b {
+  color: #fff;
+}
+
+ul.l{list-style:none}
+ul.l li{position:relative;padding-left:11mm;margin:6mm 0;font-size:20pt;line-height:1.4;color:var(--muted)}
+ul.l li::before{content:"";position:absolute;left:0;top:7pt;width:5mm;height:5mm;border-radius:1.5mm;
+  background:var(--coral);transform:rotate(45deg)}
+ul.l.teal li::before{background:var(--teal)}
+
+.qbox{margin-top:8mm;background:linear-gradient(90deg,rgba(255,106,61,.15),rgba(31,200,172,.09));
+  border:1px solid var(--line2);border-left:6mm solid var(--coral);border-radius:8mm;
+  padding:8mm 10mm;font-size:22pt;line-height:1.4;color:var(--text)}
+.qbox b{color:var(--coral)}
+
+/* equation block */
+.bggrid{display:grid;grid-template-columns:1fr 1fr;gap:12mm;align-items:center}
+.eqcard{background:var(--surface2);border:1px solid var(--line);border-radius:10mm;padding:10mm 12mm}
+.eq{font-family:var(--mono);font-size:32pt;line-height:1.9;color:#fff}
+.eq .op{color:var(--coral)} .eq .v{color:var(--teal)}
+.eqmeta{font-family:var(--mono);font-size:16pt;color:var(--dim);margin-top:6mm}
+.figwrap{display:flex;flex-direction:column;align-items:center}
+.figwrap img{width:100%;object-fit:contain}
+.cap{font-family:var(--mono);font-size:15pt;color:var(--dim);margin-top:5mm;text-align:center}
+
+/* phase cards + pipeline */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10mm}
+.phasecard{background:var(--surface2);border:1px solid var(--line);border-radius:10mm;padding:10mm 12mm}
+.phasecard .t{font-family:var(--disp);font-weight:600;font-size:22pt;color:#fff;margin-bottom:5mm}
+.phasecard .t .n{color:var(--indigo2)} .phasecard.teal .t .n{color:var(--teal)}
+.phasecard p{font-size:18pt;line-height:1.38}
+.badge{display:inline-block;margin-top:6mm;font-family:var(--mono);font-size:18pt;font-weight:600;color:#fff;
+  background:rgba(91,140,255,.18);border:1px solid rgba(91,140,255,.42);border-radius:999px;padding:3mm 9mm}
+.badge.teal{background:rgba(31,200,172,.15);border-color:rgba(31,200,172,.42)}
+.pipe{display:flex;align-items:center;gap:3mm;flex-wrap:nowrap;margin-top:10mm}
+.node{flex:1;font-family:var(--mono);font-size:15pt;text-align:center;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);border-radius:6mm;padding:6mm 2mm;color:var(--text);line-height:1.3}
+.arrow{color:var(--coral);font-size:20pt;font-weight:700}
+
+/* result: figure + stat callout */
+.resgrid-3col {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr 0.95fr;
+  gap: 10mm;
+  align-items: center;
+  margin-top: 4mm;
+}
+.stat{display:flex;flex-direction:column;gap:4mm;justify-content:center;
+  background:linear-gradient(135deg,rgba(31,200,172,.12),rgba(91,140,255,.06));
+  border:1px solid rgba(255,255,255,.1);border-radius:12mm;padding:10mm;text-align:center}
+.stat .num{font-family:var(--mono);font-weight:700;font-size:52pt;color:var(--teal);
+  letter-spacing:-.01em;line-height:1}
+.stat .lab{font-size:16pt;color:var(--muted);line-height:1.3;text-transform:uppercase;letter-spacing:0.05em}
+.stat .ok{font-family:var(--mono);font-size:16pt;color:var(--coral);font-weight:600;
+  background:rgba(255,106,61,.1);border:1px solid rgba(255,106,61,.2);border-radius:999px;padding:2mm 6mm;align-self:center}
+.stat p{font-size:15pt;color:var(--dim);line-height:1.35}
+
+/* ---------------- FOOTER ---------------- */
+.footer{position:relative;z-index:2;margin-top:2mm;
+  border-top:1px solid var(--line);padding-top:9mm;
+  display:grid;grid-template-columns:2.5fr 1fr;gap:16mm;align-items:start}
+.footer h3{font-family:var(--disp);font-size:20pt;color:var(--coral);margin-bottom:5mm;letter-spacing:.02em}
+.refs{font-size:15.5pt;line-height:1.65;color:var(--muted);columns:2;column-gap:14mm}
+.refs div{break-inside:avoid;margin-bottom:2mm}
+.refs .n{color:var(--coral);font-family:var(--mono)}
+.contact{font-family:var(--mono);font-size:16pt;color:var(--dim);line-height:1.75}
+.contact b{color:#fff;font-family:var(--body);font-weight:600}
+.contact .repo{color:var(--teal)}
+</style>
+</head>
+<body>
+<div class="banner">
+
+  <!-- ===================== HEADER ===================== -->
+  <div class="head">
+    <img class="hero-art" src="assets/hero_phase_dark.png" alt="">
+    <img class="logo" src="assets/uiu.png" alt="UIU">
+    <div class="eyebrow">FYDP&nbsp;I <span class="sep">/</span> United International University <span class="sep">&middot;</span> Dept. of CSE</div>
+    <div class="bigtitle">Solving the Lorenz ODE System<br>using <span class="acc">Optimal ANN</span> Architectures</div>
+    <div class="subtitle">Can a <strong>plain feedforward ANN</strong> — no physics in the loss — learn a coupled nonlinear ODE system, and <em>which architecture does it best?</em></div>
+    
+    <div class="chips">
+      <span class="chip">Ikramul Hasan Moral</span>
+      <span class="chip">Md. Abu Bakar</span>
+      <span class="chip">Samiur Rahman Omlan</span>
+      <span class="chip">Fariha Islam</span>
+      <span class="chip">Md. Touhidul Islam</span>
+    </div>
+
+    <div class="mentors-grid">
+      <div class="mentor-card">
+        <span class="m-role">Supervisor</span>
+        <div class="m-info">
+          <span class="m-name">Dr. Muhammad Nomani Kabir</span>
+          <span class="m-desc">Professor, Dept. of CSE, UIU</span>
+        </div>
+      </div>
+      <div class="mentor-card">
+        <span class="m-role">Course Teacher</span>
+        <div class="m-info">
+          <span class="m-name">Dr. Md. Motaharul Islam</span>
+          <span class="m-desc">Professor, Dept. of CSE, UIU</span>
+        </div>
+      </div>
+      <div class="mentor-card team-card">
+        <span class="m-role">Team Name</span>
+        <div class="m-info">
+          <span class="m-name accent-text">Team_ParaDox</span>
+          <span class="m-desc">Final Year Design Project I</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="rule"></div>
+  </div>
+
+  <!-- ===================== BODY ===================== -->
+  <div class="body">
+
+    <!-- 1. INTRODUCTION & MOTIVATION -->
+    <div class="card indigo">
+      <div class="bh"><span class="bar"></span><h2>Introduction &amp; Motivation</h2></div>
+      
+      <div class="intro-grid">
+        <div class="intro-col">
+          <div class="icon-header">
+            <div class="icon-circle coral">⚡</div>
+            <h3>Classical Solvers</h3>
+          </div>
+          <p>Highly accurate but strictly <strong>mesh-dependent</strong>. Re-integrates step-by-step for every query, causing large computational overhead.</p>
+        </div>
+        <div class="intro-col">
+          <div class="icon-header">
+            <div class="icon-circle indigo">🧠</div>
+            <h3>Neural-ODE Methods</h3>
+          </div>
+          <p>Maps inputs continuously in one shot, but typically depends on <strong>physics-informed losses</strong> or complex operator learning.</p>
+        </div>
+        <div class="intro-col">
+          <div class="icon-header">
+            <div class="icon-circle teal">🎯</div>
+            <h3>Plain-ANN Approach</h3>
+          </div>
+          <p>Can a <strong>plain feedforward ANN</strong> (no physics in the loss) approximate the Lorenz-1960 solution purely from numerical data?</p>
+        </div>
+      </div>
+
+      <div class="qbox"><b>Central Question:</b> Can a plain feedforward ANN approximate the Lorenz-1960 solution, and <em>which architecture performs best?</em></div>
+    </div>
+
+    <!-- 2. OBJECTIVES -->
+    <div class="card teal">
+      <div class="bh"><span class="bar"></span><h2>Objectives</h2></div>
+      
+      <div class="obj-grid">
+        <div class="obj-card">
+          <div class="obj-num">01</div>
+          <h3>Dual-Solver Reference</h3>
+          <p>Build a trusted reference with <strong>RK4</strong> and <strong>SciPy DOP853</strong> solvers, cross-validating accuracy.</p>
+        </div>
+        <div class="obj-card">
+          <div class="obj-num">02</div>
+          <h3>Systematic Search</h3>
+          <p>Systematically vary <strong>depth</strong>, <strong>width</strong>, and <strong>activation</strong> functions for plain ANNs (no physics aids).</p>
+        </div>
+        <div class="obj-card">
+          <div class="obj-num">03</div>
+          <h3>Performance Scoring</h3>
+          <p>Score performance vs cost: evaluate MSE, MAE, max error, and training/inference time.</p>
+        </div>
+        <div class="obj-card">
+          <div class="obj-num">04</div>
+          <h3>PINN Comparison</h3>
+          <p>Benchmark the best plain ANN configuration against published <strong>PINN / DeepONet</strong> results.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. BACKGROUND: SYSTEM -->
+    <div class="card">
+      <div class="bh"><span class="bar"></span><h2>Background: The System</h2></div>
+      <div class="bggrid">
+        <div>
+          <div class="eqcard">
+            <div class="eq">x&#775; <span class="op">=</span> <span class="op">&minus;0.10</span> <span class="v">y z</span></div>
+            <div class="eq">y&#775; <span class="op">=</span> <span class="op">&plus;1.60</span> <span class="v">x z</span></div>
+            <div class="eq">z&#775; <span class="op">=</span> <span class="op">&minus;0.75</span> <span class="v">x y</span></div>
+          </div>
+          <div class="eqmeta">k = 2, l = 1 &nbsp;&middot;&nbsp; x&#8320;=0.5, y&#8320;=0.75, z&#8320;=1 &nbsp;&middot;&nbsp; t &isin; [0, 1]</div>
+          <p style="font-size:19pt;margin-top:9mm">Three coupled nonlinear ODEs — compact, but a genuinely demanding benchmark for any solver.</p>
+        </div>
+        <div class="figwrap">
+          <img src="assets/fig_dynamics_dark.png" alt="long-term dynamics" style="max-height:120mm">
+          <div class="cap">Bounded, quasi-periodic orbits over t &isin; [0, 50].</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. RESEARCH GAP & QUESTIONS -->
+    <div class="card indigo">
+      <div class="bh"><span class="bar"></span><h2>Research Gap &amp; Questions</h2></div>
+      
+      <div class="gap-grid">
+        <div class="gap-card">
+          <div class="card-tag gap">THE GAP</div>
+          <p class="gap-desc">Prior work lacks a systematic study of plain-ANN capabilities on Lorenz-1960; literature fixes architecture, uses simpler ODEs, or relies on PINNs.</p>
+          <ul class="gap-list">
+            <li>No architecture study for Lorenz-1960</li>
+            <li>No PINN vs plain-ANN comparison</li>
+            <li>Depth &amp; width study is rarely combined</li>
+          </ul>
+        </div>
+        <div class="gap-card questions">
+          <div class="card-tag quest">OUR QUESTIONS</div>
+          <p class="gap-desc">Can plain neural networks learn coupled chaotic ODE dynamics without physical guidance, and what is the optimal design?</p>
+          <ul class="gap-list teal">
+            <li>Can a plain ANN learn the solution from data alone?</li>
+            <li>Which configuration wins the accuracy-cost trade-off?</li>
+            <li>How close does it get to physics-informed baselines?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. METHODOLOGY -->
+    <div class="card teal">
+      <div class="bh"><span class="bar"></span><h2>Methodology — Two-Phase Study</h2>
+        <span class="tag">69 controlled runs</span></div>
+      <div class="g2">
+        <div class="phasecard">
+          <div class="t"><span class="n">Phase 1</span> — Architecture search</div>
+          <p>depth {1, 2, 3, 4} &times; width {20, 50, 100} &times; activation {tanh, ReLU, sigmoid, GELU, Swish}</p>
+          <span class="badge">= 60 runs &middot; Adam fixed</span>
+        </div>
+        <div class="phasecard teal">
+          <div class="t"><span class="n">Phase 2</span> — Optimizer comparison</div>
+          <p>3 best Phase-1 architectures &times; {Adam, L-BFGS, SGD + momentum}, everything else held constant.</p>
+          <span class="badge teal">= 9 runs</span>
+        </div>
+      </div>
+      <p style="margin-top:9mm"><strong>69 controlled experiments</strong> — splitting the phases cleanly separates <em>architecture</em> effects from <em>optimizer</em> effects.</p>
+      <div class="pipe">
+        <div class="node">Generate<br>RK4 + SciPy</div><span class="arrow">&rarr;</span>
+        <div class="node">Preprocess<br>80/20 split</div><span class="arrow">&rarr;</span>
+        <div class="node">Train<br>ANN grid</div><span class="arrow">&rarr;</span>
+        <div class="node">Evaluate<br>5 metrics</div><span class="arrow">&rarr;</span>
+        <div class="node">Select<br>best</div>
+      </div>
+    </div>
+
+    <!-- 6. RESULT: BASELINE VALIDATION -->
+    <div class="card">
+      <div class="bh"><span class="bar"></span><h2>Numerical Baseline &amp; Validation</h2>
+        <span class="tag">Result</span></div>
+      <p style="margin-bottom:6mm">The reference trajectory is produced by two independent solvers and cross-checked <strong>before any ANN sees it</strong>: a custom <strong>RK4</strong> integrator (h = 10&#8315;&#179;, 1001 points) and <strong>SciPy DOP853</strong> (rtol = 10&#8315;&#185;&#8304;), split 80/20 for train–validation (seed 42).</p>
+      
+      <div class="resgrid-3col">
+        <div class="figwrap">
+          <img src="assets/fig_solution_dark.png" alt="solution trajectory" style="max-height:110mm">
+          <div class="cap">Reference Trajectory t &isin; [0, 1]</div>
+        </div>
+        <div class="figwrap">
+          <img src="assets/fig_validation_dark.png" alt="validation error" style="max-height:110mm">
+          <div class="cap">Pointwise Solver Disagreement</div>
+        </div>
+        <div class="stat">
+          <div class="num">1.8&times;10&#8315;&#178;&#178;</div>
+          <div class="lab">solver-agreement MSE</div>
+          <div class="ok">&#10003; target was &lt; 10&#8315;&#185;&#8304;</div>
+          <p>A defensible ground truth for ANN training.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. STATUS & FUTURE WORK -->
+    <div class="card indigo">
+      <div class="bh"><span class="bar"></span><h2>Status (FYDP-I) &amp; Future Work</h2></div>
+      
+      <div class="status-grid">
+        <div class="status-col">
+          <h3>Delivered This Stage (FYDP-I)</h3>
+          <div class="checklist">
+            <div class="check-item done">
+              <span class="check-icon">✓</span>
+              <div class="check-text">
+                <b>Scope Definition:</b> Research question framed with an honest, narrow focus.
+              </div>
+            </div>
+            <div class="check-item done">
+              <span class="check-icon">✓</span>
+              <div class="check-text">
+                <b>Literature Review:</b> 17-paper review identifying key architectural gaps.
+              </div>
+            </div>
+            <div class="check-item done">
+              <span class="check-icon">✓</span>
+              <div class="check-text">
+                <b>Experimental Design:</b> Two-phase design (69 controlled runs) locked.
+              </div>
+            </div>
+            <div class="check-item done">
+              <span class="check-icon">✓</span>
+              <div class="check-text">
+                <b>Numerical Validation:</b> Dual-solver baseline verified (DOP853 vs RK4).
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="status-col future">
+          <h3>Next Steps (FYDP-II)</h3>
+          <div class="checklist">
+            <div class="check-item todo">
+              <span class="check-icon">→</span>
+              <div class="check-text">
+                <b>Pipeline Execution:</b> Run Phase 1 (60 runs) followed by Phase 2 (9 runs).
+              </div>
+            </div>
+            <div class="check-item todo">
+              <span class="check-icon">→</span>
+              <div class="check-text">
+                <b>Stability Testing:</b> Repeat seeds; dense grids &amp; various initial conditions.
+              </div>
+            </div>
+            <div class="check-item todo">
+              <span class="check-icon">→</span>
+              <div class="check-text">
+                <b>PINN Comparison:</b> Compare plain ANN directly with physics-informed models.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="qbox" style="border-left-color:var(--teal)"><strong>No accuracy claims are made</strong> until the FYDP-II experiments produce evidence — the foundation is set, the results come next.</div>
+    </div>
+
+  </div>
+
+  <!-- ===================== FOOTER ===================== -->
+  <div class="footer">
+    <div>
+      <h3>Selected References</h3>
+      <div class="refs">
+        <div><span class="n">[1]</span> Lorenz (1960), <i>Tellus</i> 12(3).</div>
+        <div><span class="n">[2]</span> Matthews &amp; Bihlo (2024), PinnDE.</div>
+        <div><span class="n">[3]</span> Raissi et al. (2019), <i>JCP</i> 378.</div>
+        <div><span class="n">[4]</span> Lagaris et al. (1998), <i>IEEE TNN</i> 9(5).</div>
+        <div><span class="n">[5]</span> Lau &amp; Werth (2020), ODEN.</div>
+        <div><span class="n">[6]</span> Chen et al. (2018), Neural ODEs, <i>NeurIPS</i>.</div>
+      </div>
+    </div>
+    <div class="contact">
+      <b>Team_ParaDox</b><br>
+      Final Year Design Project I<br>
+      Dept. of CSE, UIU &middot; June 2026<br>
+      <span class="repo">github.com/ihmorol/fydp_workspace</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
