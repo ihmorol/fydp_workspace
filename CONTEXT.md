@@ -46,21 +46,43 @@ dz/dt = -0.75 xy
 
 **Approach**: Waterfall (Literature Review → Concept Development → Algorithm Design → Implementation → Testing → Deployment)
 
+**FYDP Segments**:
+- FYDP-I: Literature Review + Concept Development + Design (Ch1, Ch2, Ch3, baseline solver)
+- FYDP-II: Implementation + Testing (69 ANN experiments, evaluation, Ch4)
+- FYDP-III: Deployment (Ch5 results analysis, Ch6 conclusion, final report submission)
+
 **Data pipeline**:
 1. Generate reference trajectory using RK4 (custom) and SciPy solve_ivp (DOP853)
 2. Both solvers show agreement at RMSE ~2.33e-11 — this is the ground truth
-3. Export canonical dataset (t, x, y, z) as `.npz` for ANN training
-4. Train feedforward ANN architectures on (t → x, y, z) mapping
-5. Evaluate using MSE, training convergence, and inference time
+3. Split data 80/20 random train/validation, seed=42
+4. Z-score normalize each output variable (x, y, z) during training; unnormalize before reporting
+5. Train feedforward ANN architectures on (t → x, y, z) mapping
+6. Evaluate using MSE, MAE, max absolute error, training time, inference time
 
-**ANN approach**: Plain feedforward (data-driven only). No physics-informed loss terms, no operator learning. Input: scalar t. Output: (x(t), y(t), z(t)).
+**ANN approach**: Plain feedforward (data-driven only). No physics-informed loss terms, no operator learning. Input: scalar t (scalar). Output: (x(t), y(t), z(t)) — the three state variables of the Lorenz-1960 system.
 
-**Architecture search axes**:
-- Depth: 1–4 hidden layers
-- Width: 20, 50, 100 neurons per layer
+**Loss function**: Pure MSE on (x, y, z) targets. No IC penalty, no physics residual.
+
+**Architecture search axes (Phase 1 — 60 runs)**:
+- Depth: 1, 2, 3, 4 hidden layers
+- Width: 20, 50, 100 neurons per layer (uniform across all hidden layers)
 - Activation: tanh, ReLU, sigmoid, GELU, Swish
-- Optimizer: Adam with default lr=1e-3
-- Loss: MSE against RK4 reference trajectory
+- Optimizer: Adam, lr=1e-3 (fixed for Phase 1)
+- Total: 4 × 3 × 5 = 60 experiments
+
+**Optimizer comparison (Phase 2 — 9 runs)**:
+- Take top-3 architectures by combined MSE from Phase 1
+- Compare: Adam (lr=1e-3) vs L-BFGS vs SGD with momentum
+- Total: 3 architectures × 3 optimizers = 9 experiments
+
+**Total experiments: 69**
+
+**Training protocol**:
+- Max epochs: 10,000
+- Early stopping: patience=500 epochs on validation loss; restore best weights
+- Batch size: full batch (800 training points per step)
+- Random seed: torch.manual_seed(42) set before each model initialization
+- Data split seed: 42 (fixed, applied once before all experiments)
 
 ---
 
@@ -128,14 +150,98 @@ Full bibliography: `paper/fydp.bib`
 |---|---|---|
 | 1 | Introduction | ✅ Complete |
 | 2 | Background | ✅ Complete |
-| 3 | Project Design | ❌ Stub |
+| 3 | Project Design | ⚠️ Decisions locked — ready to write |
 | 4 | Implementation and Results | ❌ Stub |
 | 5 | Standards and Design Constraints | ⚠️ Partial |
 | 6 | Conclusion | ❌ Stub |
 
-Chapter 3 must cover: experimental design, ANN architecture grid, training protocol, evaluation metrics, data split strategy, hyperparameter settings.
+Chapter 3 decisions are fully locked (see Chapter 3 Design Decisions section below). Write using those decisions directly.
 
-Chapter 4 must cover: training results per architecture, MSE tables, convergence plots, best architecture selection, comparison with PINN baselines from literature.
+Chapter 4 must cover: training results per architecture, MSE/MAE/Max error tables, convergence plots, best architecture selection, Phase 2 optimizer comparison, comparison with PINN baselines from literature.
+
+---
+
+## Chapter 3 Design Decisions (Locked — 2026-05-15)
+
+All decisions below are final for Chapter 3 (Project Design). Do not override without supervisor approval.
+
+### 3.1 Requirements
+
+**Functional Requirements**
+
+| ID | Requirement |
+|---|---|
+| FR1 | Generate high-accuracy numerical reference solution for Lorenz-1960 using RK4 and SciPy DOP853 over t∈[0,1] at 1001 uniformly spaced points |
+| FR2 | Partition reference dataset into training and validation subsets using 80/20 random split, seed=42 |
+| FR3 | Construct feedforward ANN models with systematically varied depth (1–4), width (20/50/100), and activation (tanh/ReLU/sigmoid/GELU/Swish) |
+| FR4 | Train all Phase 1 models under identical conditions using Adam optimizer; record convergence behaviour |
+| FR5 | Conduct Phase 2 optimizer comparison (Adam vs L-BFGS vs SGD) on top-3 architectures from Phase 1 |
+| FR6 | Evaluate each model: MSE, MAE, maximum absolute error, training time, inference time against RK4 reference |
+| FR7 | Produce comparison tables, solution trajectory plots, and error curves for all evaluated models |
+
+**Non-Functional Requirements**
+
+| ID | Requirement |
+|---|---|
+| NFR1 | All experiments fully reproducible via fixed seed=42 for weight initialization and data splitting |
+| NFR2 | Numerical reference solution maintains solver agreement within RMSE < 1e-10 between RK4 and SciPy DOP853 |
+| NFR5 | All results, model configurations, and metrics logged systematically to allow independent verification |
+
+### 3.1.2 Context Diagram
+
+**External entities (2 only):**
+1. **Research Team** — configures pipeline, triggers experiments, receives outputs
+2. **Academic / Research Community** — consumes findings, reuses methodology, builds on results
+
+No other entities. System boundary contains all 5 pipeline processes.
+
+### 3.1.3 Data Flow Diagram Level 1
+
+**5 processes:**
+1. Generate Reference Solution (RK4 + SciPy DOP853)
+2. Preprocess Data (80/20 split, z-score normalize targets)
+3. Train ANN Models (Phase 1: 60 runs; Phase 2: 9 runs)
+4. Evaluate Models (MSE, MAE, Max error, training time, inference time)
+5. Compare & Select Best Architecture → report to Academic/Research Community
+
+### 3.2 Experimental Design Summary
+
+| Decision | Value |
+|---|---|
+| Framework | PyTorch |
+| Input | Scalar t |
+| Output | (x(t), y(t), z(t)) — 3 state variables |
+| Data points | 1001 uniformly spaced, t∈[0,1] |
+| Train/val split | 80/20 random, seed=42 |
+| Target normalization | Z-score per variable; unnormalize before reporting |
+| Loss function | Pure MSE — no IC penalty, no physics term |
+| Phase 1 grid | Depth 1–4 × Width 20/50/100 × 5 activations = 60 runs |
+| Phase 2 | Top-3 architectures × Adam/L-BFGS/SGD = 9 runs |
+| Total experiments | 69 |
+| Optimizer (Phase 1) | Adam, lr=1e-3 |
+| Max epochs | 10,000 |
+| Early stopping | Patience=500, restore best weights |
+| Batch size | Full batch (800 points) |
+| Seed | torch.manual_seed(42) per model |
+| Eval metrics | MSE + MAE + Max absolute error + Training time + Inference time |
+| Reproducibility | Single run per config, fixed seed=42 |
+
+### 3.3 Project Plan
+
+Three-segment FYDP narrative (no Gantt, no timeline):
+- **FYDP-I**: Literature Review, Concept Development, Design — Ch1, Ch2, Ch3, baseline solver
+- **FYDP-II**: Implementation, Testing — 69 ANN experiments, evaluation, Ch4
+- **FYDP-III**: Deployment — Ch5, Ch6, final report
+
+### 3.4 Task Allocation
+
+| Member | ID | Role | Responsibilities |
+|---|---|---|---|
+| Ikramul Hasan Moral | 0112230489 | Implementation Lead | Baseline solver, data preprocessing, ANN model implementation (PyTorch), training loop, experiment runner |
+| Md. Abu Bakar | 0112230200 | Analysis | Evaluation pipeline, metrics computation, architecture comparison |
+| Samiur Rahman Omlan | 0112230195 | Analysis | Results interpretation, visualization, plots, figures |
+| Fariha Islam | 0112230431 | Writing & Research | Paper writing, literature review, citation management |
+| Md. Touhidul Islam | 0112230435 | Writing & Research | Paper writing, chapter drafting, report compilation |
 
 ---
 
