@@ -8,21 +8,80 @@ real-world problems, particularly those involving complex or nonlinear equations
 not possible to obtain exact solutions. That is why methods such as Euler’s method and 
 Runge-Kutta are used to obtain approximate solutions. In this project, we examine a 
 particular system consisting of three nonlinear equations known as the Lorenz-1960 system 
-(i.e., one of the first meteorological models). The system is small, but complex enough to 
+(one of the first meteorological models). The system is small, but complex enough to 
 make a good testing ground for various solution methods. The Lorenz-1960 system is a 
-great candidate for evaluating how well ANNs learn and predict behavior. Classical 
+great candidate for evaluating how well  artificial neural network (ANN) learn and predict behavior. Classical 
 numerical methods address these problems step by step. Also they are typically accurate, but 
-they are likely very slow and require more computational cost. We use numerical methods like Runge-Kutta to generate data that can be used to train artificial neural networks to learn how variables change over time.
+they are very slow and require more computational cost. We use numerical methods like Runge-Kutta to generate data that can be used to train artificial neural networks to learn how variables change over time.
 The ANN learns to match its predictions with the results of the numerical solver during training. After training, the ANN can quickly predict results for any time without solving the equations again.
 Therefore, the primary aim  of this project is to solve the Lorenz-1960 system 
 and to see how well a plain ANN can learn its behavior and which ANN architecture provides
 optimal results. 
 
 
+Figure~\ref{fig:ode_landscape} shows the breadth of fields where such rate-of-change models appear.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    hub/.style={rounded corners=4pt, draw=black!85, fill=black!12, line width=1.0pt,
+                align=center, inner sep=7pt, minimum width=3.4cm, minimum height=1.5cm},
+    leaf/.style={rounded corners=3pt, draw=black!65, fill=white, line width=0.6pt,
+                 align=center, inner sep=5pt, minimum width=3.1cm, minimum height=1.1cm},
+    link/.style={-{Latex[length=2.2mm]}, draw=black!65, line width=0.7pt}
+]
+\node[hub] (ode) at (0,0) {\textbf{Ordinary Differential}\\\textbf{Equations}\\[2pt]$\dfrac{dy}{dt}=f(t,y)$};
+\node[leaf] (weather) at (-4.6, 2.1) {\textbf{Weather \& Climate}\\Lorenz convection};
+\node[leaf] (epi)     at ( 4.6, 2.1) {\textbf{Epidemiology}\\SIR spread models};
+\node[leaf] (pop)     at (-5.4, 0.0) {\textbf{Population \& Biology}\\Logistic growth};
+\node[leaf] (ctrl)    at ( 5.4, 0.0) {\textbf{Engineering \& Control}\\Motion \& circuits};
+\node[leaf] (fin)     at (-4.6,-2.1) {\textbf{Finance}\\Continuous-time models};
+\node[leaf] (ai)      at ( 4.6,-2.1) {\textbf{AI \& Scientific ML}\\Neural ODEs, PINNs};
+\foreach \n in {weather,epi,pop,ctrl,fin,ai}{\draw[link] (ode)--(\n);}
+\end{tikzpicture}
+\caption{Ordinary differential equations describe rate-of-change processes throughout science, engineering, and modern machine learning. The Lorenz-1960 system studied in this report belongs to the weather and climate family.}
+\label{fig:ode_landscape}
+\end{figure}
+
 \section{Motivation}
-This project is motivated by both research and practical sides. Classic numerical methods are reliable and accurate. They work well for directly simulating equations. However, they can be slow when we need to run them many times. A trained artificial neural network (ANN), on the other hand, can solve the equation on its own. It makes predictions and acts like a copy of the real system. Many studies now use neural networks to solve differential equations, including physics-informed neural networks (PINNs), operator learning, and ANN-based approximators. This makes the topic both relevant and interesting to explore. Another reason for this project is the learning and hands-on benefits it offers. It helps build skills in solving ordinary differential equations (ODEs). It also teaches how to build and use neural network models. The project involves running experiments and studying the results. Comparing different methods is helpful. Even if simple ANNs are not as powerful as advanced methods, they help us understand their strengths and weaknesses.
+This project is motivated by both research and practical sides. Classic numerical methods are reliable and accurate. They work well for directly simulating equations. A trained artificial neural network (ANN) on the other hand, can solve the equation on its own. It makes predictions and acts like a copy of the real system. Many studies now use neural networks to solve differential equations, including physics informed neural networks (PINNs), operator learning, and ANN-based approximators. This makes the topic both relevant and interesting to explore. Another reason for this project is the learning and hands-on benefits it offers. It helps build skills in solving ordinary differential equations (ODEs). It also teaches how to build and use neural network models. The project involves running experiments and studying the results. Comparing different methods is helpful. Even if simple ANNs are not as powerful as advanced methods, they help us understand their strengths and weaknesses.
 
 
+
+Figure~\ref{fig:ode_in_ai} summarizes how numerical solvers and neural networks combine in this data-driven workflow.
+
+\begin{figure}[ht]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    font=\footnotesize, node distance=0.8cm and 0.85cm,
+    stage/.style={rounded corners=3pt, draw=black!70, fill=white, line width=0.6pt,
+                  align=center, inner sep=5pt, text width=2.5cm, minimum height=1.3cm},
+    nn/.style={rounded corners=3pt, draw=black!85, fill=black!12, line width=0.9pt,
+               align=center, inner sep=5pt, text width=2.5cm, minimum height=1.3cm},
+    outbox/.style={rounded corners=3pt, draw=black!85, fill=black!12, line width=0.9pt,
+                align=center, inner sep=5pt, text width=2.8cm, minimum height=1.3cm},
+    chip/.style={rounded corners=2pt, draw=black!55, fill=white, line width=0.5pt, dashed,
+                 align=center, inner sep=4pt, text width=2.8cm, font=\scriptsize, minimum height=1.0cm},
+    flow/.style={-{Latex[length=2.4mm]}, line width=0.8pt, draw=black!80}
+]
+\node[stage] (sys) {Physical system\\(ODE model)};
+\node[stage, right=of sys] (solv) {Numerical solver\\RK4 / SciPy};
+\node[stage, right=of solv] (data) {Reference\\trajectory data};
+\node[nn, right=of data] (train) {Train plain ANN\\(data-driven)};
+\node[outbox, right=of train] (surr) {Fast surrogate\\$\hat{y}(t)$, no re-solving};
+\foreach \a/\b in {sys/solv, solv/data, data/train, train/surr}{\draw[flow] (\a)--(\b);}
+\node[align=left, font=\scriptsize, text width=2.5cm, below=1.0cm of sys] (lbl)
+      {\textbf{Other neural}\\\textbf{approaches to ODEs:}};
+\node[chip, below=1.0cm of solv] (pinn) {PINN\\physics in the loss};
+\node[chip, below=1.0cm of data] (nodeb) {Neural ODE\\learns $\dot{h}=f(h,t,\theta)$};
+\node[chip, below=1.0cm of train] (op) {Operator learning\\(DeepONet)};
+\end{tikzpicture}%
+}
+\caption{Ordinary differential equations underpin modern scientific machine learning. A numerical solver produces reference data that trains an artificial neural network; the trained network then acts as a fast surrogate that predicts the state at any time without re-solving the equations. This report follows the plain data-driven ANN route, in contrast to the physics-informed and operator-learning alternatives below.}
+\label{fig:ode_in_ai}
+\end{figure}
 
 \section{Objectives}
 The primary objectives of this project are:
@@ -77,7 +136,7 @@ For better understanding, a diagram of our methodology is given below:-
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{methodology.jpeg}
+    \includegraphics[width=0.8\textwidth]{Methodology.png}
     \caption{Methodology Diagram}
     \label{fig:methodology}
 \end{figure}
@@ -86,12 +145,11 @@ For better understanding, a diagram of our methodology is given below:-
 \section{Project Outcome}
 The expected outcome of the project will be the clear and the justified 
 determination of the most appropriate architecture for the ANN in estimating 
-the solution to the Lorenz-1960 system of Ordinary Differential Equations 
-(ODEs) within the scope of the experiment. This project must also include a 
+the solution to the Lorenz-1960 system of ODEs within the scope of the experiment. This project must also include a 
 numerical reference solution to the ODEs, the establishment of ANN 
 baselines, and a comparative analysis of the results. \\[1pt]
 
-The project will also contribute to the current understanding of the aptitude 
+The project will also contribute to the current understanding of the capacity
 and limitations of ANN models in the approximation and solution of differential 
 equations. If the ANN models are able to get a satisfactory level of accuracy in 
 approximating the solution to the ODEs, the project will have demonstrated 

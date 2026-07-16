@@ -99,19 +99,77 @@ The physics loss uses automatic differentiation to compute derivatives of the ne
 To better understand the differences in methodology, we present the standard architectures used in recent studies. Figure~\ref{fig:ann_arch} illustrates a typical Artificial Neural Network (ANN) architecture used for predicting system parameters without physics-informed constraints \cite{Bre}. This standard feedforward structure relies entirely on data-driven learning through backpropagation.
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{ann_architecture.jpg}
-    \caption{Typical Artificial Neural Network architecture \cite{Bre}.}
-    \label{fig:ann_arch}
+\centering
+\begin{tikzpicture}[
+    font=\footnotesize,
+    neuron/.style={circle, draw=black!55, fill=teal!16, minimum size=7mm, inner sep=0pt},
+    inn/.style={circle, draw=black!55, fill=orange!22, minimum size=8mm, inner sep=0pt},
+    outn/.style={circle, draw=black!55, fill=blue!16, minimum size=8mm, inner sep=0pt},
+    conn/.style={draw=black!22, line width=0.4pt}
+]
+% input
+\node[inn] (i1) at (0,0) {$t$};
+% hidden layer A
+\foreach \i/\y in {1/2.1,2/0.9,3/-0.9,4/-2.1}{\node[neuron] (a\i) at (2,\y) {};}
+\node at (2,0) {$\vdots$};
+% hidden layer B
+\foreach \i/\y in {1/2.1,2/0.9,3/-0.9,4/-2.1}{\node[neuron] (b\i) at (4,\y) {};}
+\node at (4,0) {$\vdots$};
+% output
+\node[outn] (o1) at (6, 1.2) {$x$};
+\node[outn] (o2) at (6, 0.0) {$y$};
+\node[outn] (o3) at (6,-1.2) {$z$};
+% connections
+\foreach \i in {1,2,3,4}{\draw[conn] (i1)--(a\i);}
+\foreach \i in {1,2,3,4}{\foreach \j in {1,2,3,4}{\draw[conn] (a\i)--(b\j);}}
+\foreach \i in {1,2,3,4}{\foreach \o in {o1,o2,o3}{\draw[conn] (b\i)--(\o);}}
+% layer captions
+\node[align=center] at (0,-3.0) {Input\\time $t$};
+\node[align=center] at (3,-3.0) {Hidden layers\\(depth \& width varied)};
+\node[align=center] at (6,-3.0) {Output\\state $(x,y,z)$};
+\end{tikzpicture}
+\caption{Feedforward ANN used in this study. A single scalar input, time $t$, is propagated through a stack of hidden layers to predict the Lorenz-1960 state $(x(t),y(t),z(t))$. The number of hidden layers, the neurons per layer, and the activation function are the axes compared in this work \cite{Bre}.}
+\label{fig:ann_arch}
 \end{figure}
 
 In contrast, Figure~\ref{fig:pinn_arch} demonstrates a Physics-Informed Neural Network (PINN) architecture. In this approach, the standard ANN output is further constrained by physical laws---specifically, the governing differential equations of the system---which are embedded directly into the loss function \cite{Zhai}.
 
 \begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.9\textwidth]{pinn_architecture.jpg}
-    \caption{Architecture of a Physics-Informed Neural Network incorporating physical loss \cite{Zhai}.}
-    \label{fig:pinn_arch}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    font=\footnotesize, node distance=0.8cm and 1.0cm,
+    block/.style={rounded corners=3pt, draw=black!55, fill=black!4, line width=0.7pt,
+                  align=center, inner sep=6pt, minimum height=1.2cm},
+    nn/.style={rounded corners=3pt, draw=teal!60, fill=teal!12, line width=0.8pt,
+               align=center, inner sep=6pt, minimum height=1.2cm, text width=2.3cm},
+    res/.style={rounded corners=3pt, draw=blue!55, fill=blue!8, line width=0.8pt,
+                align=left, inner sep=7pt},
+    loss/.style={rounded corners=3pt, draw=red!55, fill=red!8, line width=0.8pt,
+                 align=center, inner sep=6pt, minimum height=1.0cm},
+    flow/.style={-{Latex[length=2.6mm]}, line width=0.8pt, draw=black!65}
+]
+\node[block] (t) {$t$};
+\node[nn, right=of t] (net) {Feedforward NN\\$N(t;\theta)$};
+\node[block, right=of net] (out) {$\tilde{x},\ \tilde{y},\ \tilde{z}$};
+\node[block, right=1.2cm of out] (ad) {Automatic\\differentiation\\$\dot{\tilde{x}},\dot{\tilde{y}},\dot{\tilde{z}}$};
+\node[res, right=of ad] (residual) {%
+  $r_x=\dot{\tilde{x}}+0.10\,\tilde{y}\tilde{z}$\\[2pt]
+  $r_y=\dot{\tilde{y}}-1.60\,\tilde{x}\tilde{z}$\\[2pt]
+  $r_z=\dot{\tilde{z}}+0.75\,\tilde{x}\tilde{y}$};
+\node[loss, right=of residual] (lphys) {$L_{\mathrm{phys}}=\dfrac{1}{N}\sum\big(r_x^2+r_y^2+r_z^2\big)$};
+\node[block, below=1.1cm of lphys, fill=orange!12, draw=orange!70] (total)
+     {Total loss\\$L=L_{\mathrm{data}}+\lambda\,L_{\mathrm{phys}}$};
+\node[loss] (ldata) at (residual |- total)
+     {$L_{\mathrm{data}}=\dfrac{1}{N}\sum\big\|(\tilde{x},\tilde{y},\tilde{z})-(x,y,z)_{\mathrm{ref}}\big\|^2$};
+\foreach \a/\b in {t/net, net/out, out/ad, ad/residual, residual/lphys}{\draw[flow] (\a)--(\b);}
+\draw[flow] (out.south) |- (ldata.west);
+\draw[flow] (lphys) -- (total);
+\draw[flow] (ldata) -- (total);
+\end{tikzpicture}%
+}
+\caption{Physics-Informed Neural Network for the Lorenz-1960 system. The network outputs $(\tilde{x},\tilde{y},\tilde{z})$ are differentiated to form the ODE residuals $r_x, r_y, r_z$, whose mean square becomes a physics loss added to the data loss \cite{Zhai}. The plain-ANN approach adopted in this report deliberately omits the physics term ($\lambda=0$), training on the data loss alone.}
+\label{fig:pinn_arch}
 \end{figure}
 
 
