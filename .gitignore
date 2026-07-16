@@ -42,3 +42,5 @@ data/*.h5
 .DS_Store
 Thumbs.db
 __MACOSX/
+.chrometmp/
+node_modules/
