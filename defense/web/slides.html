@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FYDP-I Defense — Lorenz × ANN</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap');
+
+:root{
+  --ink:#0C1226; --ink2:#0E1530;
+  --surface:#FFFFFF; --surface2:#F3F6FC;
+  --line:#E2E7F1; --line2:#D4DBE8;
+  --text:#0C1226; --muted:#52617E; --dim:#7C89A3;
+  --coral:#F2622E; --teal:#0E9E8E; --indigo:#3552D8; --indigo2:#3552D8;
+  --disp:'Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#E9EEF7}
+body{font-family:var(--body);color:var(--text);-webkit-font-smoothing:antialiased;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+@page{ size:13.333in 7.5in; margin:0; }
+
+.slide{
+  position:relative; width:1280px; height:720px; overflow:hidden;
+  background:
+    radial-gradient(1200px 700px at 82% -10%, rgba(53,82,216,.10), transparent 60%),
+    radial-gradient(900px 600px at -8% 110%, rgba(242,98,46,.08), transparent 55%),
+    linear-gradient(160deg,#FBFCFE 0%, #F3F6FC 55%, #ECF0F8 100%);
+  color:var(--text);
+  padding:64px 76px;
+  display:flex; flex-direction:column;
+  page-break-after:always; break-after:page;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+.slide:last-child{page-break-after:avoid;break-after:auto}
+
+/* hairline frame accent */
+.slide::after{content:"";position:absolute;inset:22px;border:1px solid rgba(12,18,38,.07);border-radius:18px;pointer-events:none}
+
+/* shared bits */
+.eyebrow{font-family:var(--mono);font-size:16px;letter-spacing:.22em;text-transform:uppercase;color:var(--coral);font-weight:600}
+.eyebrow .sep{color:var(--dim);margin:0 .5em}
+h1.stitle{font-family:var(--disp);font-weight:700;font-size:46px;line-height:1.06;letter-spacing:-.01em;margin-top:10px}
+h2.stitle{font-family:var(--disp);font-weight:700;font-size:40px;line-height:1.05;letter-spacing:-.01em;margin-top:8px}
+.lead{color:var(--muted);font-size:20px;line-height:1.5;max-width:60ch}
+.accentText{color:var(--coral)} .tealText{color:var(--teal)} .indigoText{color:var(--indigo2)}
+.rule{height:4px;width:84px;border-radius:3px;background:linear-gradient(90deg,var(--coral),var(--teal));margin:18px 0 0}
+strong{color:var(--ink);font-weight:600}
+
+.foot{position:absolute;left:76px;right:76px;bottom:30px;display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:13px;color:var(--dim);letter-spacing:.06em}
+.foot .dot{width:7px;height:7px;border-radius:50%;background:var(--coral);display:inline-block;margin-right:8px;vertical-align:middle}
+.pageno{font-variant-numeric:tabular-nums}
+
+.headblock{margin-bottom:26px}
+.body{flex:1;min-height:0}
+
+/* cards */
+.grid{display:grid;gap:20px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px 26px;position:relative;
+  box-shadow:0 6px 20px rgba(12,18,38,.06)}
+.card .ic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  background:rgba(242,98,46,.12);border:1px solid rgba(242,98,46,.28);margin-bottom:16px}
+.card.teal .ic{background:rgba(14,158,142,.12);border-color:rgba(14,158,142,.30)}
+.card.indigo .ic{background:rgba(53,82,216,.12);border-color:rgba(53,82,216,.30)}
+.card h3{font-family:var(--disp);font-weight:600;font-size:23px;margin-bottom:8px;letter-spacing:-.01em}
+.card p{color:var(--muted);font-size:17px;line-height:1.5}
+.card ul{color:var(--muted);font-size:17px;line-height:1.55;padding-left:0;list-style:none}
+.card ul li{padding-left:22px;position:relative;margin:7px 0}
+.card ul li::before{content:"";position:absolute;left:2px;top:11px;width:8px;height:8px;border-radius:50%;
+  background:var(--teal)}
+svg.icon{width:26px;height:26px;stroke:var(--coral);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.teal svg.icon{stroke:var(--teal)} .indigo svg.icon{stroke:var(--indigo2)}
+
+.banner{margin-top:20px;background:linear-gradient(90deg,rgba(242,98,46,.10),rgba(14,158,142,.08));
+  border:1px solid var(--line2);border-left:4px solid var(--coral);border-radius:14px;padding:20px 26px;font-size:21px;line-height:1.45}
+
+/* title slide */
+.title-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:62%}
+.hero-art{position:absolute;right:-120px;top:50%;transform:translateY(-50%);width:760px;opacity:.68;filter:saturate(1.05)}
+.logo-tr{position:absolute;right:60px;top:54px;height:74px;opacity:1;
+  background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px 10px;box-shadow:0 6px 18px rgba(12,18,38,.08)}
+.bigtitle{font-family:var(--disp);font-weight:700;font-size:62px;line-height:1.02;letter-spacing:-.02em}
+.subtitle{color:var(--muted);font-size:21px;margin-top:18px;max-width:46ch;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;max-width:50ch}
+.chip{font-family:var(--mono);font-size:13.5px;color:var(--text);background:var(--surface2);
+  border:1px solid var(--line);border-radius:999px;padding:7px 14px}
+.sup{margin-top:22px;color:var(--muted);font-size:17px}
+.sup b{color:var(--ink)}
+
+/* table */
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:17px}
+thead th{font-family:var(--disp);font-weight:600;text-align:left;color:var(--ink);background:rgba(53,82,216,.10);
+  padding:14px 16px;font-size:16px;letter-spacing:.01em;border-bottom:1px solid var(--line2)}
+thead th:first-child{border-top-left-radius:14px}thead th:last-child{border-top-right-radius:14px}
+tbody td{padding:12px 16px;color:var(--muted);border-bottom:1px solid var(--line);vertical-align:top;line-height:1.4}
+tbody tr:nth-child(even) td{background:rgba(12,18,38,.025)}
+tbody tr.ours td{background:rgba(242,98,46,.10);color:var(--text)}
+tbody tr.ours td:first-child{color:var(--coral);font-weight:600}
+td .w{color:var(--ink);font-weight:600}
+
+/* figure cards */
+.figwrap{display:flex;align-items:center;justify-content:center;height:100%}
+.figwrap img{max-width:100%;max-height:360px;object-fit:contain}
+.whitecard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 20px rgba(12,18,38,.06)}
+.cap{color:var(--dim);font-size:14px;margin-top:10px;text-align:center;font-family:var(--mono);letter-spacing:.02em}
+
+/* equation block */
+.eqcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:30px 32px;
+  box-shadow:0 6px 20px rgba(12,18,38,.06)}
+.eq{font-family:var(--mono);font-size:30px;line-height:2.0;color:var(--ink)}
+.eq .op{color:var(--coral)} .eq .v{color:var(--teal)}
+.meta{color:var(--muted);font-family:var(--mono);font-size:16px;margin-top:14px}
+
+/* stat callout */
+.stat{display:flex;flex-direction:column;justify-content:center;gap:6px;
+  background:linear-gradient(160deg,rgba(31,200,172,.14),rgba(91,140,255,.08));
+  border:1px solid var(--line2);border-radius:20px;padding:30px}
+.stat .num{font-family:var(--mono);font-weight:700;font-size:58px;color:var(--teal);letter-spacing:-.02em;line-height:1}
+.stat .lab{color:var(--muted);font-size:18px}
+.stat .ok{font-family:var(--mono);font-size:15px;color:var(--coral)}
+
+/* phase / pipeline */
+.pipe{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.node{font-family:var(--mono);font-size:15px;color:var(--text);background:var(--surface2);
+  border:1px solid var(--line2);border-radius:12px;padding:12px 14px;text-align:center;flex:1}
+.arrow{color:var(--coral);font-size:20px}
+.badge{display:inline-flex;align-items:center;gap:10px;background:rgba(242,98,46,.12);
+  border:1px solid rgba(242,98,46,.32);border-radius:999px;padding:10px 20px;font-family:var(--mono);
+  font-size:18px;color:var(--ink);font-weight:600}
+
+/* timeline */
+.track{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+.phase{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative}
+.phase .tag{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.phase h3{font-family:var(--disp);font-size:22px;margin:6px 0 10px}
+.phase p{color:var(--muted);font-size:16px;line-height:1.45}
+.status{position:absolute;top:18px;right:18px;font-family:var(--mono);font-size:12px;padding:5px 11px;border-radius:999px}
+.s-done{background:rgba(14,158,142,.14);color:var(--teal);border:1px solid rgba(14,158,142,.42)}
+.s-next{background:rgba(242,98,46,.12);color:var(--coral);border:1px solid rgba(242,98,46,.42)}
+.s-plan{background:rgba(12,18,38,.05);color:var(--muted);border:1px solid var(--line)}
+
+/* big closing */
+.closing{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.closing .ty{font-family:var(--disp);font-weight:700;font-size:96px;letter-spacing:-.02em;
+  background:linear-gradient(90deg,#0C1226, #3552D8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.closing .q{color:var(--muted);font-size:24px;margin-top:14px}
+.closing .who{color:var(--dim);font-family:var(--mono);font-size:15px;margin-top:30px;letter-spacing:.04em}
+
+.reflist{columns:2;column-gap:48px;font-size:16px;line-height:1.5;color:var(--muted)}
+.reflist li{break-inside:avoid;margin:0 0 12px;list-style:none;padding-left:30px;position:relative}
+.reflist li .n{position:absolute;left:0;top:0;font-family:var(--mono);color:var(--coral);font-size:14px}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:26px;height:100%}
+.col{display:flex;flex-direction:column;gap:14px}
+.list{list-style:none}
+.list li{position:relative;padding-left:26px;margin:12px 0;color:var(--muted);font-size:18.5px;line-height:1.45}
+.list li::before{content:"";position:absolute;left:0;top:10px;width:10px;height:10px;border-radius:3px;background:var(--coral);transform:rotate(45deg)}
+.list.teal li::before{background:var(--teal)}
+.sectlabel{font-family:var(--disp);font-weight:600;font-size:22px;color:var(--ink);margin-bottom:4px}
+
+/* title slide — team + credits band */
+.titlefoot{position:relative;z-index:3;border-top:1px solid var(--line);padding-top:16px;margin-top:12px;
+  display:flex;flex-direction:column;gap:11px}
+.teamrow{display:flex;align-items:center;gap:14px;flex-wrap:nowrap}
+.teamname{font-family:var(--disp);font-weight:700;font-size:18px;letter-spacing:-.01em;white-space:nowrap;
+  background:linear-gradient(90deg,var(--coral),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.namechips{display:flex;flex-wrap:nowrap;gap:8px}
+.namechips .chip{font-size:12.5px;padding:6px 12px;white-space:nowrap}
+.creditrow{display:flex;flex-wrap:wrap;gap:6px 26px;font-size:15px;color:var(--muted)}
+.clab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--coral);margin-right:7px}
+.creditrow b{color:var(--ink);font-weight:600}
+
+/* methodology pills */
+.pillrow{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 2px}
+.pill{font-family:var(--mono);font-size:13.5px;color:var(--text);background:var(--surface2);
+  border:1px solid var(--line2);border-radius:999px;padding:6px 13px}
+.card.indigo .pill{border-color:rgba(53,82,216,.28)} .card.teal .pill{border-color:rgba(14,158,142,.30)}
+
+/* research-question cards */
+.rqnum{font-family:var(--disp);font-weight:700;font-size:42px;line-height:1;letter-spacing:-.02em;margin-bottom:12px}
+
+/* thank-you */
+.ty-eyebrow{font-family:var(--disp);font-weight:700;font-size:22px;letter-spacing:.01em;margin-bottom:6px;
+  background:linear-gradient(90deg,var(--coral),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.ty-credits{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px 20px;margin-top:24px;font-size:17px;color:var(--muted)}
+.ty-credits .ty-dot{color:var(--dim)}
+.ty-org{font-family:var(--mono);font-size:14px;color:var(--dim);letter-spacing:.04em;margin-top:14px}
+</style>
+</head>
+<body>
+
+<!-- 1 TITLE -->
+<section class="slide">
+  <img class="hero-art" src="assets/hero_phase_light.png" alt="" style="right:-210px;opacity:.5">
+  <img class="logo-tr" src="assets/uiu.png" alt="UIU">
+  <div class="title-wrap" style="max-width:66%">
+    <div class="eyebrow">FYDP&nbsp;I Defense <span class="sep">/</span> UIU &middot; CSE</div>
+    <div class="bigtitle">Solving the Lorenz ODE System<br>using <span class="accentText">Optimal ANN</span> Architectures</div>
+    <div class="subtitle">Can a plain feedforward ANN, with no physics in the loss, learn a coupled nonlinear ODE system, and which architecture does it best?</div>
+  </div>
+  <div class="titlefoot">
+    <div class="teamrow">
+      <span class="teamname">Team&nbsp;Paradox</span>
+      <span class="namechips">
+        <span class="chip">Ikramul Hasan Moral</span>
+        <span class="chip">Md. Abu Bakar</span>
+        <span class="chip">Samiur Rahman Omlan</span>
+        <span class="chip">Fariha Islam</span>
+        <span class="chip">Md. Touhidul Islam</span>
+      </span>
+    </div>
+    <div class="creditrow">
+      <span><span class="clab">Supervisor</span><b>Dr. Muhammad Nomani Kabir</b>, Professor, CSE</span>
+      <span><span class="clab">Course Teacher</span><b>Dr. Md. Motaharul Islam</b>, Professor, CSE</span>
+      <span><span class="clab">Date</span>June 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- 2 ROADMAP -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">Roadmap</div>
+    <h2 class="stitle">What we'll cover</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body">
+    <div class="grid g3" style="grid-auto-rows:1fr">
+      <div class="card indigo"><h3><span class="indigoText">01</span> &nbsp;Problem &amp; Objectives</h3><p>Why coupled ODEs are hard, and what we set out to do.</p></div>
+      <div class="card"><h3><span class="accentText">02</span> &nbsp;Background &amp; Gap</h3><p>The Lorenz system, ANN vs PINN, and the literature gap.</p></div>
+      <div class="card teal"><h3><span class="tealText">03</span> &nbsp;Methodology</h3><p>A two-phase, 69-run controlled architecture search.</p></div>
+      <div class="card teal"><h3><span class="tealText">04</span> &nbsp;Numerical Baseline</h3><p>A dual-solver reference we can trust.</p></div>
+      <div class="card"><h3><span class="accentText">05</span> &nbsp;Result &amp; Validation</h3><p>The baseline verified to machine precision.</p></div>
+      <div class="card indigo"><h3><span class="indigoText">06</span> &nbsp;Plan &amp; Conclusion</h3><p>FYDP-II roadmap and where we stand today.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 PROBLEM -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">01 <span class="sep">/</span> Problem &amp; Motivation</div>
+    <h2 class="stitle">Three reasons this is hard</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body" style="display:flex;flex-direction:column">
+    <div class="grid g3" style="flex:1;grid-auto-rows:1fr">
+      <div class="card indigo" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M4 18 L9 8 L13 14 L20 5"/><circle cx="20" cy="5" r="1.4"/></svg></div>
+        <h3>No closed form</h3>
+        <p>Coupled nonlinear ODEs like Lorenz-1960 rarely admit an analytical solution.</p>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Solvers are costly</h3>
+        <p>RK4 is accurate but mesh-dependent, and re-solves step by step for every new query.</p>
+      </div>
+      <div class="card teal" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.4"/><circle cx="18" cy="7" r="2.4"/><circle cx="12" cy="17" r="2.4"/><path d="M8 8 L11 15 M16 8 L13 15"/></svg></div>
+        <h3>Neural nets lean on physics</h3>
+        <p>Most neural ODE methods add physics-informed losses or operator learning to get there.</p>
+      </div>
+    </div>
+    <div class="banner" style="margin-top:26px"><strong>Central question:</strong> can a <span class="accentText">plain feedforward ANN</span>, trained only on numerical data with no physics in the loss, approximate the Lorenz-1960 solution, and <em>which architecture does it best?</em></div>
+  </div>
+</section>
+
+<!-- 4 OBJECTIVES -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">02 <span class="sep">/</span> Objectives</div>
+    <h2 class="stitle">What we set out to do</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body">
+    <div class="grid g2" style="grid-auto-rows:1fr">
+      <div class="card teal"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l3 7 4-14 3 7h4"/></svg></div><h3>Build a trusted reference</h3><p>Solve Lorenz-1960 with RK4 <em>and</em> SciPy, then cross-check one solver against the other.</p></div>
+      <div class="card indigo"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg></div><h3>Search the architecture space</h3><p>Systematically vary <strong>depth</strong>, <strong>width</strong>, and <strong>activation</strong>, with no physics aids in the loss.</p></div>
+      <div class="card"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8"/></svg></div><h3>Measure accuracy vs cost</h3><p>MSE, MAE, max error, plus training and inference time and convergence stability.</p></div>
+      <div class="card teal"><div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 21l-4.9-2.8.9-5.5-4-3.9L9.5 8z"/></svg></div><h3>Benchmark vs literature</h3><p>Position the best plain ANN against PINN / DeepONet results from prior work.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 BACKGROUND SYSTEM -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">03 <span class="sep">/</span> Background</div>
+    <h2 class="stitle">The Lorenz system</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body" style="display:grid;grid-template-columns:0.92fr 1.08fr;gap:30px;align-items:center">
+    <div>
+      <div class="eqcard">
+        <div class="eq">x&#775; <span class="op">=</span> <span class="op">&minus;0.10</span> <span class="v">y z</span></div>
+        <div class="eq">y&#775; <span class="op">=</span> <span class="op">&plus;1.60</span> <span class="v">x z</span></div>
+        <div class="eq">z&#775; <span class="op">=</span> <span class="op">&minus;0.75</span> <span class="v">x y</span></div>
+      </div>
+      <div class="meta">k = 2, l = 1 &nbsp;&middot;&nbsp; x&#8320; = 0.5, y&#8320; = 0.75, z&#8320; = 1 &nbsp;&middot;&nbsp; t &isin; [0, 1]</div>
+      <p class="lead" style="margin-top:16px;font-size:18px">Three coupled nonlinear ODEs from an early meteorological model. Compact to write down, but hard to integrate accurately.</p>
+    </div>
+    <div style="height:100%;display:flex;flex-direction:column;justify-content:center">
+      <div class="figwrap" style="height:auto"><img src="assets/fig_dynamics.png" alt="long-term dynamics"></div>
+      <div class="cap">Long-term evolution over t &isin; [0, 50]: bounded, quasi-periodic orbits.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 ANN vs PINN -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">03 <span class="sep">/</span> Background</div>
+    <h2 class="stitle">Plain ANN vs Physics-Informed NN</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body" style="display:flex;flex-direction:column">
+    <div class="grid g2" style="flex:1">
+      <div style="display:flex;flex-direction:column">
+        <div class="whitecard" style="flex:1"><img style="max-height:286px;max-width:100%" src="assets/ann_architecture.png" alt="ANN"></div>
+        <div class="cap"><span class="accentText">Plain ANN</span>: learns t &rarr; (x, y, z) from data by backpropagation.</div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <div class="whitecard" style="flex:1"><img style="max-width:100%;max-height:286px" src="assets/pinn_architecture.png" alt="PINN"></div>
+        <div class="cap"><span class="tealText">PINN</span>: embeds the governing equations in the loss.</div>
+      </div>
+    </div>
+    <div class="banner" style="border-left-color:var(--teal)"><strong>Our scope:</strong> the plain ANN on the left. PINNs appear only as a <em>literature benchmark</em>; we do not implement them.</div>
+  </div>
+</section>
+
+<!-- 7 LITERATURE -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">03 <span class="sep">/</span> Literature</div>
+    <h2 class="stitle">Where the field stands</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body">
+    <table>
+      <thead><tr><th style="width:24%">Work</th><th style="width:38%">Approach</th><th>Gap for our study</th></tr></thead>
+      <tbody>
+        <tr><td><span class="w">Matthews &amp; Bihlo</span><br><span style="font-size:14px">PinnDE</span></td><td>PINN + DeepONet on Lorenz-1960</td><td>Fixed architecture; relies on physics-informed loss</td></tr>
+        <tr><td><span class="w">Aslam et al.</span></td><td>ANN + PSO on a Lorenz variant</td><td>Optimises weights, not architecture</td></tr>
+        <tr><td><span class="w">Mall &amp; Chakraverty</span></td><td>ANN, 4–6 nodes, sigmoid only</td><td>Simple ODEs; no depth / activation sweep</td></tr>
+        <tr><td><span class="w">Lau &amp; Werth</span><br><span style="font-size:14px">ODEN</span></td><td>Plain ANN; tanh/sigmoid beat ReLU</td><td>No systematic depth–width study</td></tr>
+        <tr><td><span class="w">Dubey / Audu et al.</span></td><td>Plain ANN on first-order ODEs</td><td>Fixed nets; not coupled, not Lorenz</td></tr>
+        <tr class="ours"><td>Our work</td><td>Plain ANN, systematic search</td><td>Depth &times; width &times; activation on Lorenz-1960</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 8 RESEARCH GAPS -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">03 <span class="sep">/</span> Gap</div>
+    <h2 class="stitle">The gap we fill</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body">
+    <div class="grid g2" style="grid-auto-rows:1fr;height:100%">
+      <div class="card indigo" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg></div>
+        <h3>No architecture study</h3>
+        <p>The Lorenz system has no systematic depth–width sweep for a plain ANN.</p>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M9 4v16M15 4v16"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg></div>
+        <h3>No PINN vs plain-ANN</h3>
+        <p>Physics-informed and data-only nets are not compared on the same problem.</p>
+      </div>
+      <div class="card teal" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M4 14c3-8 5 8 8 0s4-6 8 0"/></svg></div>
+        <h3>No activation study</h3>
+        <p>Activation choice is rarely treated as a controlled variable on coupled ODEs.</p>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="ic"><svg class="icon" viewBox="0 0 24 24"><path d="M3 20V6M3 20h16M7 20v-6M12 20V9M17 20v-9"/></svg></div>
+        <h3>Depth &amp; width fixed</h3>
+        <p>Prior work varies one factor at a time, never depth <em>and</em> width together.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8b RESEARCH QUESTIONS -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">03 <span class="sep">/</span> Questions</div>
+    <h2 class="stitle">What we ask</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body">
+    <div class="grid g3" style="grid-auto-rows:1fr;height:100%">
+      <div class="card indigo" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="rqnum"><span class="indigoText">RQ1</span></div>
+        <p style="font-size:19px;color:var(--text)">Can a <strong>plain ANN</strong> learn the solution from numerical data alone, with no physics in the loss?</p>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="rqnum"><span class="accentText">RQ2</span></div>
+        <p style="font-size:19px;color:var(--text)">Which <strong>depth &times; width &times; activation</strong> gives the best accuracy–cost trade-off?</p>
+      </div>
+      <div class="card teal" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="rqnum"><span class="tealText">RQ3</span></div>
+        <p style="font-size:19px;color:var(--text)">How close does the best plain ANN come to <strong>physics-informed</strong> baselines?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 METHODOLOGY -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">04 <span class="sep">/</span> Methodology</div>
+    <h2 class="stitle">A two-phase comparative study</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body" style="display:flex;flex-direction:column;gap:22px">
+    <div class="grid g2" style="grid-auto-rows:1fr">
+      <div class="card indigo" style="display:flex;flex-direction:column;justify-content:center">
+        <h3><span class="indigoText">Phase 1</span> &middot; Architecture search</h3>
+        <div class="pillrow">
+          <span class="pill">depth 1–4</span>
+          <span class="pill">width 20 · 50 · 100</span>
+        </div>
+        <div class="pillrow">
+          <span class="pill">tanh</span><span class="pill">ReLU</span><span class="pill">sigmoid</span><span class="pill">GELU</span><span class="pill">Swish</span>
+        </div>
+        <div class="badge" style="margin-top:14px;background:rgba(91,140,255,.16);border-color:rgba(91,140,255,.4)">60 runs &middot; optimizer fixed (Adam)</div>
+      </div>
+      <div class="card teal" style="display:flex;flex-direction:column;justify-content:center">
+        <h3><span class="tealText">Phase 2</span> &middot; Optimizer comparison</h3>
+        <div class="pillrow">
+          <span class="pill">3 best nets</span><span class="pill">Adam</span><span class="pill">L-BFGS</span><span class="pill">SGD + momentum</span>
+        </div>
+        <p style="font-size:15px;margin-top:6px">Architecture held constant; only the optimizer changes.</p>
+        <div class="badge" style="margin-top:14px;background:rgba(31,200,172,.14);border-color:rgba(31,200,172,.4)">9 runs</div>
+      </div>
+    </div>
+    <div class="card" style="padding:22px 26px">
+      <div class="pipe">
+        <span class="badge">69 total</span>
+        <span class="arrow">&rarr;</span>
+        <div class="node">Generate<br>RK4 + SciPy</div><span class="arrow">&rarr;</span>
+        <div class="node">Preprocess<br>80/20 split</div><span class="arrow">&rarr;</span>
+        <div class="node">Train<br>ANN grid</div><span class="arrow">&rarr;</span>
+        <div class="node">Evaluate<br>5 metrics</div><span class="arrow">&rarr;</span>
+        <div class="node">Select<br>best</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 NUMERICAL BASELINE -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">05 <span class="sep">/</span> Numerical Baseline</div>
+    <h2 class="stitle">A baseline we can trust</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body" style="display:grid;grid-template-columns:0.85fr 1.15fr;gap:30px;align-items:center">
+    <div class="card">
+      <ul class="list">
+        <li>Custom <strong>RK4</strong> integrator: h = 10&#8315;&#179;, 1001 uniform points</li>
+        <li><strong>SciPy DOP853</strong>: rtol = 10&#8315;&#185;&#8304;, atol = 10&#8315;&#185;&#178;</li>
+        <li>80 / 20 train–validation split, fixed seed 42</li>
+        <li>Errors reported in original physical units</li>
+      </ul>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:center">
+      <div class="figwrap" style="height:auto"><img src="assets/fig_solution.png" alt="solution"></div>
+      <div class="cap">RK4 reference trajectory for x, y, z over t &isin; [0, 1].</div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 RESULT -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">05 <span class="sep">/</span> Result</div>
+    <h2 class="stitle">The baseline is verified</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body" style="display:grid;grid-template-columns:1.25fr 0.75fr;gap:30px;align-items:center">
+    <div style="display:flex;flex-direction:column;justify-content:center">
+      <div class="figwrap" style="height:auto"><img src="assets/fig_validation.png" alt="validation"></div>
+      <div class="cap">Pointwise RK4 &minus; SciPy disagreement stays at the 10&#8315;&#185;&#185; level across the trajectory.</div>
+    </div>
+    <div class="stat">
+      <div class="num">1.8&times;10&#8315;&#178;&#178;</div>
+      <div class="lab">solver-agreement MSE (RK4 vs SciPy)</div>
+      <div class="ok">&#10003; target was &lt; 10&#8315;&#185;&#8304;</div>
+      <p style="color:var(--muted);font-size:16px;margin-top:14px;line-height:1.45">The <strong>ground truth</strong> for every ANN we train in FYDP-II.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12 PLAN -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">06 <span class="sep">/</span> Plan</div>
+    <h2 class="stitle">Roadmap &amp; what's next</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body" style="display:flex;flex-direction:column;gap:22px">
+    <div class="track">
+      <div class="phase"><span class="status s-done">Done</span><div class="tag">FYDP-I &middot; wk 1–14</div><h3>Foundation</h3><p>Problem, 17-paper review, requirements, and a verified dual-solver baseline.</p></div>
+      <div class="phase"><span class="status s-next">Next</span><div class="tag">FYDP-II &middot; wk 15–28</div><h3>Experiments</h3><p>Training pipeline, Phase-1 (60) then Phase-2 (9) runs, metrics &amp; plots.</p></div>
+      <div class="phase"><span class="status s-plan">Planned</span><div class="tag">FYDP-III &middot; wk 29–42</div><h3>Analysis</h3><p>Reproducibility, comparative analysis, final report &amp; defense.</p></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="sectlabel" style="font-size:19px">Immediate next steps</div><ul class="list"><li>Build the ANN training / evaluation pipeline</li><li>Run the 60 Phase-1 architectures</li><li>Pick the 3 best for Phase-2</li></ul></div>
+      <div class="card teal"><div class="sectlabel" style="font-size:19px">Later extensions</div><ul class="list teal"><li>Repeated seeds for stability</li><li>Denser grids &amp; new initial conditions</li><li>Direct comparison with PINN baselines</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 CONCLUSION -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">06 <span class="sep">/</span> Conclusion</div>
+    <h2 class="stitle">Where we stand</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body" style="display:flex;flex-direction:column;gap:20px">
+    <div class="two">
+      <div class="card indigo"><div class="sectlabel">What's done</div><ul class="list"><li>A clear, narrow research question</li><li>17-paper review with an explicit gap</li><li>Two-phase design (69 runs) locked</li><li>Dual-solver baseline verified</li></ul></div>
+      <div class="card teal"><div class="sectlabel">What it gives us</div><ul class="list teal"><li>First systematic plain-ANN architecture study on Lorenz-1960</li><li>Clean attribution of architecture vs optimizer effects</li><li>Narrow scope; accuracy claims wait for FYDP-II evidence</li></ul></div>
+    </div>
+    <div class="banner">FYDP-II turns this validated baseline and locked design into measured results.</div>
+  </div>
+</section>
+
+<!-- 14 REFERENCES -->
+<section class="slide">
+  <div class="headblock">
+    <div class="eyebrow">Appendix</div>
+    <h2 class="stitle">Selected references</h2>
+    <div class="rule"></div>
+  </div>
+  <div class="body">
+    <ul class="reflist">
+      <li><span class="n">1</span>Lorenz, E.N. (1960). Maximum simplification of the dynamic equations. <em>Tellus</em> 12(3).</li>
+      <li><span class="n">2</span>Matthews &amp; Bihlo (2024). PinnDE: PINNs for ODEs and PDEs.</li>
+      <li><span class="n">3</span>Raissi et al. (2019). Physics-informed neural networks. <em>JCP</em> 378.</li>
+      <li><span class="n">4</span>Lagaris et al. (1998). ANN for solving ODEs/PDEs. <em>IEEE TNN</em> 9(5).</li>
+      <li><span class="n">5</span>Lau &amp; Werth (2020). ODEN: solving ODEs with neural networks.</li>
+      <li><span class="n">6</span>Mall &amp; Chakraverty (2013). ANN architectures for ODEs.</li>
+      <li><span class="n">7</span>Dubey et al. (2024). Solving coupled ODEs with ANNs.</li>
+      <li><span class="n">8</span>Chen et al. (2018). Neural ordinary differential equations. <em>NeurIPS</em>.</li>
+    </ul>
+    <p class="meta" style="margin-top:22px">Full bibliography (17 works) in the project report &middot; paper/final/fydp.bib</p>
+  </div>
+</section>
+
+<!-- 15 THANK YOU -->
+<section class="slide">
+  <img class="hero-art" style="opacity:.42;right:-220px" src="assets/hero_phase_light.png" alt="">
+  <img class="logo-tr" src="assets/uiu.png" alt="UIU">
+  <div class="closing">
+    <div class="ty-eyebrow">Team Paradox</div>
+    <div class="ty">Thank you</div>
+    <div class="q">Questions &amp; discussion</div>
+    <div class="rule" style="margin:26px auto 0"></div>
+    <div class="ty-credits">
+      <span><span class="clab">Supervisor</span>Dr. Muhammad Nomani Kabir</span>
+      <span class="ty-dot">&middot;</span>
+      <span><span class="clab">Course Teacher</span>Dr. Md. Motaharul Islam</span>
+    </div>
+    <div class="ty-org">Dept. of CSE &middot; United International University</div>
+  </div>
+</section>
+
+</body>
+</html>
