@@ -31,10 +31,10 @@ body{font-family:var(--body);color:var(--text);-webkit-font-smoothing:antialiase
     radial-gradient(820mm 560mm at -6% 30%, rgba(255,106,61,.13), transparent 52%),
     radial-gradient(900mm 600mm at 108% 72%, rgba(31,200,172,.15), transparent 55%),
     radial-gradient(680mm 460mm at 0% 104%, rgba(91,140,255,.12), transparent 55%),
-    linear-gradient(to right, rgba(255, 255, 255, 0.012) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255,255,255,0.012) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.012) 1px, transparent 1px),
     linear-gradient(165deg,#0E1530 0%, #0B1020 54%, #090D1C 100%);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 15mm 15mm, 15mm 15mm, 100% 100%;
+  background-size: 100% 100%,100% 100%,100% 100%,100% 100%, 15mm 15mm, 15mm 15mm, 100% 100%;
   color:var(--text);
   padding:24mm 26mm 20mm;
   display:flex; flex-direction:column; gap:12mm;
@@ -47,7 +47,7 @@ em{color:var(--coral);font-style:normal;font-weight:600}
 
 /* ---------------- HEADER ---------------- */
 .phead{position:relative;z-index:2;border-bottom:1px solid var(--line);padding-bottom:10mm}
-.phead .hero-art{position:absolute;right:-26mm;top:-30mm;width:240mm;opacity:.34;pointer-events:none}
+.phead .hero-art{position:absolute;right:-26mm;top:-30mm;width:235mm;opacity:.32;pointer-events:none}
 .phead .logo{position:absolute;right:0;top:0;height:42mm;background:rgba(255,255,255,.95);
   border-radius:8mm;padding:5mm 6mm}
 .eyebrow{font-family:var(--mono);font-size:18pt;letter-spacing:.26em;text-transform:uppercase;
@@ -56,9 +56,8 @@ em{color:var(--coral);font-style:normal;font-weight:600}
 .bigtitle{font-family:var(--disp);font-weight:700;font-size:84pt;line-height:1.0;
   letter-spacing:-.022em;margin-top:7mm;max-width:640mm}
 .bigtitle .acc{color:var(--coral)}
-.subtitle{color:var(--muted);font-size:24pt;line-height:1.45;margin-top:8mm;max-width:600mm}
+.subtitle{color:var(--muted);font-size:24pt;line-height:1.45;margin-top:8mm;max-width:610mm}
 .subtitle strong{color:#fff}
-
 .credits{display:grid;grid-template-columns:1.05fr 1.05fr 1fr;gap:9mm;margin-top:11mm}
 .mcard{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8mm;
   padding:6mm 9mm;display:flex;flex-direction:column;gap:2mm;backdrop-filter:blur(5px)}
@@ -73,160 +72,234 @@ em{color:var(--coral);font-style:normal;font-weight:600}
 .mcard .au:last-child::after{content:""}
 
 /* ---------------- 3-COLUMN BODY ---------------- */
-.pcols{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:13mm;align-items:stretch}
-.col{display:flex;flex-direction:column;gap:12mm;min-height:0}
+.pcols{position:relative;z-index:2;flex:1;display:flex;gap:13mm;align-items:stretch}
+.col{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:12mm;min-height:0}
 
-/* Premium card styles with top-borders and glassmorphism */
-.card{
-  background:var(--surface);
-  backdrop-filter:blur(10px);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:13mm;
-  padding:11mm 12mm;
-  position:relative;
-  box-shadow:0 8px 32px 0 rgba(0,0,0,0.3);
-}
-.card::before {
-  content:""; position:absolute; top:0; left:0; right:0; height:2mm;
-  border-radius:13mm 13mm 0 0; background:transparent;
-}
-.card.indigo::before { background:linear-gradient(90deg, var(--indigo), var(--indigo2)); }
-.card.teal::before { background:linear-gradient(90deg, var(--teal), var(--indigo2)); }
-.card.coral::before { background:linear-gradient(90deg, var(--coral), var(--indigo)); }
+.card{background:var(--surface);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.06);
+  border-radius:13mm;padding:12mm 13mm;position:relative;box-shadow:0 8px 32px 0 rgba(0,0,0,.3)}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:2mm;border-radius:13mm 13mm 0 0;background:transparent}
+.card.indigo::before{background:linear-gradient(90deg,var(--indigo),var(--indigo2))}
+.card.teal::before{background:linear-gradient(90deg,var(--teal),var(--indigo2))}
+.card.coral::before{background:linear-gradient(90deg,var(--coral),var(--indigo))}
 
-.card.grow{flex:1}
-.bh{display:flex;align-items:center;gap:6mm;margin-bottom:6mm}
+.bh{display:flex;align-items:center;gap:6mm;margin-bottom:8mm}
 .snum{font-family:var(--mono);font-weight:700;font-size:14pt;color:var(--coral);
-  background:rgba(255,106,61,.14);border:1px solid rgba(255,106,61,.36);border-radius:5mm;
-  padding:2mm 4mm;min-width:13mm;text-align:center}
+  background:rgba(255,106,61,.14);border:1px solid rgba(255,106,61,.36);border-radius:5mm;padding:2mm 4mm;min-width:13mm;text-align:center}
 .card.teal .snum{color:var(--teal);background:rgba(31,200,172,.13);border-color:rgba(31,200,172,.36)}
 .card.indigo .snum{color:var(--indigo2);background:rgba(91,140,255,.14);border-color:rgba(91,140,255,.38)}
 .bh h2{font-family:var(--disp);font-weight:600;font-size:25pt;letter-spacing:-.01em;color:#fff;line-height:1.05}
 .bh .tag{margin-left:auto;font-family:var(--mono);font-size:13pt;color:var(--coral);
   background:rgba(255,106,61,.13);border:1px solid rgba(255,106,61,.34);border-radius:999px;padding:2mm 6mm}
 .card.teal .bh .tag{color:var(--teal);background:rgba(31,200,172,.12);border-color:rgba(31,200,172,.34)}
-.card p{font-size:16.5pt;line-height:1.48;color:var(--muted)}
+.note{font-size:17pt;line-height:1.45;color:var(--muted)}
+.note strong{color:#fff}
 
-/* Structured Comparison Box */
-.comp-box { display:grid; grid-template-columns:1fr 1fr; gap:5mm; margin-top:5mm; }
-.comp-item { background:rgba(255,255,255,0.02); border:1px solid var(--line); border-radius:6mm; padding:5mm 6mm; }
-.comp-item.ann { background:rgba(31,200,172,0.03); border-color:rgba(31,200,172,0.18); }
-.comp-item.rk { background:rgba(91,140,255,0.03); border-color:rgba(91,140,255,0.18); }
-.comp-title { font-family:var(--disp); font-weight:600; font-size:15.5pt; margin-bottom:3mm; display:flex; align-items:center; gap:2mm; }
-.comp-title.teal { color:var(--teal); }
-.comp-title.indigo { color:var(--indigo2); }
-.comp-list { list-style:none; font-size:13pt; color:var(--muted); line-height:1.45; }
-.comp-list li { margin-bottom:1.5mm; position:relative; padding-left:4.5mm; }
-.comp-list li::before { content:"▪"; position:absolute; left:0; color:var(--coral); }
-.comp-item.ann .comp-list li::before { color:var(--teal); }
-.comp-item.rk .comp-list li::before { color:var(--indigo2); }
+/* line-icon tiles */
+.ic{width:19mm;height:19mm;border-radius:6mm;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  background:rgba(255,106,61,.12);border:1px solid rgba(255,106,61,.3)}
+.ic svg{width:11mm;height:11mm;stroke:var(--coral);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ic.tl{background:rgba(31,200,172,.12);border-color:rgba(31,200,172,.32)} .ic.tl svg{stroke:var(--teal)}
+.ic.in{background:rgba(91,140,255,.12);border-color:rgba(91,140,255,.36)} .ic.in svg{stroke:var(--indigo2)}
 
-/* Objective Grid Box */
-.obj-grid { display:grid; grid-template-columns:1fr 1fr; gap:5mm; margin-top:5mm; }
-.obj-card { background:rgba(255,255,255,0.02); border:1px solid var(--line); border-radius:6mm; padding:5mm 5.5mm; }
-.obj-card .otitle { font-family:var(--disp); font-weight:600; font-size:15.5pt; color:#fff; margin-bottom:2mm; }
-.obj-card .odesc { font-size:13pt; color:var(--muted); line-height:1.4; }
+/* feature / objective tiles (icon + title + short) */
+.feats{display:grid;gap:8mm}
+.feats.g2{grid-template-columns:1fr 1fr}
+.feat{display:flex;gap:6mm;align-items:flex-start}
+.feat .ft{font-family:var(--disp);font-weight:600;font-size:17.5pt;color:#fff;line-height:1.1}
+.feat .fd{font-size:14.5pt;color:var(--muted);line-height:1.32;margin-top:1.5mm}
 
-/* Mathematical Formulations Grid */
-.math-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:5mm; margin-bottom:5mm; }
-.param-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:3.5mm; margin-top:4mm; }
-.param-box { background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:5mm; padding:3.5mm 4mm; text-align:center; }
-.param-box .lbl { font-family:var(--mono); font-size:10.5pt; color:var(--dim); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:1.5mm; }
-.param-box .val { font-family:var(--disp); font-weight:700; font-size:17pt; color:#fff; }
-.param-box .val.coral { color:var(--coral); }
-.param-box .val.teal { color:var(--teal); }
-
-/* Academic Data Table */
-.academic-table { width:100%; border-collapse:collapse; font-size:13pt; margin-top:4mm; text-align:left; }
-.academic-table th { font-family:var(--mono); font-size:11pt; text-transform:uppercase; color:var(--dim); border-bottom:2px solid var(--line2); padding:3mm 3.5mm; font-weight:600; letter-spacing:0.04em; }
-.academic-table td { padding:3mm 3.5mm; border-bottom:1px solid var(--line); color:var(--muted); font-family:var(--body); line-height:1.3; }
-.academic-table tr:last-child td { border-bottom:none; }
-.academic-table tr:hover td { color:#fff; background:rgba(255,255,255,0.02); }
-.academic-table td.mono { font-family:var(--mono); font-size:11.5pt; }
-.academic-table td.highlight { color:#fff; font-weight:600; }
-
-/* Validation stats grid */
-.val-grid { display:grid; grid-template-columns:1fr 1fr; gap:5mm; margin-top:5mm; }
-.val-stat-box { background:rgba(31,200,172,0.04); border:1px solid rgba(31,200,172,0.18); border-radius:7mm; padding:5mm 6mm; display:flex; flex-direction:column; justify-content:center; }
-.val-stat-box .vnum { font-family:var(--mono); font-size:24pt; color:var(--teal); font-weight:700; line-height:1.1; }
-.val-stat-box .vlbl { font-size:13pt; color:var(--muted); margin-top:1.5mm; line-height:1.3; }
-.val-stat-box .vok { font-family:var(--mono); font-size:12.5pt; color:var(--coral); margin-top:1.5mm; }
-
-ul.l{list-style:none}
-ul.l li{position:relative;padding-left:10mm;margin:6mm 0;font-size:17.5pt;line-height:1.42;color:var(--muted)}
-ul.l li::before{content:"";position:absolute;left:0;top:7pt;width:4.5mm;height:4.5mm;border-radius:1.4mm;
-  background:var(--coral);transform:rotate(45deg)}
-ul.l.teal li::before{background:var(--teal)}
-ul.l.indigo li::before{background:var(--indigo2)}
+/* compare: RK4 vs ANN */
+.versus{display:grid;grid-template-columns:1fr auto 1fr;gap:6mm;align-items:center;margin:2mm 0 1mm}
+.vbox{background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:8mm;padding:7mm 6mm;text-align:center}
+.vbox.rk{border-color:rgba(91,140,255,.22)} .vbox.ann{border-color:rgba(31,200,172,.22)}
+.vbox .ic{margin:0 auto 4mm}
+.vbox .vt{font-family:var(--disp);font-weight:600;font-size:17pt;color:#fff}
+.vbox .vs{font-size:13.5pt;color:var(--muted);line-height:1.3;margin-top:1mm}
+.vsign{font-family:var(--disp);font-weight:700;font-size:22pt;color:var(--dim)}
 
 .callout{margin-top:9mm;background:linear-gradient(90deg,rgba(255,106,61,.16),rgba(31,200,172,.09));
-  border:1px solid var(--line2);border-left:5mm solid var(--coral);border-radius:7mm;
-  padding:9mm 10mm;font-size:19pt;line-height:1.42;color:var(--text)}
+  border:1px solid var(--line2);border-left:5mm solid var(--coral);border-radius:7mm;padding:8mm 10mm;font-size:18.5pt;line-height:1.4;color:var(--text)}
 .callout.teal{border-left-color:var(--teal);background:linear-gradient(90deg,rgba(31,200,172,.14),rgba(91,140,255,.08))}
 .callout b{color:var(--coral)} .callout.teal b{color:var(--teal)}
 
-.subhead{color:#fff;font-family:var(--disp);font-weight:600;font-size:18pt;margin:2mm 0 3mm}
-
 /* equations */
-.eqcard{background:var(--surface2);border:1px solid var(--line);border-radius:9mm;padding:9mm 10mm}
-.eq{font-family:var(--mono);font-size:24pt;line-height:1.8;color:#fff}
+.eqcard{background:var(--surface2);border:1px solid var(--line);border-radius:9mm;padding:10mm 12mm}
+.eqcard .kick{font-family:var(--mono);font-size:11pt;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);margin-bottom:4mm}
+.eq{font-family:var(--mono);font-size:23pt;line-height:1.8;color:#fff}
 .eq .op{color:var(--coral)} .eq .v{color:var(--teal)}
-.eqmeta{font-family:var(--mono);font-size:14.5pt;color:var(--dim);margin-top:5mm;line-height:1.5}
+.params{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:8mm}
+.pbox{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6mm;padding:5mm 4mm;text-align:center}
+.pbox .pl{font-family:var(--mono);font-size:10.5pt;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);margin-bottom:2mm}
+.pbox .pv{font-family:var(--disp);font-weight:700;font-size:15pt;color:#fff}
+.pbox .pv.c{color:var(--coral)} .pbox .pv.t{color:var(--teal)}
 
 /* figures */
-.fig{background:linear-gradient(160deg,rgba(91,140,255,.06),rgba(31,200,172,.04));
-  border:1px solid var(--line);border-radius:10mm;padding:8mm;display:flex;align-items:center;justify-content:center}
-.fig img{max-width:100%;width:auto;height:auto;object-fit:contain}
+.fig{background:linear-gradient(160deg,rgba(91,140,255,.06),rgba(31,200,172,.04));border:1px solid var(--line);
+  border-radius:10mm;padding:8mm;display:flex;align-items:center;justify-content:center}
+.fig img{width:100%;max-width:100%;height:auto;object-fit:contain}
 .cap{font-family:var(--mono);font-size:14pt;color:var(--dim);margin-top:6mm;text-align:center;line-height:1.4}
 
-/* network knobs */
-.knobs{display:flex;flex-direction:column;gap:7mm;margin-top:9mm}
-.knob{display:flex;align-items:baseline;gap:6mm}
-.knob .klab{flex:0 0 42mm;font-family:var(--disp);font-weight:600;font-size:18pt;color:#fff}
-.knob .klab span{display:block;font-family:var(--mono);font-weight:500;font-size:11.5pt;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
-.kvals{display:flex;flex-wrap:wrap;gap:4mm}
-.kval{font-family:var(--mono);font-size:15.5pt;color:var(--text);background:var(--surface2);
-  border:1px solid var(--line2);border-radius:999px;padding:2.5mm 6mm}
-.kval.hi{color:#0B1020;background:var(--teal);border-color:var(--teal);font-weight:700}
+/* search space: depth × width × activation = 60 */
+.search{display:flex;flex-direction:column;gap:6mm;margin-top:8mm}
+.srow{display:flex;align-items:center;gap:7mm}
+.srow .sk{flex:0 0 38mm;font-family:var(--disp);font-weight:600;font-size:16.5pt;color:#fff}
+.srow .sk span{display:block;font-family:var(--mono);font-size:11pt;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.chips{display:flex;flex-wrap:wrap;gap:4mm}
+.chip{font-family:var(--mono);font-size:15.5pt;color:var(--text);background:var(--surface2);border:1px solid var(--line2);border-radius:999px;padding:2.5mm 6mm}
+.chip.hi{color:#0B1020;background:var(--teal);border-color:var(--teal);font-weight:700}
+.sop{font-family:var(--disp);font-weight:700;font-size:18pt;color:var(--dim);text-align:center;margin-left:9mm}
+.seq{margin-top:8mm;text-align:center;font-family:var(--mono);font-size:18pt;color:#fff}
+.seq b{color:var(--teal);font-size:26pt;font-weight:700}
 
-/* methodology phases + vertical pipeline */
-.phasecard{background:var(--surface2);border:1px solid var(--line);border-radius:9mm;padding:9mm 10mm;margin-bottom:7mm}
-.phasecard .t{font-family:var(--disp);font-weight:600;font-size:19pt;color:#fff;margin-bottom:4mm}
-.phasecard .t .n{color:var(--indigo2)} .phasecard.teal .t .n{color:var(--teal)}
-.phasecard p{font-size:16pt;line-height:1.4}
-.badge{display:inline-block;margin-top:5mm;font-family:var(--mono);font-size:15.5pt;font-weight:600;color:#fff;
-  background:rgba(91,140,255,.18);border:1px solid rgba(91,140,255,.42);border-radius:999px;padding:3mm 9mm}
-.badge.teal{background:rgba(31,200,172,.15);border-color:rgba(31,200,172,.42)}
-.vpipe{display:flex;flex-direction:row;gap:3mm;margin-top:4mm;justify-content:space-between;align-items:center}
-.vnode{font-family:var(--mono);font-size:14pt;text-align:center;background:var(--surface2);
-  border:1px solid var(--line2);border-radius:6mm;padding:5mm 4mm;color:var(--text);line-height:1.25;flex:1}
-.vnode b{color:#fff;font-weight:600}
-.varrow{text-align:center;color:var(--coral);font-size:16pt;line-height:1;margin:0 1mm}
+/* two-phase big-number tiles */
+.phases{display:grid;grid-template-columns:1fr 1fr;gap:7mm;margin-top:2mm}
+.ptile{background:var(--surface2);border:1px solid var(--line);border-radius:9mm;padding:8mm 8mm;text-align:center}
+.ptile.p1{border-color:rgba(91,140,255,.24)} .ptile.p2{border-color:rgba(31,200,172,.24)}
+.ptile .pp{font-family:var(--mono);font-size:12pt;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.ptile .pn{font-family:var(--mono);font-weight:700;font-size:40pt;line-height:1;margin:3mm 0}
+.ptile.p1 .pn{color:var(--indigo2)} .ptile.p2 .pn{color:var(--teal)}
+.ptile .px{font-size:14pt;color:var(--muted);line-height:1.3}
 
-/* result stat */
-.stat{margin-top:9mm;display:flex;flex-direction:column;gap:4mm;
-  background:linear-gradient(160deg,rgba(31,200,172,.18),rgba(91,140,255,.08));
-  border:1px solid var(--line2);border-radius:11mm;padding:11mm 12mm}
-.stat .num{font-family:var(--mono);font-weight:700;font-size:46pt;color:var(--teal);letter-spacing:-.02em;line-height:1}
-.stat .lab{font-size:16pt;color:var(--muted);line-height:1.3}
-.stat .ok{font-family:var(--mono);font-size:15.5pt;color:var(--coral)}
+/* pipeline steps with icons */
+.steps{display:flex;flex-direction:column;gap:0;margin-top:2mm}
+.step{display:flex;align-items:center;gap:7mm;background:var(--surface2);border:1px solid var(--line2);border-radius:8mm;padding:6mm 8mm}
+.step .st{font-family:var(--disp);font-weight:600;font-size:16.5pt;color:#fff}
+.step .sd{font-family:var(--mono);font-size:12.5pt;color:var(--dim);margin-top:.5mm}
+.stepar{align-self:center;color:var(--coral);font-size:17pt;line-height:1;margin:2.5mm 0}
 
-/* ---------------- STAT BAND (full width) ---------------- */
+/* evaluation metric chips */
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-top:8mm}
+.metric{display:flex;align-items:center;gap:5mm;background:var(--surface2);border:1px solid var(--line);border-radius:7mm;padding:5mm 6mm}
+.metric .ic{width:14mm;height:14mm;border-radius:4mm}
+.metric .ic svg{width:8mm;height:8mm}
+.metric .mt{font-family:var(--disp);font-weight:600;font-size:15.5pt;color:#fff}
+.metric .md{font-family:var(--mono);font-size:11.5pt;color:var(--dim)}
+.metric.wide{grid-column:1 / -1}
+
+/* literature comparison matrix (visual ✓/✗) */
+.matrix{width:100%;border-collapse:collapse;margin-top:7mm}
+.matrix th{font-family:var(--mono);font-size:11.5pt;color:var(--dim);text-transform:uppercase;letter-spacing:.04em;
+  font-weight:600;padding:3mm 2mm;text-align:center;border-bottom:1px solid var(--line2)}
+.matrix th:first-child{text-align:left}
+.matrix td{padding:4mm 2mm;text-align:center;border-bottom:1px solid var(--line)}
+.matrix td.study{text-align:left;font-family:var(--disp);font-weight:600;font-size:15.5pt;color:#fff}
+.matrix tr:last-child td{border-bottom:none}
+.matrix tr.ours td{background:rgba(31,200,172,.07)}
+.matrix tr.ours td.study{color:var(--teal)}
+.mk{width:9mm;height:9mm;display:inline-block;vertical-align:middle}
+.mk.y{stroke:var(--teal)} .mk.n{stroke:var(--dim)}
+.mk svg{width:100%;height:100%;fill:none;stroke:inherit;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+
+/* validation numeric proof */
+.proof{display:grid;grid-template-columns:1fr 1fr;gap:7mm;margin-top:8mm}
+.pcard{background:linear-gradient(160deg,rgba(31,200,172,.16),rgba(91,140,255,.07));border:1px solid var(--line2);border-radius:9mm;padding:9mm 8mm}
+.pcard.alt{background:linear-gradient(160deg,rgba(91,140,255,.14),rgba(31,200,172,.05))}
+.pcard .pnum{font-family:var(--mono);font-weight:700;font-size:30pt;color:var(--teal);line-height:1;letter-spacing:-.02em}
+.pcard.alt .pnum{color:var(--indigo2)}
+.pcard .plab{font-size:14pt;color:var(--muted);margin-top:3mm;line-height:1.3}
+.proofok{margin-top:7mm;display:flex;align-items:center;gap:5mm;font-family:var(--mono);font-size:15pt;color:var(--coral)}
+.proofok .mk{width:7mm;height:7mm;stroke:var(--coral)}
+
+/* status timeline */
+.status{display:flex;flex-direction:column;gap:7mm;margin-top:2mm}
+.srow2{display:flex;gap:7mm;align-items:flex-start;background:var(--surface2);border:1px solid var(--line);border-radius:8mm;padding:7mm 8mm}
+.srow2.done{border-color:rgba(31,200,172,.22)} .srow2.next{border-color:rgba(91,140,255,.22)}
+.srow2 .sh{font-family:var(--disp);font-weight:600;font-size:16.5pt;color:#fff;margin-bottom:2mm}
+.srow2 .sl{font-size:14pt;color:var(--muted);line-height:1.4}
+.srow2 .sl b{color:#fff;font-weight:600}
+
+/* ---- fill pass: enlarge graphics in columns A & C (does not touch column B) ---- */
+.versus{margin:7mm 0 4mm}
+.vbox{padding:13mm 9mm}
+.vbox .ic{width:26mm;height:26mm;margin-bottom:6mm}
+.vbox .ic svg{width:15mm;height:15mm}
+.vbox .vt{font-size:20pt}
+.vbox .vs{font-size:15.5pt;margin-top:3mm}
+.feats{gap:15mm}
+.feat .ic{width:26mm;height:26mm}
+.feat .ic svg{width:15mm;height:15mm}
+.feat .ft{font-size:20.5pt}
+.feat .fd{font-size:16.5pt;margin-top:2.5mm}
+.eqcard{padding:16mm 16mm}
+.eq{font-size:30pt;line-height:2.15}
+.eqcard .kick{font-size:12.5pt;margin-bottom:6mm}
+.params{margin-top:11mm}
+.pbox{padding:7mm 4mm}
+.pbox .pl{font-size:11.5pt}
+.pbox .pv{font-size:16.5pt}
+.card .note{font-size:18pt}
+.matrix th{padding:5mm 2mm;font-size:13pt}
+.matrix td{padding:9mm 2mm}
+.matrix td.study{font-size:18pt}
+.mk{width:14mm;height:14mm}
+.proof{gap:8mm;margin-top:11mm}
+.pcard{padding:15mm 10mm}
+.pcard .pnum{font-size:40pt}
+.pcard .plab{font-size:15.5pt;margin-top:5mm}
+.proofok{font-size:16.5pt;margin-top:10mm}
+.srow2{padding:12mm 10mm}
+.srow2 .ic{width:18mm;height:18mm}
+.srow2 .ic svg{width:10mm;height:10mm}
+.srow2 .sh{font-size:19.5pt;margin-bottom:3mm}
+.srow2 .sl{font-size:16pt}
+
+/* ---- larger type for A0 legibility (fills card space; overrides above) ---- */
+.bh h2{font-size:27pt}
+.note,.card .note{font-size:20pt;line-height:1.46}
+.cap{font-size:16pt}
+.callout{font-size:20pt;line-height:1.42;padding:9mm 11mm}
+.subhead{font-size:19pt}
+/* column A */
+.vbox .vt{font-size:21pt} .vbox .vs{font-size:16.5pt}
+.feat .ft{font-size:21pt} .feat .fd{font-size:17.5pt}
+.eq{font-size:31pt} .eqcard .kick{font-size:13pt}
+.pbox .pl{font-size:12pt} .pbox .pv{font-size:17pt}
+/* column B */
+.chip{font-size:17pt;padding:3mm 7mm} .srow .sk{font-size:18.5pt} .srow .sk span{font-size:12pt}
+.seq{font-size:21pt} .seq b{font-size:29pt}
+.ptile .pp{font-size:13pt} .ptile .pn{font-size:44pt} .ptile .px{font-size:15.5pt}
+.step .st{font-size:18pt} .step .sd{font-size:14pt}
+.metric .mt{font-size:17pt} .metric .md{font-size:13pt}
+/* column C */
+.matrix th{font-size:14pt} .matrix td.study{font-size:18.5pt}
+.pcard .pnum{font-size:41pt} .pcard .plab{font-size:16.5pt}
+.proofok{font-size:17pt}
+.srow2 .sh{font-size:20pt} .srow2 .sl{font-size:17pt}
+
+/* ---- enlarge graphic elements to fill card interiors (focus B & C; A already full) ---- */
+.fig{padding:3mm}
+/* column B */
+.chip{font-size:19pt;padding:4mm 9mm}
+.search{gap:8mm}
+.seq{font-size:23pt;margin-top:10mm} .seq b{font-size:36pt}
+.srow .sk{font-size:19.5pt}
+.ptile{padding:19mm 9mm} .ptile .pn{font-size:66pt;margin:5mm 0} .ptile .pp{font-size:14pt} .ptile .px{font-size:16.5pt}
+.step{padding:11mm 10mm} .step .ic{width:20mm;height:20mm} .step .ic svg{width:11mm;height:11mm} .step .st{font-size:19pt} .step .sd{font-size:15pt}
+.stepar{font-size:21pt;margin:5mm 0}
+.metric{padding:9mm 8mm} .metric .ic{width:19mm;height:19mm} .metric .ic svg{width:11mm;height:11mm} .metric .mt{font-size:18.5pt} .metric .md{font-size:14pt}
+.metrics{gap:7mm}
+/* column C */
+.matrix td{padding:13mm 2mm} .matrix td.study{font-size:19pt} .mk{width:18mm;height:18mm}
+.pcard{padding:19mm 11mm} .pcard .pnum{font-size:48pt} .pcard .plab{font-size:17.5pt}
+.proofok{font-size:18pt;margin-top:11mm}
+.srow2{padding:15mm 11mm} .srow2 .sh{font-size:21pt} .srow2 .sl{font-size:18pt}
+.srow2 .ic{width:22mm;height:22mm} .srow2 .ic svg{width:12mm;height:12mm}
+.status{gap:9mm}
+
+/* ---------------- STAT BAND (taller, richer) ---------------- */
 .statband{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:13mm}
-.tile{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:13mm;
-  padding:11mm 13mm;overflow:hidden}
+.tile{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:13mm;padding:17mm 14mm;overflow:hidden;backdrop-filter:blur(8px)}
 .tile::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5mm;background:var(--coral)}
 .tile.t2::before{background:var(--teal)} .tile.t3::before{background:var(--indigo)} .tile.t4::before{background:var(--indigo2)}
-.tile .nn{font-family:var(--mono);font-weight:700;font-size:50pt;line-height:1;letter-spacing:-.02em;color:#fff}
+.tile .nn{font-family:var(--mono);font-weight:700;font-size:52pt;line-height:1;letter-spacing:-.02em;color:#fff}
 .tile.t1 .nn{color:var(--coral)} .tile.t2 .nn{color:var(--teal)} .tile.t3 .nn{color:var(--indigo2)} .tile.t4 .nn{color:var(--indigo2)}
 .tile .nl{margin-top:5mm;font-size:16.5pt;color:var(--muted);line-height:1.32}
 
 /* ---------------- FOOTER ---------------- */
-.pfoot{position:relative;z-index:2;border-top:1px solid var(--line);padding-top:10mm;
+.pfoot{position:relative;z-index:2;border-top:1px solid var(--line);padding-top:9mm;
   display:grid;grid-template-columns:2.6fr 1fr;gap:16mm;align-items:start}
 .pfoot h3{font-family:var(--disp);font-size:18pt;color:var(--coral);margin-bottom:5mm;letter-spacing:.02em}
-.refs{font-size:14pt;line-height:1.55;color:var(--muted);columns:3;column-gap:14mm}
+.refs{font-size:14pt;line-height:1.5;color:var(--muted);columns:3;column-gap:14mm}
 .refs div{break-inside:avoid;margin-bottom:2mm}
 .refs .n{color:var(--coral);font-family:var(--mono)}
 .contact{font-family:var(--mono);font-size:15pt;color:var(--dim);line-height:1.7;text-align:right}
@@ -245,320 +318,196 @@ ul.l.indigo li::before{background:var(--indigo2)}
     <div class="bigtitle">Solving the Lorenz ODE System<br>using <span class="acc">Optimal ANN</span> Architectures</div>
     <div class="subtitle">Can a <strong>plain feedforward ANN</strong>, with no physics in the loss, learn a coupled nonlinear ODE system, and <em>which architecture does it best?</em></div>
     <div class="credits">
-      <div class="mcard">
-        <span class="m-role">Supervisor</span>
-        <span class="m-name">Dr. Muhammad Nomani Kabir</span>
-        <span class="m-desc">Professor, Dept. of CSE, UIU</span>
-      </div>
-      <div class="mcard">
-        <span class="m-role">Course Teacher</span>
-        <span class="m-name">Dr. Md. Motaharul Islam</span>
-        <span class="m-desc">Professor, Dept. of CSE, UIU</span>
-      </div>
-      <div class="mcard team">
-        <span class="m-role">Team_ParaDox</span>
+      <div class="mcard"><span class="m-role">Supervisor</span><span class="m-name">Dr. Muhammad Nomani Kabir</span><span class="m-desc">Professor, Dept. of CSE, UIU</span></div>
+      <div class="mcard"><span class="m-role">Course Teacher</span><span class="m-name">Dr. Md. Motaharul Islam</span><span class="m-desc">Professor, Dept. of CSE, UIU</span></div>
+      <div class="mcard team"><span class="m-role">Team_ParaDox</span>
         <div class="authors">
-          <span class="au">Ikramul Hasan Moral</span>
-          <span class="au">Md. Abu Bakar</span>
-          <span class="au">Samiur Rahman Omlan</span>
-          <span class="au">Fariha Islam</span>
-          <span class="au">Md. Touhidul Islam</span>
+          <span class="au">Ikramul Hasan Moral</span><span class="au">Md. Abu Bakar</span><span class="au">Samiur Rahman Omlan</span><span class="au">Fariha Islam</span><span class="au">Md. Touhidul Islam</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ===================== 3-COLUMN BODY ===================== -->
+  <!-- ===================== BODY ===================== -->
   <div class="pcols">
 
-    <!-- ========== COLUMN A ========== -->
+    <!-- ===== COLUMN A ===== -->
     <div class="col">
 
+      <!-- 01 INTRODUCTION -->
       <div class="card indigo">
-        <div class="bh"><span class="snum">01</span><h2>Introduction &amp; Motivation</h2></div>
-        <p style="margin-bottom:4mm">Coupled nonlinear ODEs like the <strong>Lorenz-1960</strong> system have no closed-form solution. We compare two distinct solvers:</p>
-        <div class="comp-box">
-          <div class="comp-item rk">
-            <div class="comp-title indigo" style="font-size:13.5pt;">Runge-Kutta (RK4)</div>
-            <ul class="comp-list">
-              <li>Step-by-step solver</li>
-              <li>Mesh-dependent grid</li>
-              <li>Redoes integration for every query</li>
-            </ul>
+        <div class="bh"><span class="snum">01</span><h2>The Problem</h2></div>
+        <div class="versus">
+          <div class="vbox rk">
+            <span class="ic in"><svg viewBox="0 0 24 24"><path d="M3 20h4v-4h4v-4h4v-4h5"/><circle cx="7" cy="16" r="1.3"/><circle cx="11" cy="12" r="1.3"/><circle cx="15" cy="8" r="1.3"/></svg></span>
+            <div class="vt">Classical solver</div>
+            <div class="vs">Step-by-step, mesh-bound, re-runs per query</div>
           </div>
-          <div class="comp-item ann">
-            <div class="comp-title teal" style="font-size:13.5pt;">Plain ANN</div>
-            <ul class="comp-list">
-              <li>Direct mapping: t → (x,y,z)</li>
-              <li>Continuous &amp; mesh-free</li>
-              <li>Instant one-shot query</li>
-            </ul>
+          <div class="vsign">vs</div>
+          <div class="vbox ann">
+            <span class="ic tl"><svg viewBox="0 0 24 24"><circle cx="5" cy="7" r="1.8"/><circle cx="5" cy="17" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="7" r="1.8"/><circle cx="19" cy="17" r="1.8"/><path d="M6.6 7.7 10.4 11M6.6 16.3 10.4 13M13.6 11 17.4 7.7M13.6 13 17.4 16.3"/></svg></span>
+            <div class="vt">Trained ANN</div>
+            <div class="vs">One direct map t &rarr; (x, y, z), mesh-free</div>
           </div>
         </div>
-        <div class="callout" style="margin-top:5mm"><b>Central Question:</b> Can a plain neural network, trained only on data with no physics in the loss, learn this coupled system, and which shape does it best?</div>
+        <div class="callout"><b>Central question:</b> can a plain ANN, trained only on data with no physics in the loss, learn this coupled system &mdash; and <em>which architecture does it best?</em></div>
       </div>
 
+      <!-- 02 OBJECTIVES -->
       <div class="card teal">
         <div class="bh"><span class="snum">02</span><h2>Objectives</h2></div>
-        <div class="obj-grid">
-          <div class="obj-card" style="border-color: rgba(31,200,172,0.18)">
-            <div class="otitle" style="color:var(--teal); font-size:14pt;">1. Ground Truth</div>
-            <div class="odesc">Build a trusted reference using custom RK4 and SciPy solvers, cross-checking their agreement.</div>
-          </div>
-          <div class="obj-card" style="border-color: rgba(126,162,255,0.18)">
-            <div class="otitle" style="color:var(--indigo2); font-size:14pt;">2. Search Space</div>
-            <div class="odesc">Vary depth, width, and activation functions systematically with zero physics in the loss.</div>
-          </div>
-          <div class="obj-card" style="border-color: rgba(255,106,61,0.18)">
-            <div class="otitle" style="color:var(--coral); font-size:14pt;">3. Performance</div>
-            <div class="odesc">Evaluate models on error (MSE, MAE, Max Error) and physical cost (train &amp; inference time).</div>
-          </div>
-          <div class="obj-card" style="border-color: rgba(31,200,172,0.18)">
-            <div class="otitle" style="color:var(--teal); font-size:14pt;">4. Literature Check</div>
-            <div class="odesc">Benchmark the best plain ANN configurations against published physics-informed results.</div>
-          </div>
+        <div class="feats g2">
+          <div class="feat"><span class="ic tl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.4"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/></svg></span>
+            <div><div class="ft">Trusted baseline</div><div class="fd">RK4 + SciPy, cross-checked</div></div></div>
+          <div class="feat"><span class="ic in"><svg viewBox="0 0 24 24"><path d="M4 7h8M16 7h4M4 17h4M12 17h8"/><circle cx="14" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg></span>
+            <div><div class="ft">Search the space</div><div class="fd">Depth × width × activation</div></div></div>
+          <div class="feat"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 18a8 8 0 0 1 16 0"/><path d="M12 18l5-4"/><circle cx="12" cy="18" r="1.2"/></svg></span>
+            <div><div class="ft">Accuracy vs cost</div><div class="fd">Error and run-time, together</div></div></div>
+          <div class="feat"><span class="ic tl"><svg viewBox="0 0 24 24"><path d="M12 4v15M6 9h12M7 9l-3 6h6zM17 9l-3 6h6z"/></svg></span>
+            <div><div class="ft">Benchmark</div><div class="fd">Best ANN vs PINN literature</div></div></div>
         </div>
       </div>
 
-      <div class="card grow">
-        <div class="bh"><span class="snum">03</span><h2>The System</h2></div>
-        <div class="math-grid">
-          <div class="eqcard" style="padding: 5mm 6mm;">
-            <div style="font-family:var(--mono); font-size:9.5pt; color:var(--dim); text-transform:uppercase; margin-bottom:1.5mm;">General Form</div>
-            <div class="eq" style="font-size:13.5pt; line-height:1.45;">
-              dx/dt = kl(1/(k²+l²) - 1/k²) yz<br>
-              dy/dt = kl(1/l² - 1/(k²+l²)) xz<br>
-              dz/dt = (kl²/2)(1/k² - 1/l²) xy
-            </div>
-          </div>
-          <div class="eqcard" style="padding: 5mm 6mm; border-color: rgba(255,106,61,0.2);">
-            <div style="font-family:var(--mono); font-size:9.5pt; color:var(--coral); text-transform:uppercase; margin-bottom:1.5mm;">Reduced Form</div>
-            <div class="eq" style="font-size:13.5pt; line-height:1.45;">
-              ẋ = -0.10 yz<br>
-              ẏ = +1.60 xz<br>
-              ż = -0.75 xy
-            </div>
-          </div>
-        </div>
-        <div class="param-grid">
-          <div class="param-box">
-            <div class="lbl">Parameters</div>
-            <div class="val coral" style="font-size:14pt;">k = 2, l = 1</div>
-          </div>
-          <div class="param-box">
-            <div class="lbl">Initial Values</div>
-            <div class="val teal" style="font-size:14pt;">x₀=0.5, y₀=0.75, z₀=1</div>
-          </div>
-          <div class="param-box">
-            <div class="lbl">Time Span</div>
-            <div class="val" style="font-size:14pt;">t ∈ [0, 1]</div>
-          </div>
-        </div>
-        <p style="font-size:15.5pt;margin-top:5mm">These coupled nonlinear ordinary differential equations represent meteorological fluid circulation. They are compact to write, but highly sensitive to numerical integration precision.</p>
-        <div class="fig" style="margin-top:6mm"><img src="assets/fig_dynamics_dark.png" alt="long-term dynamics"></div>
-        <div class="cap">Quasi-periodic trajectories over t &isin; [0, 50] (long-term).</div>
-      </div>
-
-    </div>
-
-    <!-- ========== COLUMN B ========== -->
-    <div class="col">
-
-      <div class="card teal">
-        <div class="bh"><span class="snum">04</span><h2>Network &amp; Search Space</h2>
-          <span class="tag">69 runs</span></div>
-        <div class="fig" style="padding: 6mm;"><img src="assets/ann_architecture_dark.svg" alt="feedforward ANN t to x,y,z" style="height:150px;"></div>
-        <div class="cap">One input (t) → Stacked hidden layers → Three outputs (x, y, z).</div>
-        
-        <table class="academic-table" style="margin-top: 3mm;">
-          <thead>
-            <tr>
-              <th>Dimension</th>
-              <th>Phase 1 (60 configs)</th>
-              <th>Phase 2 (9 runs)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="highlight">Depth (Layers)</td>
-              <td class="mono">1, 2, 3, 4</td>
-              <td>Top 3 Phase-1 shapes</td>
-            </tr>
-            <tr>
-              <td class="highlight">Width (Neurons)</td>
-              <td class="mono">20, 50, 100</td>
-              <td>Fixed from Phase 1</td>
-            </tr>
-            <tr>
-              <td class="highlight">Activations</td>
-              <td class="mono">tanh, ReLU, sigmoid, GELU, Swish</td>
-              <td>Fixed from Phase 1</td>
-            </tr>
-            <tr>
-              <td class="highlight">Optimizers</td>
-              <td>Adam <span style="color:var(--dim)">(fixed)</span></td>
-              <td class="mono">Adam, L-BFGS, SGD + Mom.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="card indigo grow">
-        <div class="bh"><span class="snum">05</span><h2>Methodology</h2>
-          <span class="tag" style="color:var(--indigo2);background:rgba(91,140,255,.14);border-color:rgba(91,140,255,.38)">Waterfall Flow</span></div>
-        <div class="phasecard" style="margin-bottom:5mm;">
-          <div class="t"><span class="n">Phase 1</span> &middot; Architecture Search</div>
-          <p style="font-size:15pt;">Sweep depth &times; width &times; activation with the optimizer held fixed (Adam) to evaluate impact of shape.</p>
-          <span class="badge" style="font-size:13pt; padding:2mm 6mm;">= 60 runs</span>
-        </div>
-        <div class="phasecard teal" style="margin-bottom:6mm;">
-          <div class="t"><span class="n">Phase 2</span> &middot; Optimizer Sweep</div>
-          <p style="font-size:15pt;">Top 3 Phase-1 architectures trained with {Adam, L-BFGS, SGD + momentum} to study training stability.</p>
-          <span class="badge teal" style="font-size:13pt; padding:2mm 6mm;">= 9 runs</span>
-        </div>
-        <div style="font-family:var(--disp); font-weight:600; font-size:16pt; color:#fff; margin-bottom:3mm;">Execution Pipeline</div>
-        <div class="vpipe" style="flex-direction:column; gap:2mm;">
-          <div class="vnode" style="padding:4mm; width:100%;"><b>01. Generate Baseline</b><br><span style="font-size:11.5pt; color:var(--dim)">Dual Solver Cross-Check</span></div>
-          <div class="varrow">▼</div>
-          <div class="vnode" style="padding:4mm; width:100%;"><b>02. Preprocess Data</b><br><span style="font-size:11.5pt; color:var(--dim)">80% Train / 20% Val Split</span></div>
-          <div class="varrow">▼</div>
-          <div class="vnode" style="padding:4mm; width:100%;"><b>03. Train Grid Sweep</b><br><span style="font-size:11.5pt; color:var(--dim)">69 Controlled Runs</span></div>
-          <div class="varrow">▼</div>
-          <div class="vnode" style="padding:4mm; width:100%;"><b>04. Score &amp; Select</b><br><span style="font-size:11.5pt; color:var(--dim)">Identify Optimal Shape</span></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ========== COLUMN C ========== -->
-    <div class="col">
-
-      <div class="card indigo">
-        <div class="bh"><span class="snum">06</span><h2>Literature Gap &amp; Scope</h2></div>
-        <p style="margin-bottom:3mm">Existing works solve Lorenz-1960 using fixed networks or physics-informed constraints. We target the gap in plain ANN architecture selection:</p>
-        
-        <table class="academic-table" style="margin-bottom: 4mm;">
-          <thead>
-            <tr>
-              <th>Reference Study</th>
-              <th>Target System</th>
-              <th>Method</th>
-              <th>Shape Sweep?</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="highlight">Matthews (2024)</td>
-              <td>Lorenz-1960</td>
-              <td>PINN / DeepONet</td>
-              <td>No <span style="color:var(--dim)">(Fixed)</span></td>
-            </tr>
-            <tr>
-              <td class="highlight">Lagaris (1998)</td>
-              <td>General ODEs</td>
-              <td>Plain MLP</td>
-              <td>No <span style="color:var(--dim)">(Fixed)</span></td>
-            </tr>
-            <tr>
-              <td class="highlight">Chen (2018)</td>
-              <td>Neural ODEs</td>
-              <td>Derivative Map</td>
-              <td>No <span style="color:var(--dim)">(Fixed)</span></td>
-            </tr>
-            <tr style="background: rgba(31, 200, 172, 0.05);">
-              <td class="highlight" style="color:var(--teal)">Ours (ParaDox)</td>
-              <td style="color:var(--teal)">Lorenz-1960</td>
-              <td style="color:var(--teal)">Plain ANN</td>
-              <td style="color:var(--teal); font-weight:600;">Yes (69 runs)</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="subhead" style="font-size:16pt; margin-top:2mm; margin-bottom:1mm;">Primary Research Questions</div>
-        <ul class="l teal" style="margin-top:1mm;">
-          <li style="margin: 2.5mm 0; font-size:14.5pt; padding-left: 8mm;">Can a data-only ANN approximate this coupled fluid system?</li>
-          <li style="margin: 2.5mm 0; font-size:14.5pt; padding-left: 8mm;">Which depth &times; width shape wins the accuracy-cost tradeoff?</li>
-          <li style="margin: 2.5mm 0; font-size:14.5pt; padding-left: 8mm;">How close does a plain ANN come to physics-informed baselines?</li>
-        </ul>
-      </div>
-
+      <!-- 03 THE SYSTEM -->
       <div class="card coral">
-        <div class="bh"><span class="snum">07</span><h2>Baseline &amp; Validation</h2>
-          <span class="tag" style="color:var(--coral);background:rgba(255,106,61,.13);border-color:rgba(255,106,61,.34)">Target: &lt; 10<sup>-10</sup></span></div>
-        <p>Two independent solvers cross-check reference data before network training: a custom <strong>RK4</strong> (h = 10<sup>-3</sup>, 1001 points) and <strong>SciPy DOP853</strong> (rtol = 10<sup>-10</sup>, atol = 10<sup>-12</sup>).</p>
-        
-        <div class="val-grid">
-          <div class="val-stat-box">
-            <div class="vnum">1.8×10<sup>-22</sup></div>
-            <div class="vlbl">Solver Agreement MSE</div>
-            <div class="vok">✓ Target Exceeded</div>
-          </div>
-          <div class="val-stat-box" style="background:rgba(91, 140, 255, 0.04); border-color:rgba(91, 140, 255, 0.18);">
-            <div class="vnum" style="color:var(--indigo2)">7.19×10<sup>-11</sup></div>
-            <div class="vlbl">Max Abs. Disagreement</div>
-            <div class="vok" style="color:var(--indigo2)">✓ Machine Precision</div>
-          </div>
+        <div class="bh"><span class="snum">03</span><h2>The System</h2></div>
+        <div class="eqcard">
+          <div class="kick">Reduced form &middot; k = 2, l = 1</div>
+          <div class="eq">x&#775; <span class="op">=</span> <span class="op">&minus;0.10</span> <span class="v">y z</span></div>
+          <div class="eq">y&#775; <span class="op">=</span> <span class="op">&plus;1.60</span> <span class="v">x z</span></div>
+          <div class="eq">z&#775; <span class="op">=</span> <span class="op">&minus;0.75</span> <span class="v">x y</span></div>
         </div>
-
-        <table class="academic-table" style="margin-top: 4mm;">
-          <thead>
-            <tr>
-              <th>State at t = 1.0</th>
-              <th>Reference Value</th>
-              <th>Solver Difference (Δ)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="highlight">x(1)</td>
-              <td class="mono">0.4120105447758</td>
-              <td class="mono">1.04 × 10<sup>-13</sup></td>
-            </tr>
-            <tr>
-              <td class="highlight">y(1)</td>
-              <td class="mono">1.3588439851225</td>
-              <td class="mono">2.05 × 10<sup>-12</sup></td>
-            </tr>
-            <tr>
-              <td class="highlight">z(1)</td>
-              <td class="mono">0.6309874543508</td>
-              <td class="mono">3.33 × 10<sup>-13</sup></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="fig" style="margin-top:5mm"><img src="assets/fig_validation_dark.png" alt="validation"></div>
-        <div class="cap">Solver disagreement stays near double-precision limit.</div>
+        <div class="params">
+          <div class="pbox"><div class="pl">Initial</div><div class="pv t">x&#8320;,y&#8320;,z&#8320;</div></div>
+          <div class="pbox"><div class="pl">Values</div><div class="pv">0.5, 0.75, 1</div></div>
+          <div class="pbox"><div class="pl">Interval</div><div class="pv c">t &isin; [0,1]</div></div>
+        </div>
+        <p class="note" style="margin-top:8mm">Three coupled nonlinear ODEs: simple to state, hard to integrate accurately.</p>
+        <div class="fig" style="margin-top:10mm"><img src="assets/fig_solution_dark.png" alt="RK4 reference solution"></div>
+        <div class="cap">RK4 reference solution on t &isin; [0, 1]: the data the ANN learns.</div>
       </div>
 
-      <div class="card teal grow">
-        <div class="bh"><span class="snum">08</span><h2>Status &amp; Outlook</h2></div>
-        
-        <div class="obj-grid" style="grid-template-columns: 1fr; gap: 4mm; margin-top:0;">
-          <div class="obj-card" style="border-color: rgba(31, 200, 172, 0.22); background: rgba(31, 200, 172, 0.015);">
-            <div class="otitle" style="color:var(--teal); display:flex; align-items:center; gap:2mm; font-size:14.5pt; margin-bottom:1.5mm;">
-              <span style="font-size:15pt;">✓</span> FYDP-I: Completed &amp; Verified
-            </div>
-            <div class="odesc" style="font-size:12.5pt; line-height:1.35;">
-              • Literature review of 17 papers concluded.<br>
-              • Dual-solver baseline generated and validated.<br>
-              • 69-run architecture sweep grid locked.
-            </div>
-          </div>
-          
-          <div class="obj-card" style="border-color: rgba(91, 140, 255, 0.22); background: rgba(91, 140, 255, 0.015);">
-            <div class="otitle" style="color:var(--indigo2); display:flex; align-items:center; gap:2mm; font-size:14.5pt; margin-bottom:1.5mm;">
-              <span style="font-size:15pt;">➔</span> FYDP-II: Future Work
-            </div>
-            <div class="odesc" style="font-size:12.5pt; line-height:1.35;">
-              • Execute Phase-1 (60 nets) and Phase-2 (9 runs).<br>
-              • Run multiple seed evaluations for stability.<br>
-              • Benchmarking plain ANN against PINN models.
-            </div>
-          </div>
-        </div>
+      <!-- FIG: long-term dynamics -->
+      <div class="card">
+        <div class="fig"><img src="assets/fig_dynamics_dark.png" alt="long-term dynamics"></div>
+        <div class="cap">Long-term behaviour on t &isin; [0, 50]: bounded, quasi-periodic orbits.</div>
+      </div>
 
-        <div class="callout teal" style="margin-top:5mm; padding: 6mm 8mm; font-size:15pt;"><b>Honesty Clause:</b> We make no model accuracy claims in FYDP-I. The baseline data and search methodology are locked; experimental results will follow in FYDP-II.</div>
+    </div>
+
+    <!-- ===== COLUMN B ===== -->
+    <div class="col">
+
+      <!-- 04 NETWORK & SEARCH SPACE -->
+      <div class="card teal">
+        <div class="bh"><span class="snum">04</span><h2>Network &amp; Search Space</h2></div>
+        <div class="fig"><img src="assets/ann_architecture_dark.svg" alt="feedforward ANN t to x,y,z"></div>
+        <div class="search">
+          <div class="srow"><div class="sk">Depth<span>layers</span></div><div class="chips"><span class="chip">1</span><span class="chip">2</span><span class="chip">3</span><span class="chip">4</span></div></div>
+          <div class="sop">&times;</div>
+          <div class="srow"><div class="sk">Width<span>neurons</span></div><div class="chips"><span class="chip">20</span><span class="chip">50</span><span class="chip">100</span></div></div>
+          <div class="sop">&times;</div>
+          <div class="srow"><div class="sk">Activation<span>nonlinearity</span></div><div class="chips"><span class="chip">tanh</span><span class="chip">ReLU</span><span class="chip">sigmoid</span><span class="chip hi">GELU</span><span class="chip">Swish</span></div></div>
+        </div>
+        <div class="seq">= <b>60</b> candidate architectures</div>
+      </div>
+
+      <!-- 05 METHODOLOGY -->
+      <div class="card indigo">
+        <div class="bh"><span class="snum">05</span><h2>Two-Phase Study</h2></div>
+        <div class="phases">
+          <div class="ptile p1"><div class="pp">Phase 1</div><div class="pn">60</div><div class="px">architecture search &middot; Adam fixed</div></div>
+          <div class="ptile p2"><div class="pp">Phase 2</div><div class="pn">9</div><div class="px">optimizer sweep &middot; top-3 nets</div></div>
+        </div>
+        <p class="note" style="margin-top:8mm">Architecture first, optimizer second; the two effects stay separable.</p>
+      </div>
+
+      <!-- PIPELINE -->
+      <div class="card">
+        <div class="bh"><span class="snum" style="color:var(--indigo2);background:rgba(91,140,255,.14);border-color:rgba(91,140,255,.38)">&rarr;</span><h2>Pipeline</h2></div>
+        <div class="steps">
+          <div class="step"><span class="ic in"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/><circle cx="7" cy="6" r="1.4"/><circle cx="14" cy="12" r="1.4"/><circle cx="10" cy="18" r="1.4"/></svg></span><div><div class="st">Generate</div><div class="sd">RK4 + SciPy reference</div></div></div>
+          <div class="stepar">&darr;</div>
+          <div class="step"><span class="ic in"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="16" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/></svg></span><div><div class="st">Split</div><div class="sd">80 / 20 train–validation</div></div></div>
+          <div class="stepar">&darr;</div>
+          <div class="step"><span class="ic in"><svg viewBox="0 0 24 24"><circle cx="6" cy="8" r="1.6"/><circle cx="6" cy="16" r="1.6"/><circle cx="13" cy="12" r="1.6"/><circle cx="20" cy="12" r="1.6"/><path d="M7.5 8.6 11.6 11.4M7.5 15.4 11.6 12.6M14.6 12 18.4 12"/></svg></span><div><div class="st">Train</div><div class="sd">69 controlled runs</div></div></div>
+          <div class="stepar">&darr;</div>
+          <div class="step"><span class="ic in"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span><div><div class="st">Select</div><div class="sd">best architecture</div></div></div>
+        </div>
+      </div>
+
+      <!-- EVALUATION METRICS -->
+      <div class="card coral">
+        <div class="bh"><span class="snum">06</span><h2>How We Score</h2></div>
+        <div class="metrics">
+          <div class="metric"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V5M16 20v-7M3 20h18"/></svg></span><div><div class="mt">MSE</div><div class="md">mean sq. error</div></div></div>
+          <div class="metric"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 20V12M10 20V7M16 20v-5M3 20h18"/></svg></span><div><div class="mt">MAE</div><div class="md">mean abs. error</div></div></div>
+          <div class="metric"><span class="ic tl"><svg viewBox="0 0 24 24"><path d="M3 16l5-7 4 5 3-4 6 8"/><circle cx="8" cy="9" r="1.2"/></svg></span><div><div class="mt">Max error</div><div class="md">worst case</div></div></div>
+          <div class="metric"><span class="ic in"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span><div><div class="mt">Train time</div><div class="md">fitting cost</div></div></div>
+          <div class="metric wide"><span class="ic in"><svg viewBox="0 0 24 24"><path d="M4 12h12M12 6l6 6-6 6"/></svg></span><div><div class="mt">Inference time</div><div class="md">cost of a single query once trained</div></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== COLUMN C ===== -->
+    <div class="col">
+
+      <!-- 07 LITERATURE GAP (visual matrix) -->
+      <div class="card indigo">
+        <div class="bh"><span class="snum">07</span><h2>The Gap</h2></div>
+        <table class="matrix">
+          <thead><tr><th>Prior work</th><th>Lorenz-1960</th><th>Plain ANN</th><th>Arch. sweep</th></tr></thead>
+          <tbody>
+            <tr><td class="study">Matthews &amp; Bihlo</td>
+              <td><span class="mk y"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span></td>
+              <td><span class="mk n"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span></td>
+              <td><span class="mk n"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span></td></tr>
+            <tr><td class="study">Lagaris et al.</td>
+              <td><span class="mk n"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span></td>
+              <td><span class="mk y"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span></td>
+              <td><span class="mk n"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span></td></tr>
+            <tr><td class="study">Lau &amp; Werth</td>
+              <td><span class="mk n"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span></td>
+              <td><span class="mk y"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span></td>
+              <td><span class="mk n"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span></td></tr>
+            <tr><td class="study">Mall &amp; Chakraverty</td>
+              <td><span class="mk n"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span></td>
+              <td><span class="mk y"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span></td>
+              <td><span class="mk n"><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg></span></td></tr>
+            <tr class="ours"><td class="study">Ours · Team_ParaDox</td>
+              <td><span class="mk y"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span></td>
+              <td><span class="mk y"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span></td>
+              <td><span class="mk y"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span></td></tr>
+          </tbody>
+        </table>
+        <p class="note" style="margin-top:7mm">No prior study sweeps plain-ANN architecture on Lorenz-1960.</p>
+      </div>
+
+      <!-- 08 BASELINE & VALIDATION (numeric proof) -->
+      <div class="card coral">
+        <div class="bh"><span class="snum">08</span><h2>Baseline Verified</h2>
+          <span class="tag">target &lt; 10&#8315;&#185;&#8304;</span></div>
+        <div class="proof">
+          <div class="pcard"><div class="pnum">1.8&times;10&#8315;&#178;&#178;</div><div class="plab">solver-agreement MSE (RK4 vs SciPy)</div></div>
+          <div class="pcard alt"><div class="pnum">6.06&times;10&#8315;&#185;&#185;</div><div class="plab">max pointwise disagreement</div></div>
+        </div>
+        <div class="proofok"><span class="mk"><svg viewBox="0 0 24 24" style="fill:none;stroke:var(--coral);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round"><path d="M5 13l4 4L19 7"/></svg></span> target beaten by ten orders of magnitude</div>
+        <p class="note" style="margin-top:7mm">Two independent solvers agree before any ANN is trained.</p>
+        <div class="fig" style="margin-top:9mm"><img src="assets/fig_validation_dark.png" alt="validation error"></div>
+        <div class="cap">Pointwise RK4 &minus; SciPy disagreement across the trajectory.</div>
+      </div>
+
+      <!-- 09 STATUS -->
+      <div class="card teal">
+        <div class="bh"><span class="snum">09</span><h2>Status &amp; Next</h2></div>
+        <div class="status">
+          <div class="srow2 done"><span class="ic tl"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></span>
+            <div><div class="sh">FYDP-I &middot; done</div><div class="sl"><b>17-paper</b> review, verified <b>dual-solver baseline</b>, locked <b>69-run</b> design</div></div></div>
+          <div class="srow2 next"><span class="ic in"><svg viewBox="0 0 24 24"><path d="M4 12h13M12 6l6 6-6 6"/></svg></span>
+            <div><div class="sh">FYDP-II &middot; next</div><div class="sl">Run the experiments, repeat seeds, <b>benchmark against PINNs</b></div></div></div>
+        </div>
+        <div class="callout teal" style="margin-top:8mm"><b>No claims yet.</b> Accuracy results follow once FYDP-II runs.</div>
       </div>
 
     </div>
@@ -567,10 +516,10 @@ ul.l.indigo li::before{background:var(--indigo2)}
 
   <!-- ===================== STAT BAND ===================== -->
   <div class="statband">
-    <div class="tile t1"><div class="nn">69</div><div class="nl">controlled training runs across both phases</div></div>
-    <div class="tile t2"><div class="nn">1001</div><div class="nl">reference points from the RK4 integrator</div></div>
-    <div class="tile t3"><div class="nn">17</div><div class="nl">papers reviewed to locate the gap</div></div>
-    <div class="tile t4"><div class="nn">5</div><div class="nl">evaluation metrics for accuracy &amp; cost</div></div>
+    <div class="tile t1"><div class="nn">69</div><div class="nl">controlled training runs</div></div>
+    <div class="tile t2"><div class="nn">1001</div><div class="nl">RK4 reference points</div></div>
+    <div class="tile t3"><div class="nn">17</div><div class="nl">papers reviewed</div></div>
+    <div class="tile t4"><div class="nn">5</div><div class="nl">evaluation metrics</div></div>
   </div>
 
   <!-- ===================== FOOTER ===================== -->
