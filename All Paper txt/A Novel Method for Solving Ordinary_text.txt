@@ -1,0 +1,4852 @@
+
+=== PAGE 1 ===
+Applied Mathematics, 2021, 12, 900-918 
+https://www.scirp.org/journal/am 
+ISSN Online: 2152-7393 
+ISSN Print: 2152-7385 
+ 
+DOI: 10.4236/am.2021.1210059  Oct. 21, 2021 
+900 
+Applied Mathematics
+ 
+ 
+ 
+ 
+A Novel Method for Solving Ordinary 
+Differential Equations with Artificial  
+Neural Networks 
+Roseline N. Okereke, Olaniyi S. Maliki, Ben I. Oruh 
+Department of Mathematics, Michael Okpara University of Agriculture, Umudike, Nigeria 
+ 
+ 
+ 
+Abstract 
+This research work investigates the use of Artificial Neural Network (ANN) 
+based on models for solving first and second order linear constant coefficient 
+ordinary differential equations with initial conditions. In particular, we em-
+ploy a feed-forward Multilayer Perceptron Neural Network (MLPNN), but by-
+pass the standard back-propagation algorithm for updating the intrinsic weights. 
+A trial solution of the differential equation is written as a sum of two parts. 
+The first part satisfies the initial or boundary conditions and contains no ad-
+justable parameters. The second part involves a feed-forward neural network 
+to be trained to satisfy the differential equation. Numerous works have ap-
+peared in recent times regarding the solution of differential equations using 
+ANN, however majority of these employed a single hidden layer perceptron 
+model, incorporating a back-propagation algorithm for weight updation. For 
+the homogeneous case, we assume a solution in exponential form and com-
+pute a polynomial approximation using statistical regression. From here we 
+pick the unknown coefficients as the weights from input layer to hidden layer 
+of the associated neural network trial solution. To get the weights from hid-
+den layer to the output layer, we form algebraic equations incorporating the 
+default sign of the differential equations. We then apply the Gaussian Radial 
+Basis function (GRBF) approximation model to achieve our objective. The 
+weights obtained in this manner need not be adjusted. We proceed to develop 
+a Neural Network algorithm using MathCAD software, which enables us to 
+slightly adjust the intrinsic biases. We compare the convergence and the ac-
+curacy of our results with analytic solutions, as well as well-known numerical 
+methods and obtain satisfactory results for our example ODE problems. 
+ 
+Keywords 
+Ordinary Differential Equations, Multilayer Perceptron Neural Networks, 
+How to cite this paper: Okereke, R.N., 
+Maliki, O.S. and Oruh, B.I. (2021) A Novel 
+Method for Solving Ordinary Differential 
+Equations with Artificial Neural Networks. 
+Applied Mathematics, 12, 900-918. 
+https://doi.org/10.4236/am.2021.1210059 
+Received: November 19, 2020 
+Accepted: October 18, 2021 
+Published: October 21, 2021 
+Copyright © 2021 by author(s) and  
+Scientific Research Publishing Inc. 
+This work is licensed under the Creative 
+Commons Attribution International  
+License (CC BY 4.0). 
+http://creativecommons.org/licenses/by/4.0/ 
+ 
+ 
+Open Access
+
+
+=== PAGE 2 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+901 
+Applied Mathematics
+ 
+Gaussian Radial Basis Function, Network Training, MathCAD (Computer 
+Aided Design) 14, IBM-SPSS (Statistical Package for Social Science) 23 
+ 
+1. Introduction 
+The beginning of Neuro-computing is often taken to be the research article of 
+McCulloch and Pitts [1] published in 1943, which showed that even simple types 
+of neural networks could, in principle, compute any arithmetic or logical func-
+tion, was widely read and had great influence. Other researchers, principally von 
+Neumann, wrote a book [2] in which the suggestion was made that the research 
+into the design of brain-like or brain-inspired computers might be of great in-
+terest and benefit to scientific and technological knowledge. 
+We present a new perspective for obtaining solutions of initial value problems 
+using Artificial Neural Networks (ANN). We discover that neural network based 
+model for the solution of ordinary differential equations (ODE) provides a num-
+ber of advantages over standard numerical methods. Firstly, the neural network 
+based solution is differentiable and is in closed analytic form. On the other hand 
+most other techniques offer a discretized solution or a solution with limited dif-
+ferentiability. Secondly, the neural network based method for solving a differen-
+tial equation provides a solution with very good generalization properties. The 
+major advantage here is that our method reduces considerably the computation-
+al complexity involved in weight updating, while maintaining satisfactory accu-
+racy. 
+Neural Network Structure 
+A neural network is an inter-connection of processing elements, units or nodes, 
+whose functionality resemble that of the human neurons [3]. The processing 
+ability of the network is stored in the connection strengths, simply called weights, 
+which can be obtained by a process of adaptation to, a set of training patterns. 
+Neural network methods can solve both ordinary and partial differential equa-
+tions. Furthermore, it relies on the function approximation property of feed 
+forward neural networks which results in a solution written in a closed analytic 
+form. This form employs a feed forward neural network as a basic approxima-
+tion element [4] [5]. Training of the neural network can be done either by any 
+optimization technique which in turn requires the computation of the gradient 
+the error with respect to the network parameters, by regression based model or 
+by basis function approximation. In any of these methods, a trial solution of the 
+differential equation is written as a sum of two parts, proposed by Lagaris [6]. 
+The first part satisfies the initial or boundary conditions and contains no ad-
+justable parameters. The second part contains some adjustable parameters that 
+involves feed forward neural network and is constructed in a way that does not 
+affect the initial or boundary conditions. Through the construction, the trial so-
+
+
+=== PAGE 3 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+902 
+Applied Mathematics
+ 
+lution, initial or boundary conditions are satisfied and the network is trained to 
+satisfy the differential equation. The general flowchart for neural network train-
+ing (or learning) is given below in Figure 1. 
+2. Neural Networks as Universal Approximators 
+Artificial neural networks can make a nonlinear mapping from the inputs to the 
+outputs of the corresponding system of neurons, which is suitable for analyzing 
+the problem defined by initial/boundary value problems that have no analytical 
+solutions or which cannot be easily computed. One of the applications of the 
+multilayer feed forward neural network is the global approximation of real va-
+lued multivariable function in a closed analytic form. Namely such neural net-
+works are universal approximators. It is discovered in the literature that multi-
+layer feed forward neural networks with one hidden layer using arbitrary squash-
+ing functions are capable of approximating any Borel measurable function from 
+one finite dimensional space to another with any desired degree of accuracy. 
+This is made clear in the following theorem. 
+Universal Approximation Theorem 
+The universal approximation theorem for MLP was proved by Cybenko [7] and 
+Hornik et al. [8] in 1989. Let 
+nI  represent an n-dimensional unit cube containing 
+all possible input samples 
+(
+)
+1
+2
+,
+,
+,
+n
+x x
+x
+=
+x
+
+ with
+[
+]
+0,1
+ix ∈
+, 
+1,2,
+,
+i
+n
+=
+
+. Let 
+(
+)
+n
+C I
+ be the space of continuous functions on 
+nI , given a continuous sigmo-
+id function 
+( )
+ϕ ⋅, then the universal approximation theorem states that the fi-
+nite sums of the form 
+(
+)
+2
+3
+2
+1
+0
+,
+,  
+1,2,
+,
+N
+n
+k
+k
+ki
+ki
+j
+i
+j
+y
+y
+w
+w x
+k
+m
+ϕ
+=
+=
+
+
+=
+=
+=
+
+
+
+
+∑
+∑
+x w
+
+          (1) 
+are dense in 
+(
+)
+n
+C I
+. This simply means that given any function 
+(
+)
+n
+f
+C
+∈
+I
+ and 
+0
+ε >
+, there is a sum 
+(
+)
+,
+y x w  of the above form that satisfies 
+(
+)
+( )
+,
+, 
+n
+y
+f
+ε
+−
+<
+∀∈
+x w
+x
+x
+I .                   (2) 
+ 
+ 
+Figure 1. Network training flowchart. 
+
+
+=== PAGE 4 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+903 
+Applied Mathematics
+ 
+3. Gradient Computation 
+Minimization of error function can also be considered as a procedure for train-
+ing the neural network [9], where the error corresponding to each input vector 
+x  is the value 
+( )
+f
+x  which has to become zero. In computing this error value, 
+we require the network output as well as the derivatives of the output with re-
+spect to the input vectors. Therefore, while computing error with respect to the 
+network parameters, we need to compute not only the gradient of the network 
+but also the gradient of the network derivatives with respect to its inputs. This 
+process can be quite tedious computationally, and we briefly outline this in what 
+follows. 
+3.1. Gradient Computation with Respect to Network Inputs 
+Next step is to compute the gradient with respect to input vectors, for this pur-
+pose let us consider a multilayer perceptron (MLP) neural network with n input 
+units, a hidden layer with m sigmoid units and a linear output unit. For a given 
+input vector 
+(
+)
+1
+2
+,
+,
+,
+n
+x x
+x
+=
+x
+
+ the network output is written: 
+(
+)
+(
+)
+1
+,
+m
+j
+j
+i
+N
+v
+z
+ϕ
+=
+= ∑
+x p
+, 
+1
+n
+j
+ji
+i
+j
+i
+z
+w x
+u
+=
+=
++
+∑
+              (3) 
+ji
+w  denotes the weight from input unit 𝑖𝑖 to the hidden unit 𝑗𝑗, 
+jv  denotes 
+weight from the hidden unit 𝑗𝑗 to the output unit, 
+ju  denotes the biases, and 
+(
+)
+jz
+ϕ
+ is the sigmoid activation function. 
+Now the derivative of networks output N with respect to input vector 
+ix  is: 
+(
+)
+(
+)
+( )1
+1
+1
+,
+m
+m
+j
+j
+j
+ji
+j
+j
+i
+i
+N
+v
+z
+v w
+x
+x
+ϕ
+ϕ
+=
+=
+
+
+∂
+∂
+=
+=
+
+
+∂
+∂
+
+
+∑
+∑
+x p
+            (4) 
+where 
+( )
+( )
+1
+ϕ
+ϕ
+≡∂
+∂
+x
+x . Similarly, the kth derivative of N is computed as;  
+( )
+1
+m
+k
+k
+k
+k
+i
+j
+ji
+j
+j
+N
+x
+v w ϕ
+=
+∂
+∂
+= ∑
+ 
+Where 
+(
+)
+j
+jz
+ϕ
+ϕ
+≡
+ and 
+( )
+k
+ϕ
+ denotes the kth order derivative of the sigmoid 
+activation function. 
+3.2. Gradient Computation with Respect to Network Parameters 
+Network’s derivative with respect to any of its inputs is equivalent to a feed- 
+forward neural network 
+( )
+k
+N
+x  with one hidden layer, having the same values 
+for the weights 
+ji
+w  and thresholds 
+ju  and with each weight 
+jv  being re-
+placed with 
+j
+j
+v p . Moreover, the transfer function of each hidden unit is re-
+placed with the kth order derivative of the sigmoid function. Therefore, the gra-
+dient of 
+k
+N  with respect to the parameters of the original network can easily 
+obtained as: 
+3.3. Network Parameter Updation 
+After computation of derivative of the error with respect to the network para-
+meter has been defined then the network parameters 
+jv , 
+ju  and 
+ji
+w  upda-
+
+
+=== PAGE 5 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+904 
+Applied Mathematics
+ 
+tion rule is given as, 
+(
+)
+( )
+1
+k
+j
+j
+j
+N
+t
+t
+ν
+ν
+µ ν
+∂
++
+=
++
+∂
+, 
+(
+)
+( )
+1
+k
+j
+j
+j
+N
+u
+t
+u
+t
+u
+η ∂
++
+=
++
+∂
+, 
+(
+)
+( )
+1
+k
+ji
+ji
+ji
+N
+w
+t
+w
+t
+w
+γ ∂
++
+=
++
+∂
+ 
+(5) 
+where µ , η  and γ  are the learning rates, 
+1,2,
+,
+i
+n
+=
+
+ and 
+1,2,
+,
+j
+m
+=
+
+. 
+Once a derivative of the error with respect to the network parameters has been 
+defined it is then straightforward to employ any optimization technique to mi-
+nimize error function. 
+4. General Formulation for Differential Equations 
+Let us consider the following general differential equations which represent both 
+ordinary and partial differential equations Majidzadeh [10]: 
+( )
+( )
+( )
+(
+)
+2
+,
+,
+,
+,
+0,
+,
+G x
+x
+x
+x
+x
+D
+ψ
+ψ
+ψ
+∇
+∇
+=
+∀∈
+
+            (6) 
+subject to some initial or boundary conditions, where 
+(
+)
+1
+2
+,
+,
+,
+n
+n
+x
+x x
+x
+=
+∈
+
+, 
+n
+D ⊂ denotes the domain, and 
+( )
+x
+ψ
+ is the unknown scalar-valued solu-
+tion to be computed. Here, G is the function which defines the structure of the 
+differential equation and ∇ is a differential operator. Let 
+(
+)
+,
+t x p
+ψ
+ denote the 
+trail solution with parameters (weights, biases) p. Tian Qi et al. [11], gave the 
+following as the general formulation for the solution of differential equations (5) 
+using ANN. Now, 
+(
+)
+,
+t x p
+ψ
+ may be written as the sum of two terms 
+(
+)
+( )
+(
+)
+(
+)
+,
+,
+,
+,
+t x p
+A x
+F x N x p
+ψ
+=
++
+                 (7) 
+where 
+( )
+A x  satisfies initial or boundary condition and contains no adjustable 
+parameters, whereas 
+(
+)
+,
+N x p  is the output of feed forward neural network with 
+the parameters p and input data x. The function 
+(
+)
+(
+)
+,
+,
+F x N x p
+ is actually the 
+operational model of the neural network. Feed forward neural network (FFNN) 
+converts differential equation problem to function approximation problem. The 
+neural network 
+(
+)
+,
+N x p  is given by; 
+(
+)
+(
+)
+1
+,
+m
+j
+j
+j
+N x p
+v
+z
+σ
+=
+= ∑
+, 
+1
+n
+j
+ji
+i
+j
+i
+z
+w x
+u
+=
+=
++
+∑
+              (8) 
+ji
+w  denotes the weight from input unit i to the hidden unit j, 
+jv  denotes 
+weight from the hidden unit j to the output unit, 
+ju  denotes the biases, and 
+(
+)
+jz
+σ
+ is the sigmoid activation function. 
+Neural Network Training 
+The neural network weights determine the closeness of predicted outcome to the 
+desired outcome. If the neural network weights are not able to make the correct 
+prediction, then only the biases need to be adjusted. The basis function we shall 
+apply in this work in training the neural network is the sigmoid activation func-
+tion given by 
+(
+) (
+)
+1
+1
+e
+jz
+jz
+σ
+−
+−
+=
++
+.                       (9) 
+
+
+=== PAGE 6 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+905 
+Applied Mathematics
+ 
+5. Method for Solving First Order Ordinary  
+Differential Equation 
+Let us consider the first order ordinary differential equation below 
+( )
+(
+)
+[
+]
+,
+, 
+,
+x
+f
+x
+x
+a b
+ψ
+ψ
+′
+=
+∈
+                   (10) 
+with initial condition 
+( )
+a
+A
+ψ
+=
+. In this case, the ANN trial solution may be 
+written as 
+(
+)
+(
+)
+,
+,
+,
+t x p
+A
+xN x p
+ψ
+=
++
+                   (11) 
+where 
+(
+)
+,
+N x p  is the neural output of the feed forward network with one in-
+put data x with parameters p. The trial solution 
+(
+)
+,
+t x p
+ψ
+ satisfies the initial 
+condition. Now let us consider a first order differential equation: 
+( )
+[
+]
+( )
+0, 
+0,1 , 
+0
+1
+x
+x
+ψ
+ψ
+ψ
+′
+−
+=
+∈
+=                 (12) 
+with trial solution: 
+(
+)
+(
+)
+,
+,
+,
+t x p
+A
+xN x p
+ψ
+=
++
+                   (13) 
+where x is the input to neural network model and p represents the parameters— 
+weights and biases. 
+(
+)
+( )
+(
+)
+0,
+0
+0,
+1
+tw
+p
+A
+N
+p
+A
+=
++
+=
+=  
+(
+)
+(
+)
+,
+1
+,
+,
+t x p
+xN x p
+ψ
+⇒
+= +
+    (14) 
+To solve this problem using neural network, we shall employ a neural network 
+architecture with three layers. One input layer with one neuron; one hidden 
+layer with three neurons and one output layer with one output unit, as depicted 
+below in Figure 2. 
+Each neuron is connected to other neurons of the previous layer through 
+adaptable synaptic weights 
+j
+w  and biases 
+ju . Now,  
+(
+)
+(
+)
+,
+1
+,
+t
+i
+i
+i
+x p
+x N x p
+ψ
+= +
+, with 
+(
+)
+(
+)
+3
+1
+,
+i
+j
+j
+j
+N x p
+v
+z
+σ
+=
+= ∑
+, and 
+(
+)
+( )
+(
+)
+(
+)
+3
+1
+1
+2
+2
+3
+3
+j
+j
+j i
+v
+z
+v
+z
+v
+z
+v
+z
+σ
+σ
+σ
+σ
+=
+=
++
++
+∑
+,            (15) 
+where 
+1
+1
+11
+1
+2
+1
+12
+2
+3
+1
+13
+3
+,
+,
+z
+x w
+u
+z
+x w
+u
+z
+x w
+u
+=
++
+=
++
+=
++
+. 
+ 
+ 
+Figure 2. Schematic for 
+(
+)
+,
+N x p . 
+
+
+=== PAGE 7 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+906 
+Applied Mathematics
+ 
+Now, in solving ordinary differential equations, we assume a solution to the 
+homogeneous part and approximate the function using SPSS model, which es-
+timates the regression coefficients in the multiple regression mode. These coeffi-
+cients are what we use as the weights from the input layer to the hidden layer. 
+The condition placed on 
+( )
+( )
+ay
+x
+f
+x
+=
+, say, where 
+( )
+ay
+x  is the assumed so-
+lution is that 
+( )
+0
+f
+x ≠
+. 
+Any exponential function, 
+( )
+e x
+y x
+α
+=
+, where α ∈, is a part of solution to 
+any first order ordinary differential equation. We regress that function using ex-
+cel spreadsheet and SPSS model as follows: 
+Assuming we let 
+( )
+( )
+[
+]
+2e ,
+0,1
+x
+ay
+x
+f x
+x
+=
+=
+∈
+, be a solution to a given first 
+order ordinary differential equation, 
+( )
+2
+y
+y
+f
+x
+′ −
+=
+, defined on the given in-
+terval. Then dividing the interval into 10 equidistant points, we use excel spread-
+sheet to find values of 
+( )
+ay
+x  at all the points shown in Table 1, then use SPSS 
+to regress and get the weights which we designate weights from input layer to 
+hidden layer. 
+The above is followed by the display of the SPSS 20 output of the data in Ta-
+ble 2, from which we pick the weights. 
+Looking at Table 2, we see that the cubic curve fits perfectly the assumed so-
+lution. Therefore, we pick the coefficients: 2.413, 0.115 and 3.860 as the weights 
+from input layer to the hidden layer. 
+The next task is to obtain the weights from hidden layer to the output layer. 
+We shall find 
+( )
+f
+x , a real function of a real valued vector 
+(
+)
+T
+1
+2
+,
+,
+,
+d
+x
+x x
+x
+=
+
+ 
+and a set of functions, 
+( )
+{
+}
+i x
+ϕ
+ called the elementary functions such that 
+(
+)
+( )
+1
+ˆ
+,
+N
+i
+i
+i
+f x v
+v
+x
+ϕ
+=
+= ∑
+                     (16) 
+is satisfied, where 
+iv  are real valued constants such that 
+( )
+(
+)
+ˆ
+,
+f x
+f x v
+ε
+−
+<
+. 
+When one can find coefficients 
+iv  that make ε  arbitrarily small for any func-
+tion 
+( ).
+f
+ over the domain of interest, we say that the elementary function set 
+( )
+{
+}
+.
+iϕ
+ has the property of universal approximation over the class of functions 
+( ).
+f
+. There are many possible elementary functions we can choose from which 
+we will show later. Now if the number of input vectors 
+ix  is made equal to the  
+ 
+Table 1. Table of values for the relationship between ya and x. 
+X 
+0 
+0.1 
+0.2 
+0.3 
+0.4 
+0.5 
+0.6 
+0.7 
+0.8 
+0.9 
+1 
+Y 
+1 1.2214 1.49183 1.82212 2.22554 2.71828 3.32012 4.0552 4.95303 6.04965 7.38906 
+ 
+Table 2. Model summary and parameter estimates. 
+Equation 
+R2 
+Constant 
+b1 
+b2 
+b3 
+Linear 
+0.930 
+0.240 
+6.109 
+Quadratic 
+0.998 
+1.126 
+0.205 
+5.904 
+Cubic 
+1.000 
+0.987 
+2.413 
+0.115 
+3.860 
+The Independent variable is X 
+
+
+=== PAGE 8 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+907 
+Applied Mathematics
+ 
+number of elementary functions 
+( ).
+iϕ
+, then the normal equations can be given 
+as; 
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+1
+1
+1
+1
+1
+1
+N
+N
+N
+N
+N
+N
+x
+x
+v
+f x
+x
+x
+v
+f x
+ϕ
+ϕ
+ϕ
+ϕ
+
+
+
+
+
+
+
+
+
+
+
+=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             (17) 
+and the solution becomes 
+1
+v
+f
+φ −
+=
+, where v becomes a vector with the coeffi-
+cients, f is a vector composed of the values of the function at the N points, and 
+φ  the matrix with entries given by values of the elementary functions at each of 
+the N points in the domain. An important condition that must be placed in the 
+elementary functions is that the inverse of φ  must exist. In general, there are 
+many sets 
+( )
+{
+}
+.
+iϕ
+ with the property of universal approximation for a class of 
+functions. We would prefer a set 
+( )
+{
+}
+.
+iϕ
+ over another 
+( )
+{
+}
+.
+iγ
+ if 
+( )
+{
+}
+.
+iϕ
+ pro-
+vides a smaller error ε for a pre-set value of N. This means that the speed of 
+convergence of the approximation is also an important factor in the selection of 
+the basis. As we mentioned earlier, there are many possible elementary basis 
+functions we can choose from. A typical example of basis function is the Gaus-
+sian basis specified by: 
+( )
+(
+)
+(
+)
+2
+exp
+1,2,
+,
+;
+i
+G z
+G
+x
+c
+z
+i
+N
+=
+−
+=
+−
+=
+
+ 
+However in neuro-computing, the most popular choice for elementary func-
+tions is the radial basis function (RBFs) where 
+( )
+i x
+ϕ
+ is given; 
+( )
+2
+2
+exp
+2
+i
+i
+x
+x
+x
+ϕ
+σ
+
+
+−
+
+
+=
+−
+
+
+
+
+                    (18) 
+where 
+2
+σ  is the variance of input vectors x. It is this last basis function that we 
+shall adopt in generating our weights from hidden layer to output layer. At this 
+point we shall divide a given interval into a certain number of points equidistant 
+from each other and choose input vectors 
+ix  to conform with the number of 
+elementary functions 
+( ).
+iϕ
+ to make the basis function implementable. Here N 
+= 3 and the solution
+1
+v
+f
+φ −
+=
+ is given by; 
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+1
+1
+1
+1
+2
+1
+3
+1
+1
+2
+1
+2
+2
+2
+3
+2
+2
+3
+1
+3
+2
+3
+3
+3
+3
+v
+x
+x
+x
+f
+v
+x
+x
+x
+f
+v
+x
+x
+x
+f
+ϕ
+ϕ
+ϕ
+ϕ
+ϕ
+ϕ
+ϕ
+ϕ
+ϕ
+−
+
+
+
+
+
+
+
+
+
+
+
+
+= 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             (19) 
+where 
+, ,
+v
+f
+φ
+ are as defined before, and 
+( )
+(
+)
+2
+2
+2
+2
+1
+1
+1
+1
+exp
+,
+,
+2
+N
+N
+i
+i
+i
+i
+i
+i
+x
+x
+x
+x
+x
+x
+x
+N
+N
+ϕ
+σ
+σ
+=
+=
+
+
+−
+
+
+=
+−
+=
+−
+=
+
+
+
+
+∑
+∑
+      (20) 
+Now to compute 
+( )
+f
+x  depends on the nature of a given differential equa-
+tion. For first, second or higher order homogeneous ordinary differential equa-
+tions, we form linear, quadratic or higher order polynomial equations incorpo-
+rating the default signs of the terms in the differential equations. For non-ho- 
+mogeneous ordinary differential equations, we use the forcing functions. When 
+
+
+=== PAGE 9 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+908 
+Applied Mathematics
+ 
+the weights of the neural network are obtained by these systematic ways, there is 
+no need to adjust all the parameters in the network, as postulated by previous 
+researchers, in order to achieve convergence. All that is required is a little ad-
+justment of the biases, and these are fixed to lie in a given interval and conver-
+gence to a solution with an acceptable minimum error is achieved. When the 
+problem of obtaining the parameters is settled, it becomes easy to solve any first, 
+second or higher order ordinary differential equation using the neural network 
+model appropriate to it. We shall restrict this study to first and second order li-
+near ordinary homogeneous differential equations. To compute the prediction 
+error we use the squared error function defined as follows: 
+(
+)
+2
+0.5
+d
+p
+E
+ψ
+ψ
+=
+−
+                      (21) 
+where 
+d
+ψ  represents the desired output and 
+p
+ψ  the predicted output. The 
+same procedure can be applied to second and third order ODE. For the second 
+order initial value problem (IVP): 
+( )
+( )
+(
+)
+( )
+( )
+,
+,
+, 
+0
+, 
+0
+x
+f
+x
+x
+A
+B
+ψ
+ψ ψ
+ψ
+ψ
+′′
+′
+′
+=
+=
+=
+           (22) 
+The trial solution is written 
+( )
+(
+)
+2
+,
+t x
+A
+Bx
+x N x p
+ψ
+=
++
++
+                  (23) 
+where 
+,
+A B ∈ and 
+(
+)
+(
+)
+3
+1
+,
+i
+j
+j
+j
+N x p
+v
+z
+σ
+=
+= ∑
+, and for two point BC:  
+( )
+( )
+0
+,
+1
+A
+B
+ψ
+ψ
+=
+=
+ the trial solution in this case is written:  
+( )
+(
+)
+(
+)
+(
+)
+1
+1
+,
+t x
+A
+x
+Bx
+x
+x N x p
+ψ
+=
+−
++
++
+−
+. 
+Now, we first demonstrate the computational complexity involved in adjust-
+ing all parameters in order to update the weights and getting a close approxima-
+tion to the desired result. Subsequently, we proceed to our main results and 
+analysis that displays the ease of computation achieved by our novel method of 
+adjusting only the biases. The former adjustment or weight updation is done us-
+ing the backpropagation algorithm. Therefore, we need to train the network so 
+we can apply the backpropagation algorithm. The basis function we shall apply 
+in this work in training the neural network is the sigmoid activation function 
+given by Equation (9). In a simple neural model as depicted in Figure 3, where 
+there is no hidden layer and 
+(
+)
+(
+)
+1
+2
+1
+2
+,
+,
+,
+x
+x x
+w
+w w
+=
+=
+, we shall assume some 
+figures for illustration. Let the training data be given as 
+(
+)
+(
+)
+1
+2
+,
+0.1,0.2
+x
+x x
+=
+=
+; 
+desired output 
+0.02
+dy =
+; initial weights 
+(
+)
+(
+)
+1
+2
+,
+0.4,0.1
+w
+w w
+=
+=
+; the bias  
+1.78
+b =
+ and predicted output 
+p
+y . The diagram below shows the neural net-
+work training model for the sample data we are considering. Now we proceed to 
+train the network to get the predicted output. 
+5.1. Network Training 
+First we compute 
+1
+1
+2
+2
+z
+x
+w
+x
+w
+b
+=
+⋅
++
+⋅
++
+, which is sum of products and bias, i.e.; 
+(
+)
+(
+)
+(
+)
+(
+)
+1
+1
+2
+2
+0.1 0.4
+0.2 0.1
+1.78
+1.84
+z
+x
+w
+x
+w
+b
+=
++
++
+=
++
++
+=
+      (24) 
+
+
+=== PAGE 10 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+909 
+Applied Mathematics
+ 
+ 
+Figure 3. Schematic for 
+(
+)
+,
+N x p . 
+ 
+Next we apply z, as input to the activation function, which in this case is the 
+sigmoid activation function: 
+( ) (
+)
+(
+)
+1
+1
+1.84
+1
+e
+1
+e
+0.863
+z
+z
+σ
+−
+−
+−
+−
+=
++
+=
++
+=
+. Hence the predicted output  
+0.863
+p
+y =
+. 
+We have seen that the predicted output does not correspond to the desired 
+output, therefore we have to train the network to reduce the prediction error. To 
+compute the prediction error, we use the squared error (21) function defined as 
+follows. Considering the predicted output we calculated above, the prediction 
+error is: 
+(
+)
+2
+0.5 0.02
+0.863
+0.355
+E =
+−
+=
+.                 (25) 
+We observe that the prediction error is huge, so we must attempt to minimize 
+it. We noted previously that the weights determine how close a predicted output 
+is to the desired output. Therefore to minimize the error we have to adjust the 
+weights. This can be achieved using the formula; 
+(
+)
+n
+o
+d
+p
+w
+w
+y
+y
+x
+η
+=
++
+−
+                    (26) 
+where 
+n
+w  and 
+o
+w  represent new and old weights respectively. We update the 
+weights using the following: 
+o
+w : current weight (1.78, 0.4, 0.1); 
+η : network learning rate = 0.01; 
+dy : desired output = 0.02; 
+x: current input vector = (+1, 0.1, 0.2). 
+[
+]
+[
+][
+]
+[
+]
+ 
+1.78,0.4,0.1
+0.01 0.02
+0.863
+1,0.1,0.2
+1.772,0.399,0.098
+n
+w
+∴
+=
++
+−
++
+=
+. 
+With this information we adjust the model and retrain the neural network to 
+get; 
+(
+)
+(
+)
+0.1 0.399
+0.2 0.098
+1.772
+1.79
+z =
++
++
+=
+ 
+( ) (
+)
+1
+1.79
+ 
+1
+e
+0.857
+z
+σ
+−
+−
+⇒
+=
++
+=
+ 
+(
+)
+2
+  
+0.5 0.02
+0.857
+0.350
+E
+∴
+=
+−
+=
+. 
+
+
+=== PAGE 11 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+910 
+Applied Mathematics
+ 
+5.2. Computation of the Gradient 
+The error computation not only involves the outputs but also the derivatives of 
+the network output with respect to its inputs. So, it requires computing the gra-
+dient of the network derivatives with respect to its inputs. Let us now consider a 
+multilayered perceptron with one input node, a hidden layer with m nodes, and 
+one output unit. For the given inputs 
+(
+)
+1
+2
+,
+,
+,
+n
+x
+x x
+x
+=
+
+, the output is given by 
+(
+)
+(
+)
+1
+,
+m
+j
+j
+j
+N x p
+v
+z
+σ
+=
+= ∑
+                     (27) 
+where 
+1
+n
+j
+ji
+i
+j
+i
+z
+w x
+u
+=
+=
++
+∑
+, 
+ji
+w  denotes the weight from input unit i to the 
+hidden unit j, 
+jv  denotes weight from the hidden unit j to the output unit, 
+ju  
+denotes the biases, and 
+(
+)
+jz
+σ
+ is the sigmoid activation function. The deriva-
+tives of 
+(
+)
+,
+N x p  with respect to input 
+ix  is 
+( )
+1
+,
+k
+m
+k
+k
+j
+ji
+j
+k
+j
+i
+N
+v w
+x
+σ
+=
+∂
+=
+∂
+∑
+                     (28) 
+where 
+(
+)
+jz
+σ
+σ
+=
+ and 
+( )
+k
+σ
+ denotes the kth order derivative of sigmoid func-
+tion. 
+Let Nθ  denote the derivative of the network with respect to its inputs and 
+then we have the following relation 
+( )
+n
+n
+i
+i
+i
+N
+D N
+v p
+θ
+σ
+=
+= ∑
+; 
+1
+k
+n
+j
+jk
+k
+p
+wλ
+=
+= ∏
+, 
+1
+n
+i
+i
+k
+λ
+=
+= ∑
+         (29) 
+The derivative of Nθ  with respect to other parameters may be obtained as 
+( )
+k
+j
+j
+j
+N
+p
+v
+θ
+σ
+∂
+=
+∂
+, 
+(
+)1
+k
+j
+j
+j
+j
+N
+v p
+v
+θ
+σ
++
+∂
+=
+∂
+, 
+(
+)
+( )
+1
+1
+1,
+1
+i
+k
+k
+k
+j
+j
+j
+j
+j
+i
+ji
+ji
+j
+k
+k
+ji
+N
+x v p
+v
+w
+w
+w
+λ
+λ
+θ
+σ
+λ
+σ
++
+−
+=
+≠
+
+
+∂
+=
++
+
+
+∂
+
+
+∏
+           (30) 
+Now after getting all the derivatives we can find out the gradient of error. Us-
+ing general learning method for supervised training we can minimize the error 
+to the desired accuracy. We illustrate the above using the first order ordinary 
+differential equation below 
+( )
+(
+)
+[
+]
+,
+, 
+,
+x
+f
+x
+x
+a b
+ψ
+ψ
+′
+=
+∈
+                  (31) 
+with initial condition 
+( )
+a
+A
+ψ
+=
+. In this case, the ANN trial solution may be 
+written as 
+(
+)
+(
+)
+,
+,
+,
+t x p
+A
+xN x p
+ψ
+=
++
+                   (32) 
+where 
+(
+)
+,
+N x p  is the neural output of the feed forward network with one in-
+put data x with parameters p. The trial solution 
+(
+)
+,
+t x p
+ψ
+ satisfies the initial 
+condition. We differentiate the trial solution 
+(
+)
+,
+t x p
+ψ
+ to get 
+(
+)
+(
+)
+(
+)
+d
+,
+d
+,
+,
+,
+d
+d
+t x p
+N x p
+N x p
+x
+x
+x
+ψ
+=
++
+               (33) 
+For evaluating the derivative term in the right hand side of (32), we use equa-
+
+
+=== PAGE 12 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+911 
+Applied Mathematics
+ 
+tions (6) and (26)–(31). The error function for this case may be formulated as 
+( )
+(
+)
+(
+)
+(
+)
+2
+1
+d
+,
+,
+,
+d
+n
+t
+i
+i
+t
+i
+i
+i
+w
+x p
+E p
+f x w
+x p
+x
+=
+
+
+=
+−
+
+
+
+
+
+
+∑
+            (34) 
+The weights from input to hidden are modified according to the following 
+rule 
+1
+r
+r
+ji
+ji
+r
+ji
+E
+w
+w
+w
+η
++
+
+
+∂
+=
+−
+
+
+
+
+∂
+
+
+                     (35) 
+where 
+(
+)
+(
+)
+(
+)
+2
+1
+d
+,
+,
+,
+d
+n
+t
+i
+i
+t
+i
+r
+r
+i
+i
+ji
+ji
+w
+x p
+E
+f x w
+x p
+x
+w
+w
+=
+
+
+
+
+∂
+∂
+
+
+=
+−
+
+
+
+
+
+
+∂
+∂
+
+
+
+
+∑
+          (36) 
+Here, 𝜂𝜂 is the learning rate and r is the iteration step. The weights from hid-
+den to output layer may be updated in a similar formulation as done for input to 
+hidden. Now going back to Equation (27), we recall that 
+1
+n
+j
+ji
+i
+j
+i
+z
+w x
+u
+=
+=
++
+∑
+  
+and 
+(
+)
+(
+)
+1
+,
+m
+j
+j
+j
+N x p
+v
+z
+σ
+=
+= ∑
+.This implies that; 
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+d
+,
+d
+d
+d
+d
+d
+d
+d
+d
+d
+d
+d
+m
+m
+j
+ji
+i
+j
+j
+ji
+i
+j
+j
+j
+m
+m
+j
+j
+j
+j
+j
+j
+j
+j
+N x p
+v
+w x
+u
+v
+w x
+u
+x
+x
+x
+z
+v
+z
+v
+z
+x
+z
+x
+σ
+σ
+σ
+σ
+=
++
+=
++
+=
+=
+⋅
+∑
+∑
+∑
+∑
+      (37) 
+If the neural network model is a simple one as we saw in Section 3.3, then, 
+(
+)
+( )
+(
+)
+1
+1
+2
+2
+,
+N x p
+z
+x w
+x w
+u
+σ
+σ
+=
+=
++
++
+ 
+1
+1
+2
+2
+d
+d
+d
+d
+; 
+d
+d
+d
+d
+N
+z
+N
+z
+x
+z
+x
+x
+z
+x
+σ
+σ
+∂
+∂
+⇒
+=
+⋅
+=
+⋅
+∂
+∂
+ 
+Now let us consider a first order differential equation: 
+( )
+[
+]
+( )
+0, 
+0,1 , 
+0
+1
+x
+x
+ψ
+ψ
+ψ
+′
+−
+=
+∈
+=                 (38) 
+with trial solution: 
+(
+)
+(
+)
+,
+,
+t x p
+A
+xN x p
+ψ
+=
++
+                    (39) 
+where x is the input to neural network model and p represents the parameters— 
+weights and biases. 
+(
+)
+( )
+(
+)
+0,
+0
+0,
+1
+tw
+p
+A
+N
+p
+A
+=
++
+=
+=  
+(
+)
+(
+)
+,
+1
+,
+t x p
+xN x p
+ψ
+⇒
+= +
+    (40) 
+To solve this problem using neural network (NN), we shall employ a NN ar-
+chitecture given in Figure 3. Now, 
+(
+)
+(
+)
+,
+1
+,
+t
+i
+i
+i
+x p
+x N x p
+ψ
+= +
+, with  
+(
+)
+(
+)
+3
+1
+,
+i
+j
+j
+j
+N x p
+v
+z
+σ
+=
+= ∑
+, and 
+(
+)
+( )
+(
+)
+(
+)
+3
+1
+1
+2
+2
+3
+3
+1
+j
+j
+j
+v
+z
+v
+z
+v
+z
+v
+z
+σ
+σ
+σ
+σ
+=
+=
++
++
+∑
+ 
+where 
+1
+1
+11
+1
+z
+x w
+u
+=
++
+, 
+2
+1
+12
+2
+z
+x w
+u
+=
++
+ and 
+3
+1
+13
+3
+z
+x w
+u
+=
++
+. 
+If the neural network model is not able to predict correctly the solution of the 
+differential equation with the given initial parameters—weights and biases, we 
+
+
+=== PAGE 13 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+912 
+Applied Mathematics
+ 
+need to find the prediction error given by 
+( )
+(
+)
+(
+)
+(
+)
+2
+1
+d
+,
+,
+,
+d
+n
+t
+i
+i
+t
+i
+i
+i
+w
+x p
+E p
+f x w
+x p
+x
+=
+
+
+=
+−
+
+
+
+
+
+
+∑
+.           (41) 
+If the prediction error does not satisfy an acceptable threshold, then the pa-
+rameters need to be adjusted using the equation, 
+1
+r
+r
+ji
+ji
+r
+ji
+E
+w
+w
+w
+η
++
+
+
+∂
+=
+−
+
+
+
+
+∂
+
+
+, where 
+(
+)
+(
+)
+(
+)
+2
+1
+d
+,
+,
+,
+d
+n
+t
+i
+i
+t
+i
+r
+r
+i
+i
+ji
+ji
+w
+x p
+E
+f x w
+x p
+x
+w
+w
+=
+
+
+∂
+∂
+=
+−
+
+
+
+
+∂
+∂
+
+
+∑
+(42) 
+Recall that: 
+(
+)
+(
+)
+,
+1
+,
+t
+i
+i
+i
+x p
+x N x p
+ψ
+= +
+, and 
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+d
+d
+d
+,
+1
+,
+,
+,
+d
+d
+d
+t
+i
+i
+i
+i
+i
+i
+i
+i
+i
+w
+x p
+x N x p
+N x p
+x
+N x p
+x
+x
+x
+=
++
+=
++
+.     (43) 
+(
+)
+(
+)
+(
+)
+3
+3
+1
+1
+1
+1
+1
+1
+3
+1
+2
+1
+2
+3
+1
+1
+2
+1
+3
+1
+d
+d
+d
+  
+,
+d
+d
+d
+d
+d
+d
+d
+d
+d
+d
+d
+d
+d
+d
+d
+j
+j
+j
+j
+j
+j
+N x p
+v
+z
+v
+z
+x
+x
+x
+z
+z
+z
+v
+v
+v
+z
+x
+z
+x
+z
+x
+σ
+σ
+σ
+σ
+σ
+=
+=
+∴
+=
+=
+=
++
++
+∑
+∑
+ 
+(
+)
+( )
+(
+)
+(
+)
+1
+1
+1
+11
+2
+2
+12
+3
+3
+13
+1
+d
+,
+d
+N x p
+v
+z
+w
+v
+z
+w
+v
+z
+w
+x
+σ
+σ
+σ
+′
+′
+′
+=
++
++
+       (44) 
+Putting Equations (42) and (43) into Equation (40) gives 
+( )
+(
+)
+(
+)
+(
+)
+(
+)
+2
+1
+d
+,
+,
+1
+,
+d
+n
+i
+i
+i
+i
+i
+E p
+N x p
+x
+N x p
+xN x p
+x
+=
+
+
+
+
+=
++
+−
++
+
+
+
+
+
+
+
+
+
+
+∑
+ 
+( )
+(
+)
+(
+)
+(
+)
+2
+3
+3
+1
+1
+1
+1
+1
+d
+ 
+,
+1
+d
+j
+j
+i
+j
+j
+j
+j
+E p
+v
+z
+x
+N x p
+x
+v
+z
+x
+σ
+σ
+=
+=
+
+
+
+
+
+
+∴
+=
++
+−−
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+∑
+∑
+   (45) 
+( )
+( )
+(
+)
+(
+)
+(
+( )
+(
+)
+(
+)
+(
+)
+( )
+(
+)
+(
+)
+(
+))
+1
+1
+2
+2
+3
+3
+1
+1
+1
+11
+2
+2
+12
+3
+3
+13
+2
+1
+1
+1
+2
+2
+3
+3
+    
+1
+E p
+v
+z
+v
+z
+v
+z
+x v
+z
+w
+v
+v
+z
+w
+v
+z
+w
+x v
+z
+v
+z
+v
+z
+σ
+σ
+σ
+σ
+σ
+σ
+σ
+σ
+σ
+⇒
+=
++
++
+′
+′
+′
++
++
++
++
+−−
++
++
+    (46) 
+We noted earlier that when the neural network is not able to predict accepta-
+ble solution, that is, solution with minimum error, the weights and biases need 
+to be adjusted. This involves complex derivatives with multivariable chain rule 
+[11] [12]. From the ongoing, we need to compute the derivative of Equation (46) 
+with respect to the weights and biases. That is: 
+( )
+(
+)
+(
+)
+(
+( )
+(
+)
+(
+)
+(
+)
+( )
+(
+)
+(
+)
+(
+))
+1
+1
+2
+2
+3
+3
+1
+1
+1
+11
+2
+2
+12
+3
+3
+13
+2
+1
+1
+1
+2
+2
+3
+3
+1
+r
+r
+ji
+ji
+E
+v
+z
+v
+z
+v
+z
+w
+w
+x
+v
+z
+w
+v
+v
+z
+w
+v
+z
+w
+x
+v
+z
+v
+z
+v
+z
+σ
+σ
+σ
+σ
+σ
+σ
+σ
+σ
+σ
+∂
+∂
+=
++
++
+∂
+∂
+′
+′
+′
++
++
++
++
+−−
++
++
+       (47) 
+Similarly, to update the weights from the hidden layer to output layer, we com-
+pute 
+,
+1,2,3
+j
+E
+v
+j
+∂
+∂
+=
+. Finally, we update the biases by computing  
+,
+1,2,3
+j
+E
+u
+j
+∂
+∂
+=
+. Equation (47) together with 
+j
+E
+v
+∂
+∂
+ and 
+j
+E
+u
+∂
+∂
+ are used 
+
+
+=== PAGE 14 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+913 
+Applied Mathematics
+ 
+to update the weights and biases. The superscript (r) denotes the rth iteration. 
+It is important to note that the foregoing is necessary in order to achieve the 
+number of iterations required. Sometimes, it may be necessary to do up to 30 or 
+more iterations for the solution to converge within an acceptable threshold. It is 
+on the basis of this complex derivatives involved in solving ODE with neural 
+network, especially of higher order, and the many iterations required for con-
+vergence that motivated our search for a more efficient and accurate way of 
+solving the given problem, but avoiding the inherent computational complexity. 
+5.3. Results 
+We begin with a couple of examples on first and second order differential equa-
+tions. 
+5.4. Example 
+Consider the initial value problem; 
+( )
+[
+]
+0; 
+0
+1, 
+0,1 , 
+1.
+y
+y
+y
+x
+α
+α
+′ −
+=
+=
+∈
+≡
+              (48) 
+This equation has been solved by Mall and Chakraverty [13]. As discussed in 
+the previous section, the trial solution is given by; 
+( )
+(
+)
+,
+ty
+x
+A
+xN x p
+=
++
+ 
+Applying the initial condition gives 
+1
+A = , therefore 
+( )
+(
+)
+1
+,
+ty
+x
+xN x p
+= +
+. 
+To obtain the weights from input to hidden layer, it is natural to assume  
+( )
+ex
+ay
+x =
+. We approximate this function using regression in SPSS. We shall 
+train the network for 10 equidistant points in [0, 1], and then employ excel 
+spreadsheet to find values of 
+( )
+ex
+ay
+x =
+ at all the points. This leads us to the 
+following data in Table 3. 
+We then perform a curve-fit polynomial regression built into IBM SPSS 23 
+[14], for the function 
+( )
+ex
+ay
+x =
+. The output is displayed below in Table 4. 
+Table 4 displays the linear, quadratic and cubic regression of 
+( )
+ex
+ay
+x =
+. The 
+quadratic and cubic curves show perfect goodness of fit, 
+2
+1
+R = . Using the cu-
+bic curve, we pick our weights from input layer to hidden layer as:  
+ 
+Table 3. Values of 
+( )
+(
+)
+,
+ex
+a
+x y
+x =
+ for problem (47). 
+X 
+0 
+0.1 
+0.2 
+0.3 
+0.4 
+0.5 
+0.6 
+0.7 
+0.8 
+0.9 
+1 
+Y 
+1 
+1.1052 
+1.2214 
+1.3499 
+1.4918 
+1.6487 
+1.8221 
+2.014 
+2.226 
+2.4596 
+2.7183 
+ 
+Table 4. Model summary and parameter estimates. 
+Equation 
+R2 
+Constant 
+b1 
+b2 
+b3 
+Linear 
+0.981 
+0.883 
+1.698 
+Quadratic 
+1.000 
+1.010 
+0.856 
+0.842 
+Cubic 
+1.000 
+1.000 
+1.016 
+0.423 
+0.279 
+The Independent variable is X 
+
+
+=== PAGE 15 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+914 
+Applied Mathematics
+ 
+11
+12
+13
+1.016,
+0.423,
+0.279
+w
+w
+w
+=
+=
+=
+. Now to compute the weights from hidden 
+layer to the output layer, we find a function 
+( )
+x
+ϑ
+ such that 
+1
+v
+f
+φ −
+=
+; 
+,v f  
+and φ  are as defined in Section 3. In particular, 
+( )
+(
+)
+(
+)
+(
+)
+(
+)
+T
+1
+2
+3
+,
+,
+f x
+x
+x
+x
+ϑ
+ϑ
+ϑ
+=
+. 
+We now form a linear function based on the default sign of the differential equa-
+tion, i.e. 
+( )
+x
+ax
+b
+ϑ
+=
+−
+, where a is the coefficient of the derivative of y and b is 
+the coefficient of y Thus; 
+( )
+( )
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+T
+T
+1
+2
+3
+1,
+,
+,
+1.1,1.2,1.3
+x
+x
+f x
+x
+x
+x
+ϑ
+ϑ
+ϑ
+ϑ
+=
++
+=
+=
+ 
+The neural architecture for the neural network is shown in Figure 2, so we let 
+3
+N =
+. We take 
+(
+)
+T
+0.1,0.2,0.3
+x =
+ and 
+( )
+(
+)
+T
+1.1,1.2,1.3
+f
+x =
+. It then follows 
+that 
+1
+v
+f
+φ −
+=
+, 
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+1
+1
+1
+1
+2
+1
+3
+1
+1
+2
+1
+2
+2
+2
+3
+2
+2
+3
+1
+3
+2
+3
+3
+3
+3
+ 
+v
+x
+x
+x
+v
+x
+x
+x
+v
+x
+x
+x
+ϕ
+ϕ
+ϕ
+ϑ
+ϕ
+ϕ
+ϕ
+ϑ
+ϕ
+ϕ
+ϕ
+ϑ
+−
+
+
+
+
+
+
+
+
+
+
+
+
+⇒
+= 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       (49) 
+where 
+(
+)
+(
+)
+2
+2
+exp
+,
+1,2,3;
+1,2,3.
+2
+i
+j
+i
+j
+x
+x
+x
+i
+j
+ϕ
+σ
+
+
+−
+
+
+=
+−
+=
+=
+
+
+
+
+
+
+          (50) 
+Substituting the given values of the vectors x and f, we obtain the weights 
+from the hidden layer to the output layer, 
+1
+1
+2
+3
+1
+0.94
+0.78
+1.1
+5.17
+0.94
+1
+0.94
+1.2
+9.375
+0.78
+0.94
+1
+1.3
+6.08
+v
+v
+v
+−
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=
+= −
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+,          (51) 
+Therefore the weights from the hidden layer to the output layer are;  
+1
+2
+3
+5.17,
+9.375,
+6.08
+v
+v
+v
+=
+= −
+=
+. 
+The biases are fixed between –1 and 1. We now train the network with the 
+available parameters using MathCAD 14 software [15] as follows: 
+(
+)
+(
+)
+(
+)
+1
+2
+3
+1
+2
+1
+2
+3
+1
+1
+1
+2
+2
+2
+3
+3
+3
+1
+1
+1
+2
+w : 1.016   w : 0.423   w : 0.279   x : 1   
+v : 5.17     v : 6.08     u : 1     u : 0.2251    u :
+0.1
+z : w
+x
+u
+2.016     z : w
+x
+u
+0.6481    z : w
+x
+u
+0.179
+z
+:
+1
+exp z
+0.882467, 
+z
+:
+1
+ex
+−
+=
+=
+=
+=
+=
+=
+=
+=
+= −
+=
+⋅
++
+=
+=
+⋅
++
+=
+=
+⋅
++
+=
+σ
+=
++
+=
+σ
+=
++
+
+
+
+
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+( )
+( )
+( )
+( )
+(
+)
+1
+2
+1
+3
+3
+1
+1
+2
+2
+3
+3
+x
+p
+d
+2
+10
+d
+p
+p z
+0.656582,
+z
+:
+1
+exp z
+0.544631
+N : v
+z
+v
+z
+v
+z
+1.718251
+y
+x : 1
+x N
+2.718251,  y
+x : e
+2.718282
+E : 0.5
+y
+x
+y
+x
+4.707964 10
+−
+−
+−
+=
+
+
+
+
+
+
+σ
+=
++
+=
+
+
+=
+⋅σ
++
+⋅σ
++
+⋅σ
+=
+= +
+⋅
+=
+=
+=
+=
+⋅
+−
+=
+×
+. 
+Here yd and yp are respectively the desired output (exact solution) and the 
+predicted output (trial solution). From the indicated error value, this is an ac-
+ceptable accuracy. We compare our results with the neural network results ob-
+tained by Otadi and Mosleh [16] and find them to be in reasonable agreement. 
+
+
+=== PAGE 16 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+915 
+Applied Mathematics
+ 
+This is depicted in Table 5, as well as the graphical profile in Figure 4 below. 
+The perfect accuracy is evident in the graphical profile depicted in Figure 4. 
+5.5. Remark 
+In what follows, we consider a non-homogeneous second order linear differen-
+tial equation. It is important to recall that for any second order non-homoge- 
+neous differential equation of the form
+( )
+( )
+( )
+( )
+y
+x
+a x y
+b x y
+f
+x
+′′
+′
++
++
+=
+, the non- 
+homogeneous term 
+( )
+f
+x  is termed the forcing function. In this section, we 
+shall employ the forcing function to compute the weights from hidden layer to 
+the output layer. This is made clear in the following example. 
+5.6. Example 
+Consider the initial value problem; 
+(
+)
+( )
+( )
+[
+]
+4
+24cos 2
+; 
+0
+3, 
+0
+4, 
+0,1
+y
+y
+x
+y
+y
+x
+′′
+′
+−
+=
+=
+=
+∈
+. 
+The trial solution is 
+( )
+(
+)
+2
+,
+ty
+x
+A
+Bx
+x N x p
+=
++
++
+. Applying the initial condi-
+tion gives 
+3,
+4
+A
+B
+=
+=
+. 
+Therefore, 
+( )
+(
+)
+2
+3
+4
+,
+ty
+x
+x
+x N x p
+=
++
++
+, 
+( )
+2
+3
+e
+e
+x
+x
+ay
+x
+−
+−
+=
++
+. 
+We use excel spreadsheet to find values of 
+( )
+ay
+x  at all the x points, as dis-
+played in Table 6. 
+Using regression and SPSS model we find weights from input layer to hidden 
+layer. From Table 7 and using the cubic curve fit with R2 = 1, we pick our 
+weights from input layer to hidden layer as: 
+11
+12
+13
+0.488,
+1.697,
+3.338
+w
+w
+w
+=
+=
+=
+. 
+Now to compute the weights from hidden layer to the output layer, we use the 
+function:  
+ 
+Table 5. Comparison of the results. 
+Input data (X) 0 
+0.1 
+0.2 
+0.3 
+0.4 
+0.5 
+0.6 
+0.7 
+0.8 
+0.9 
+1 
+Y Exact 
+1 1.1052 1.2214 1.3499 1.4918 1.6487 1.8221 2.0138 2.226 2.46 2.7183 
+Y Pred 
+1 1.1052 1.2214 1.3499 1.4918 1.6488 1.8222 2.0137 2.226 2.46 2.7183 
+ 
+ 
+Figure 4. Plot of Y exact and Y predicted for Example 1. 
+
+
+=== PAGE 17 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+916 
+Applied Mathematics
+ 
+( )
+(
+)
+( )
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+T
+T
+1
+2
+3
+24cos 2
+,
+ 
+,
+,
+23.999854,23.999415,23.998684
+x
+x
+f x
+x
+x
+x
+ϑ
+ϑ
+ϑ
+ϑ
+=
+=
+=
+ 
+With 
+(
+)
+T
+0.1,0.2,0.3
+x =
+. Hence, the weights from the hidden layer to the out-
+put layer given by 
+1
+v
+f
+φ −
+=
+ are; 
+1
+1
+2
+3
+1
+0.94
+0.78
+23.999854
+0.94
+1
+0.94
+23.999415
+0.78
+0.94
+1
+23.998684
+v
+v
+v
+−
+
+
+
+
+
+
+
+
+
+
+
+
+=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+1
+2
+3
+112.489
+ 
+187.474
+112.483
+v
+v
+v
+
+
+
+
+
+
+
+
+⇒
+= −
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+The weights from the hidden layer to the output layer are;  
+1
+2
+3
+112.489,
+187.474,
+112.483
+v
+v
+v
+=
+= −
+=
+. 
+The biases are fixed between −1 and 1. We now train the network with the 
+available parameters using our MathCAD 14 algorithm as follows: 
+(
+)
+(
+)
+1
+2
+3
+1
+2
+3
+1
+2
+3
+1
+1
+1
+2
+2
+2
+3
+3
+3
+1
+1
+w : 0.488   w : 1.697     w : 3.338      x : 1   
+v : 112.489     v :
+187.474   v : 112.483  u : 1     u : 1      u :
+0.1691
+z : w
+x
+u
+1.488     z : w
+x
+u
+2.697     z : w
+x
+u
+3.1689
+σ z
+:
+1
+exp
+z
+=
+=
+=
+=
+=
+= −
+=
+=
+=
+= −
+=
+⋅
++
+=
+=
+⋅
++
+=
+=
+⋅
++
+=
+=
++
+−
+
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+(
+)
+( )
+( )
+(
+)
+( )
+( )
+(
+)
+1
+1
+2
+2
+1
+3
+3
+1
+1
+2
+2
+3
+3
+2
+p
+2 x
+2 x
+d
+2
+8
+d
+p
+0.815778, σ z
+:
+1
+exp
+z
+0.936849,
+σ z
+:
+1
+exp
+z
+0.959647
+N : v
+σ z
+v
+σ z
+v
+σ z
+24.075112
+y
+x : 3
+4 x
+x
+N
+31.075112,
+y
+x : 4 e
+2 e
+3 cos 2 x
+31.075335
+E : 0.5
+y
+x
+y
+x
+2.502862 10
+−
+−
+−
+⋅
+−⋅
+−
+=
+=
++
+−
+=
+
+
+
+
+
+
+
+
+
+=
++
+−
+=
+
+
+=
+⋅
++
+⋅
++
+⋅
+=
+=
++
+⋅
++
+⋅
+=
+=
+⋅
++
+⋅
+−⋅
+⋅
+=
+=
+⋅
+−
+=
+×
+. 
+We compare the exact and approximate solution in Table 8. The accuracy is 
+clearly depicted graphically in Figure 5. 
+ 
+Table 6. Values of 
+( )
+(
+)
+2
+2
+,
+e
+e
+x
+x
+a
+x y
+x
+−
+=
++
+. 
+X 
+0 
+0.1 
+0.2 
+0.3 
+0.4 
+0.5 
+0.6 
+0.7 
+0.8 
+0.9 
+1 
+Y 
+2 
+2.0401 
+2.1621 
+2.3709 2.67487 3.0862 
+3.6213 
+4.3018 
+5.1549 
+6.2149 
+7.524 
+ 
+Table 7. Model summary and parameter estimates. 
+Equation 
+R2 
+Constant 
+b1 
+b2 
+b3 
+Linear 
+0.887 
+1.630 
+5.283 
+Quadratic 
+0.995 
+1.931 
+-3.698 
+6.703 
+Cubic 
+1.000 
+1.985 
+0.488 
+1.697 
+3.338 
+The Independent variable is X 
+ 
+Table 8. Comparison of the results. 
+Input data (X) 0 
+0.1 
+0.2 
+0.3 
+0.4 
+0.5 
+0.6 
+0.7 
+0.8 
+0.9 
+1 
+Y Exact 
+3 3.6408 4.7630 6.3668 8.4520 11.0188 14.0670 17.5968 21.6081 26.1008 31.0751 
+Y Pred 
+3 3.5829 4.5448 5.9101 7.7107 9.9879 12.7958 16.2041 20.3035 25.2108 31.0753 
+
+
+=== PAGE 18 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+917 
+Applied Mathematics
+ 
+ 
+Figure 5. Plot of Y exact and Y predicted for Example 2. 
+6. Conclusion 
+In this paper, we have presented a novel approach for solving first and second 
+order linear ordinary differential equations with constant coefficients. Specifically, 
+we employ a feed-forward Multilayer Perceptron Neural Network (MLPNN), but 
+avoid the standard back-propagation algorithm for updating the intrinsic weights. 
+This greatly reduces the computational complexity of the given problem. Our 
+results are validated by the near perfect approximations achieved in comparison 
+with the exact solutions, as well as demonstrating the function approximation 
+capabilities of ANN. This then proves the efficiency of our neural network pro-
+cedure. We employed Excel spreadsheet, IBM SPSS 23, and MathCAD 14 algo-
+rithm to achieve this task. 
+Conflicts of Interest 
+The authors declare no conflicts of interest regarding the publication of this pa-
+per. 
+References 
+[1] 
+McCulloch, W.S. and Pitts W. (1943) A Logical Calculus of the Ideas Immanent in 
+Nervous Activity. The Bulletin of Mathematical Biophysics, 5, 115-133.  
+https://doi.org/10.1007/BF02478259  
+[2] 
+Neumann, J.V. (1951) The General and Logical Theory of Automata. Wiley, New 
+York.  
+[3] 
+Graupe, D. (2007) Principles of Artificial Neural Networks. Vol. 6, 2nd Edition, 
+World Scientific Publishing Co. Pte. Ltd., Singapore.  
+[4] 
+Rumelhart, D.E. and McClelland, J.L. (1986) Parallel Distributed Processing, Ex-
+plorations in the Microstructure of Cognition I and II. MIT Press, Cambridge.  
+https://doi.org/10.7551/mitpress/5236.001.0001  
+[5] 
+Werbos, P.J. (1974) Beyond Recognition, New Tools for Prediction and Analysis in 
+the Behavioural Sciences. Ph.D. Thesis, Harvard University, Cambridge. 
+[6] 
+Lagaris, I.E., Likas, A.C. and Fotiadis, D.I. (1997) Artificial Neural Network for Solv-
+ing Ordinary and Partial Differential Equations. arXiv: physics/9705023v1. 
+
+
+=== PAGE 19 ===
+R. N. Okereke et al. 
+ 
+ 
+DOI: 10.4236/am.2021.1210059 
+918 
+Applied Mathematics
+ 
+[7] 
+Cybenco, G. (1989) Approximation by Superposition of a Sigmoidal Function. Ma-
+thematics of Control, Signals and Systems, 2, 303-314.  
+https://doi.org/10.1007/BF02551274  
+[8] 
+Hornic, K., Stinchcombe, M. and White, H. (1989) Multilayer Feedforward Networks 
+Are Universal Approximators. Neural Networks, 2, 359-366.  
+https://doi.org/10.1016/0893-6080(89)90020-8  
+[9] 
+Lee, H. and Kang, I.S. (1990) Neural Algorithms for Solving Differential Equations. 
+Journal of Computational Physics, 91, 110-131.  
+https://doi.org/10.1016/0021-9991(90)90007-N 
+[10] 
+Majidzadeh, K. (2011) Inverse Problem with Respect to Domain and Artificial Neural 
+Network Algorithm for the Solution. Mathematical Problems in Engineering, 2011, 
+Article ID: 145608, 16 p. https://doi.org/10.1155/2011/145608  
+[11] 
+Chen, R.T.Q., Rubanova, Y., Bettencourt, J. and Duvenaud, D. (2018) Neural Ordi-
+nary Differential Equations. arXiv: 1806.07366v1.  
+[12] 
+Okereke, R.N. (2019) A New Perspective to the Solution of Ordinary Differential 
+Equations using Artificial Neural Networks. Ph.D Dissertation, Mathematics Depart-
+ment, Michael Okpara University of Agriculture, Umudike. 
+[13] 
+Mall, S. and Chakraverty, S. (2013) Comparison of Artificial Neural Network Archi-
+tecture in Solving Ordinary Differential Equations. Advances in Artificial Neural Sys-
+tems, 2013, Article ID: 181895. https://doi.org/10.1155/2013/181895  
+[14] 
+IBM (2015) IBM SPSS Statistics 23 http://www.ibm.com 
+[15] 
+PTC (Parametric Technology Corporation) (2007) Mathcad Version 14.  
+http://communications@ptc.com 
+[16] 
+Otadi, M. and Mosleh, M. (2011) Numerical Solution of Quadratic Riccati Differen-
+tial Equations by Neural Network. Mathematical Sciences, 5, 249-257. 
+ 
+ 

@@ -1,0 +1,1221 @@
+
+=== PAGE 1 ===
+Prepared for submission to NeurIPS
+ODEN: A Framework to Solve Ordinary
+Diﬀerential Equations using Artiﬁcial Neural Networks
+Liam L. H. Lau§ 1, ∗and Denis Werth§ 2, †
+1Gonville & Caius College, Trinity Street, Cambridge, CB2 1TA, UK
+2 ´Ecole Normale Sup´erieure Paris-Saclay, Department of Physics, France
+We explore in detail a method to solve ordinary diﬀerential equations using feedforward neural
+networks. We prove a speciﬁc loss function, which does not require knowledge of the exact solution,
+to be a suitable standard metric to evaluate neural networks’ performance. Neural networks are
+shown to be proﬁcient at approximating continuous solutions within their training domains. We il-
+lustrate neural networks’ ability to outperform traditional standard numerical techniques. Training
+is thoroughly examined and three universal phases are found: (i) a prior tangent adjustment, (ii) a
+curvature ﬁtting, and (iii) a ﬁne-tuning stage. The main limitation of the method is the nontrivial
+task of ﬁnding the appropriate neural network architecture and the choice of neural network hyper-
+parameters for eﬃcient optimization. However, we observe an optimal architecture that matches
+the complexity of the diﬀerential equation. A user-friendly and adaptable open-source code (ODEN)
+is provided on GitHub.
+I.
+INTRODUCTION
+Neural networks (NNs) are known to be powerful tools
+due to their role as universal continuous function approx-
+imators [1]. Rewarding NNs for their improving perfor-
+mances in speciﬁc tasks can be done by minimizing a spe-
+cially designed loss function. In fact, the last ten years
+have seen a surge in the capabilities of NNs, speciﬁcally
+deep neural networks, due to the increase in supervised
+data and compute. For example, one can cite AlexNet
+[2], a convolutional neural network for image recognition
+and GPT-2 [3], a powerful Transformer language model.
+Although NNs and machine learning are used in
+physics [4–13], the use of NNs has still not been widely
+accepted in the scientiﬁc community due to their black-
+box nature, the unclear and often unexplored eﬀects of
+hyperparameter choice for a particular problem, and a
+large computational cost for training.
+Usually, neural networks are used for problems involv-
+ing dimensional reduction [14], data visualization, clus-
+tering [15], and classiﬁcation [16]. Here, we use the po-
+tential of NNs to solve diﬀerential equations. Diﬀeren-
+tial equations are prevalent in many disciplines includ-
+ing Physics, Chemistry, Biology, Economics, and Engi-
+neering. When an analytical solution cannot be found,
+numerical methods are employed and are very success-
+ful [17–19]. However, some systems exhibit diﬀerential
+equations that are not eﬃciently solved by usual numer-
+ical methods. Such diﬀerential equations can be numer-
+ically solved to the required accuracy by novel speciﬁc
+codes, such as oscode [20] which eﬃciently solves one-
+§ These authors contributed equally to this work.
+∗lhll2@cam.ac.uk
+† denis.werth@ens-paris-saclay.fr
+dimensional, second-order, ordinary diﬀerential equa-
+tions (ODEs) with rapidly oscillating solutions which ap-
+pear in cosmology and condensed matter physics [21]
+among other systems.
+Yet, speciﬁcally written algo-
+rithms [22] and codes require a lot of time and resources.
+In this paper, we ask whether the unsupervised method
+of solving ODEs using NNs, ﬁrst developed by Lagaris et
+al. [23] and improved in [24–31], is robust. In previous in-
+vestigations, there has been no clear consensus on what
+exact method should be used.
+Multiple loss functions
+were used, sometimes requiring the exact solution to be
+known [32] [33], and the boundary/initial conditions were
+either included in the model as an extra term in the loss
+function or treated independently by means of trial func-
+tions. No explicit benchmark to evaluate the NN per-
+formances was transparently introduced. Training and
+extrapolation performances were not meticulously stud-
+ied, making NNs appear as black-boxes.
+This work aims at ﬁlling the mentioned gaps and de-
+mystifying a few aspects. We provide a clear step-by-
+step method to solve ODEs using NNs.
+We prove a
+speciﬁc loss function from the literature [24] to be an
+appropriate benchmark metric to evaluate the NN per-
+formances, as it does not require the exact solution to be
+known. The training process is investigated in detail and
+is found to exhibit three phases that we believe are the
+general method that the NN learns to solve a given ODE
+with boundary/initial conditions. We explore the eﬀect
+of training domain sampling, extrapolation performances
+and NN architectures.
+Contrary to numerical integra-
+tion, approximating the ODE solution by a NN gives a
+function that can be continuously evaluated over the en-
+tire training domain. However, ﬁnding an appropriate
+NN architecture to reach the desired accuracy requires
+extensive testing and intuition. An open-source and user-
+arXiv:2005.14090v2  [physics.comp-ph]  1 Jun 2020
+
+
+=== PAGE 2 ===
+2
+friendly code (ODEN) that accompanies this manuscript2
+is provided, along with animations that help to visualize
+the training process.
+In the next section, we brieﬂy present the basics of
+NNs, followed by the method used to solve ODEs with
+NNs in Section III. In Section IV, three diﬀerent ODEs
+are solved as illustration.
+A speciﬁc loss function is
+proved to be a universal metric to assess the accuracy and
+diﬀerent simple NN models are tested in Section V, par-
+ticularly highlighting the role of complexity when choos-
+ing the NN. Finally, conclusion and outlook are provided
+in Sections VI.
+II.
+BACKGROUND
+The basic unit of a NN is a neuron i that takes a vector
+of input features x = (x1, x2, ...) and produces a scalar
+output ai(x). In almost all cases, ai can be decomposed
+into a linear operation taking the form of a dot prod-
+uct with a set of weights w(i) = (w(i)
+1 , w(i)
+2 , ...) followed
+by re-centering with an oﬀset called the bias b(i), and
+a non-linear transformation i.e. an activation function
+σi : R →[0, 1] which is usually the same for all neurons.
+One can write the full input-output formula for one neu-
+ron as follows
+ai(x) = σi
+
+w(i). x + b(i)
+.
+(1)
+A NN consists of many such neurons stacked into lay-
+ers, with output of one layer serving as input for the next.
+Thus, the whole NN can be thought of as a complicated
+non-linear transformation of inputs x into an output N
+that depends on the weights and biases θ of all the neu-
+rons in the input, hidden, and output layers [34]:
+Neural Network = N(x, θ).
+(2)
+The NN is trained by ﬁnding the value of θ that mini-
+mizes the loss function L(θ), a function that judges how
+well the model performs on corresponding the NN inputs
+to the NN output. Minimization is usually done using
+a gradient descent method [34].
+These methods itera-
+tively adjust the NN parameters θ in the direction (on
+the parameter surface) where the gradient L is large and
+negative. In this way, the training procedure ensures the
+parameters θ ﬂow towards a local minimum of the loss
+function. The main advantage of NNs is to exploit their
+layered structure to compute the gradients of L in a very
+eﬃcient way using backpropagation [34].
+2 https://github.com/deniswerth/ODEN
+III.
+METHOD
+The starting point of solving ODEs using NNs is the
+universal approximation theorem.
+The theorem states
+that a feedforward NN with hidden layers containing a
+ﬁnite number of neurons can approximate any continuous
+functions at any level of accuracy [1].
+Thus, one may
+expect NNs to perform well on solving ODEs. Despite
+the existence of such NNs, the theorem does not provide
+us with a recipe to ﬁnd these NNs nor touch upon their
+learnabilities.
+Diﬀerential equations with an unknown solution f can
+be written as a function F of f and their derivatives in
+the form
+F[x, f(x), ∇f(x), ..., ∇pf(x)] = 0
+for
+x ∈D,
+(3)
+with some Dirichlet/Neumann boundary conditions or
+initial conditions, where D is the diﬀerential equation
+domain and ∇pf(x) is the p-th gradient of f. The nota-
+tions and the approach can easily be generalized to cou-
+pled and partial diﬀerential equations. Following classic
+procedures, we then discretize the domain D in N points
+x = (x1, x2, ..., xN). For each point xi ∈D, Eq. (3) must
+hold so that we have
+F[xi, f(xi), ∇f(xi), ..., ∇pf(xi)] = 0.
+(4)
+Writing the diﬀerential equation in such a way allows
+us to convert the problem of ﬁnding solutions to an opti-
+mization problem. Indeed, an approximated solution is a
+function that minimizes the square of the left-hand side
+of Eq. (3). In our approach, we identify the approxi-
+mated solution of the diﬀerential equation (3) with a NN
+N(x, θ) and express the loss function as follows [24]:
+L(θ) = 1
+N
+N
+X
+i=1
+F [xi, N(xi, θ), ∇N(xi, θ), ..., ∇pN(xi, θ)]2
++
+X
+j
+[∇kN(xj, θ) −Kj]2,
+(5)
+with Kj being some chosen constants. The loss function
+contains two terms: the ﬁrst one forces the diﬀerential
+equation (3) to hold, and the second one encodes the
+boundary/initial conditions3. Note that L(θ) does not
+depend on the exact solution4. The approximated solu-
+tion N(x, θ) is found by ﬁnding the set of weights and
+biases θ such that the loss function L(θ) is minimized on
+the training points xi for i = 1, 2, ..., N. Solving ODEs
+using NNs can then be expressed in terms of the following
+steps:
+3 Usually, k = 0 and/or k = 1.
+4 In some works, the mean squared error [32] [33] is used.
+
+
+=== PAGE 3 ===
+3
+1. Write the diﬀerential equation in the form shown
+in Eq. (3);
+2. Discretize the diﬀerential equation domain in N
+points x = (x1, x2, ..., xN);
+3. Construct a neural network N(x, θ) by choosing
+its architecture i.e.
+the number of hidden layers
+and the number of neurons in each layer, and the
+activation functions;
+4. Write the loss function L(θ) in the form shown in
+Eq. (5) including boundary/initial conditions;
+5. Minimize L(θ) to ﬁnd the optimal NN parameters
+θ⋆i.e. train the NN;
+6. Once the NN has been trained on the discrete do-
+main, N(x, θ⋆) is an approximation of the exact
+solution that can be evaluated continuously within
+the training domain.
+For our setup, as ODE solutions are scalar functions of
+a scalar independent variable, the NN has one input neu-
+ron and one output neuron. The ﬁrst term of L(θ) in Eq.
+(5) requires computing the gradients of the NN output
+with respect to the NN input.
+Gradient computation,
+as well as the network implementation and the training
+procedure, is performed using the Keras [35] framework
+with a Tensorﬂow 2 [36] backend. The general method
+can be easily extended to coupled and partial diﬀerential
+equations5.
+IV.
+APPLICATIONS
+The method is veriﬁed against the exact solution of
+ﬁrst and second order ODEs. We then use the method
+to solve an ODE that exhibits rapid oscillations. Training
+processes were computed using 12 CPU cores and took
+between a few seconds to a few minutes, depending on
+the number of epochs and the NN complexity.
+A.
+First order ordinary diﬀerential equation
+We ﬁrst demonstrate the accuracy and eﬃciency of the
+NN solver when applied to the following simple ﬁrst order
+diﬀerential equation with x ∈[0, 2], subject to the initial
+value f(0) = 0:
+df
+dx(x) + f(x) = e−x cos(x).
+(6)
+5 For example, coupled diﬀerential equations can be solved by cor-
+responding the number of output neurons to the number of equa-
+tions in the system one wants to solve.
+The analytic solution is f(x) = e−x sin(x). The equa-
+tion being simple, the NN is expected to reach an accept-
+able accuracy for relatively few epochs. The accuracy and
+eﬃciency of the solver are illustrated in FIG. 1 where the
+NN has been trained for 104 epochs reaching 1.6 × 10−4
+as mean relative error. The bottom panel in FIG. 1 ex-
+hibits clear wavy patterns showing that the NN solution
+wiggles around the exact solution. Better accuracy can
+be found by increasing the number of epochs.
+0.00
+0.05
+0.10
+0.15
+0.20
+0.25
+0.30
+f(x)
+Exact solution
+Neural network solution
+0.00
+0.25
+0.50
+0.75
+1.00
+1.25
+1.50
+1.75
+2.00
+x
+10−5
+10−4
+10−3
+Relative
+error, |∆f|
+|f|
+FIG. 1: The NN solution (dots) of Eq. (6) subject to the
+initial value f(0) = 0 overlaid on the exact solution (solid
+line). The lower panel shows the relative error. The network
+was trained for 104 epochs using Adam optimizer with 100
+uniformly spaced training points in [0,2]. One hidden layer
+of 10 neurons with a sigmoid activation function was used.
+B.
+Stationary Schr¨odinger equation
+The one dimensional time-independent Schr¨odinger
+equation, with potential V (x), has the following diﬀer-
+ential equation6:
+d2ψ
+dx2 (x) + 2m(En −V (x))ψ(x) = 0.
+(7)
+The energy En is quantized with an integer n. For a
+harmonic potential V (x) = x2, the nth level has energy
+n + 1/2 with a corresponding analytical solution to the
+nth energy eigenfunction ψn(x) given in terms of the Her-
+mite polynomials. FIG. 3 shows the NN evaluation of
+the energy eigenfunction ψ(x) for n = 1. In this example,
+Dirichlet boundary conditions are imposed at x = ±2.
+Note that the relative error is maintained at ∼10−4 in
+between the boundary conditions and degrades outside.
+6 We set ℏ= 1.
+
+
+=== PAGE 4 ===
+4
+−4
+−3
+−2
+−1
+0
+1
+2
+3
+4
+x
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+ψ(x)
+Exact solution
+Neural network solution
+(a) 103 epochs
+−4
+−3
+−2
+−1
+0
+1
+2
+3
+4
+x
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+ψ(x)
+(b) 6 × 103 epochs
+−4
+−3
+−2
+−1
+0
+1
+2
+3
+4
+x
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+ψ(x)
+(c) 7 × 103 epochs
+−4
+−3
+−2
+−1
+0
+1
+2
+3
+4
+x
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+ψ(x)
+(d) 8 × 103 epochs
+−4
+−3
+−2
+−1
+0
+1
+2
+3
+4
+x
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+ψ(x)
+(e) 104 epochs
+−4
+−3
+−2
+−1
+0
+1
+2
+3
+4
+x
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+ψ(x)
+(f) 1.8 × 104 epochs
+FIG. 2: The NN n = 2 energy eigenfunction (dots) as a solution of Eq. (7) along with the exact solution (solid line), shown
+for comparative purposes, at diﬀerent epochs during the training. The same boundary conditions, architecture, activation
+function, and domain sampling as FIG. 3 were used.
+
+
+=== PAGE 5 ===
+5
+The NN is found to perform well on solving a boundary-
+value problem.
+As the exact solution rapidly vanishes
+outside the boundary conditions, the relative error dra-
+matically increases so that it is no longer a valid measure
+of accuracy.
+−0.6
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+ψ(x)
+Exact solution
+Neural network solution
+−4
+−3
+−2
+−1
+0
+1
+2
+3
+4
+x
+10−5
+10−3
+10−1
+Relative
+error, |∆ψ|
+|ψ|
+FIG. 3: NN solution (dots) of Eq. (7) for n = 1 overlaid on
+the exact solution (solid line). Dirichlet boundary conditions
+are imposed at x = ±2. The lower plot shows the relative
+error. The network was trained for 5 × 104 epochs using
+Adam optimizer with 100 uniformly spaced training points
+in [−5, 5] (but displayed for [−4, 4]). One hidden layer of 50
+neurons with a sigmoid activation function was used.
+The required number of epochs during the training can
+only be found by iterative testing. FIG. 2 shows the neu-
+ral network prediction for the n = 2 energy eigenfunction
+for x ∈[−4, 4] at diﬀerent epochs. One can see a general
+tendency in the training process that was found for other
+equations as well: (i) ﬁrst, the NN ﬁts the general trend
+of the solution by adjusting its prediction along a tangent
+of the curve (FIGs. 2a and 2b), (ii) then, the NN ﬁts the
+curvature to reveal the true shape of the solution (FIGs.
+2c-2e), (iii) ﬁnally, it ﬁne-tunes to adjust the prediction
+to the exact solution, decreasing the relative error (FIG.
+2f). These three phases of the training can be used to
+guess the number of epochs required to reach the desired
+relative error. Generally, the more complex the solution
+is, the more epochs are necessary to let the NN ﬁt the
+curvature. Once the right curve is found, increasing the
+number of epochs increases the accuracy.
+C.
+Burst equation
+To illustrate the NN’s ability to ﬁt a complex shape,
+we solve the following second-order diﬀerential equation
+d2f
+dx2 (x) +
+n2 −1
+(1 + x2)2 f(x) = 0.
+(8)
+The solution of Eq. (8) is characterized by a burst of
+approximately n/2 oscillations in the region |x| < n [20].
+An analytical solution for the equation is
+f(x) =
+√
+1 + x2
+n
+cos(n arctan x).
+(9)
+The exact solution and the NN prediction is shown in
+FIG. 4 for n = 10. With usual numerical solvers such as
+Runge-Kutta based approaches, the relative error grows
+exponentially during the step by step integration, fail-
+ing to reproduce the oscillations of Eq. (9) (see FIG. 4)
+[20]. With an optimization-based approach, the trained
+NN is able to capture the behavior of the rapid oscilla-
+tions, albeit requiring the training of a more complicated
+architecture over a greater number epochs when com-
+pared to the ﬁrst order diﬀerential equation example in
+FIG. 1 and the Schr¨odinger equation example in FIG.
+3. Training on minibatches of the discretized domain was
+found to outperform training using the whole domain as
+a batch. Even for boundary conditions being imposed
+only at positive x values, the network is able to retain
+the symmetry of the solution for negative x values with-
+out losing accuracy.
+−0.2
+−0.1
+0.0
+0.1
+0.2
+0.3
+0.4
+0.5
+f(x)
+Exact solution
+Neural network solution
+Runge-Kutta
+−6
+−4
+−2
+0
+2
+4
+6
+x
+10−6
+10−4
+10−2
+Relative
+error, |∆f|
+|f|
+FIG. 4: NN solution (dots) of Eq. (8) for n = 10 overlaid
+on the exact solution Eq. (9) (solid line). Dirichlet
+boundary conditions are imposed at x = 1.5 and x = 3. The
+lower plot shows the relative error. The network was trained
+for 2 × 105 epochs with minibatches of size 30 using Adamax
+optimizer with 300 uniformly spaced training points in
+[−7, 7]. Three hidden layers, each having 30 neurons with a
+tanh activation function were used.
+V.
+PERFORMANCES
+We ﬁnd that even if the NNs are not susceptible to
+overﬁtting within the training domain, the main issue
+of the NN approach arises from the arbitrariness in the
+choice of NN hyperparameters and the choice of the NN
+
+
+=== PAGE 6 ===
+6
+architecture. The ﬂexibility of the method enables us to
+obtain a thorough understanding of how well diﬀerent
+NN models perform on solving diﬀerential equations.
+Traditional non-linear activation functions such as sig-
+moid and tanh are found to reproduce the ODE solution
+with less training than modern activation functions such
+as ReLU, ELU, and SELU. Rather than using a random
+uniform distribution or constant initialization, we ﬁnd
+that the properly scaled normal distribution for weight
+and bias initialization called Xavier initialization7 [37]
+[38], makes the training process converge faster. Xavier
+initialization is used for all ﬁgures. Also, Adam based
+approaches including Adamax and Nadam, with a learn-
+ing rate set to 10−3, are found to perform better than
+stochastic gradient descent.
+A.
+Identifying the loss function with the mean
+squared error
+To evaluate the accuracy of the NN solution and the
+training performance, we suggest to use the loss function
+L in Eq. (5). Indeed, we show that the loss function
+as written in Eq. (5) can be identiﬁed with the mean
+absolute error computed with the L2 norm, with some
+scaling.
+The identiﬁcation makes the loss function an
+excellent indicator of how accurate the found solution
+is without the need of an exact solution. Furthermore,
+the numerical stability and the computational cost of the
+training process can be assessed without computing the
+relative error, as it is automatically encrypted in the loss
+function (5).
+The main idea of this identiﬁcation is to write the loss
+function (5) as a continuous functional of the unknown
+solution f and Taylor expand it around an exact solution
+f 0 to the second order. Using the same notations as in
+Section III, let us take the continuous limit of the ﬁrst
+term in Eq. (5), turning the sum into an integral, and
+deﬁning the loss L as a functional L[f]
+L →L[f],
+(10)
+with
+L[f] =
+Z
+D
+dx F[x, f(x), ∇f(x), ..., ∇pf(x)]2
++
+X
+j
+[∇kf(xj) −Kj]2.
+(11)
+The loss functional has to be minimized on the en-
+tire diﬀerential domain D rather than on a set of dis-
+crete points xi ∈D. Using the physics language, L[f]
+is to be understood as the action with some Lagrangian
+7 GlorotNormal in Tensorﬂow 2.
+F[x, f(x), ∇f(x), ...∇pf(x)]2. For clarity, we deﬁne ¯F =
+F2. The Cauchy-Peano theorem guarantees the existence
+of an exact solution f 0 to diﬀerential equations subject to
+boundary/initial conditions. The solution f 0 minimizes
+the loss function making it vanish L[f 0] = 0. We now
+Taylor expand L[f] around f 0 to the second order
+L[f] =
+Z
+D
+dx ¯F[x, f 0(x), ∇f 0(x), ..., ∇pf 0(x)]
++
+Z
+D
+dx δ ¯F
+δf [x, f 0(x), ∇f 0(x), ..., ∇pf 0(x)]
+ f(x) −f 0(x)
+
++
+Z
+D
+dx δ2 ¯F
+δf 2 [x, f 0(x), ∇f 0(x), ..., ∇pf 0(x)]
+ f(x) −f 0(x)
+2
++ O
+
+f(x) −f 0(x)
+3
+.
+(12)
+The second term in Eq. (11) vanishes because f 0 satis-
+ﬁes the boundary/initial conditions. The zero order term
+in Eq. (12) vanishes because f 0 is an exact solution i.e.
+¯F[x, f 0(x), ∇f 0(x), ...∇pf 0(x)] = 0 for all x ∈D. The
+ﬁrst order term in Eq. (12) vanishes because f 0 mini-
+mizes the loss function so that the functional derivative
+is zero8 i.e.
+δ ¯
+F
+δf [x, f 0(x), ∇f 0(x), ...∇pf 0(x)] = 0 for all
+x ∈D. The remaining non-vanishing term is the sec-
+ond order term. As the δ2 ¯
+F
+δf 2 [x, f 0(x), ∇f 0(x), ...∇pf 0(x)]
+term does not depend on the NN solution and so does
+not depend on the parameters θ, it is a function of x
+only and can be seen as a scaling α(x)
+L[f] =
+Z
+D
+dx α(x)
+
+f(x) −f 0(x)
+2 +O
+
+f(x) −f 0(x)
+3
+.
+(13)
+Written in this form, the loss function appears to be
+the mean absolute error using the L2 norm integrated
+over the entire domain D, with some scaling function
+α(x). After discretizing D and identifying f(x) with the
+neural network N(x, θ), the loss function (5) takes the
+ﬁnal form
+L(θ) ≈1
+N
+N
+X
+i=1
+α(xi)
+
+N(xi, θ) −f 0(xi)
+2
++
+X
+j
+[∇kN(xj, θ) −Kj]2.
+(14)
+Note that taking the continuous limit requires enough
+discrete points to make it valid. Here, NNs are usually
+trained with ∼O(100) points within the considered do-
+mains. Through this identiﬁcation, we better understand
+the three training phases shown in section IV B. Indeed,
+as the loss function (5) can be Taylor expanded around
+8 By analogy with physics, this term would be the Euler-Lagrange
+equation after an integration by parts.
+
+
+=== PAGE 7 ===
+7
+the exact solution, the NN ﬁrst minimizes the loss leading
+order term making it learn the general tendency of the
+solution ﬁrst by ﬁnding the tangents. Then, the NN min-
+imizes higher order terms, making the NN learn speciﬁc
+local patterns, like curvature. Finally, the NN adjusts
+the solution by considering even higher orders of the loss.
+These universal phases enable the method to converge lo-
+cally with a stable accuracy that does not decrease over
+the entire training domain.
+B.
+Domain sampling
+Our hypothesis is that using ﬁne sampling for regions
+with more features, such as oscillations, would lead to
+greater accuracy i.e. lower loss. Moreover, the computa-
+tional cost of training the NN could be reduced by avoid-
+ing dense sampling of featureless regions in the domain.
+We probe diﬀerent domain samplings and expose their
+impact on the NN performance. FIG. 5 illustrates the
+eﬀect of diﬀerent domain samplings for the n = 5 energy
+eigenfunction of Eq. (7): evenly spaced points, random
+uniformly distributed points, and points sampled from a
+Gaussian distribution centered at x = 0 with standard
+deviation of 1, to accentuate the oscillatory region.
+Surprisingly, a NN trained on evenly spaced points per-
+forms better than the other distributions. Every point in
+the region contributes equally in the loss function (5)
+and the NN learns the ODE solution uniformly over the
+entire domain.
+The uniform behavior can be seen in
+the lower panel of FIG. 5 as the relative error remains
+constant over the entire domain. Moreover, increasing
+the number of training points is found to have no inﬂu-
+ence on the NN performances but requires more training
+to reach the same accuracy. Randomizing the points is
+found to increase the relative error by an order of magni-
+tude. Choosing a sampling distribution that accentuates
+a certain region fails to reproduce the ODE solution’s
+shape for the same training time.
+Further training is
+then necessary to reproduce the same accuracy.
+C.
+Extrapolation performances
+Once the NN is trained, it is expected to be a continu-
+ous function within the ﬁnite, bounded training domain.
+Here, we illustrate the continuous nature of the NN so-
+lution. FIG. 6 shows the extrapolation performances for
+points inside the training domain and outside the train-
+ing domain. The n = 5 energy eigenfunction of Eq. (7)
+is solved within [−4, 4] using 100 evenly spaced points.
+The NN prediction is then evaluated in [0, 2], and in
+[−6, −4] ∪[4, 6].
+The NN is able to reproduce the ODE solution with
+the same accuracy within the training domain but fails to
+reproduce the solution outside the training domain, even
+with more training. Note that the mean relative error
+is smaller than in FIG. 5 as more epochs were used for
+−0.6
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+ψ(x)
+Exact solution
+Evenly spaced
+Random uniform
+Random gaussian
+−4
+−2
+0
+2
+4
+x
+10−3
+10−1
+Relative
+error, |∆ψ|
+|ψ|
+FIG. 5: NN solution of Eq. (7) for n = 5 overlaid on the
+exact solution (solid line) for (i) an evenly spaced training
+domain (blue dots), (ii) a random uniform training domain
+(green dots), and (iii) a random Gaussian training domain
+centered at x = 0 with width 1 (red dots). The lower panel
+shows the relative error. All training domains contain 100
+points in [−5, 5]. Dirichlet boundary conditions at x = ±4
+were imposed. The network was trained for 4 × 105 epochs
+using Adamax optimizer and tanh activation, and two
+hidden layers with 20 neurons in each layer were used.
+−0.6
+−0.4
+−0.2
+0.0
+0.2
+0.4
+0.6
+ψ(x)
+Exact solution
+Training sample
+Prediction inside
+the training domain
+Prediction outside
+the training domain
+−6
+−4
+−2
+0
+2
+4
+6
+x
+10−3
+100
+103
+Relative
+error, |∆ψ|
+|ψ|
+FIG. 6: NN prediction of Eq. (7) for n = 5 overlaid on the
+exact solution (solid line) for (i) the training points, 100
+evenly spaced points in [−4, 4] (blue dots), (ii) 40 evenly
+spaced points in [0, 2], and (iii) 30 evenly spaced points in
+[−6, −4] and [4, 6]. The lower panel shows the relative error.
+Dirichlet boundary conditions were imposed at x = ±3. The
+network was trained for 5 × 105 epochs using three hidden
+layers with 30 neurons in each layer. The same optimizer
+and activation as in FIG. 5 were used.
+the training. In classical numerical analysis, the sample
+spacing i.e. the integration step is usually small to avoid
+numerical instabilities [22]. Here, the optimization ap-
+proach enables us to train the NN on a reduced number
+
+
+=== PAGE 8 ===
+8
+of points, hence reducing the training time, and allows
+then to evaluate the prediction on a ﬁne mesh.
+D.
+Neural network architectures
+Choosing the exact architecture for a NN remains an
+art that requires extensive numerical experimentation
+and intuition, and is often times problem-speciﬁc. Both
+the number of hidden layers and the number of neurons
+in each layer can aﬀect the performance of the NN.
+A detailed systematic study to quantify the eﬀect of
+the NN architecture in presented in FIG. 7. We vary
+both the number of neurons in a single hidden layer and
+the number of hidden layers for all three equations (6),
+(7) and (8).
+An unsatisfactory value of the loss after
+plateauing can be viewed as a poor NN architecture per-
+formance, as further training in general does not reduce
+its value. Here, the loss function is used to evaluate the
+NN performances during the training process as it can be
+identiﬁed with the scaled mean squared error (see section
+V A).
+Intuitively, one would expect an increasing NN com-
+plexity to enhance the accuracy. We found that some NN
+architectures, not necessary the more complex ones, per-
+form better than others in reaching the desired accuracy
+for a certain number of epochs. In general, increasing
+the number of hidden layers make the loss decrease more
+rapidly in the beginning of the training until roughly 104
+epochs, but some simpler NN architectures prove to reach
+a better accuracy after more training.
+A clear link between the ODE complexity and the num-
+ber of NN parameters is shown. The ﬁrst order ODE (6)
+being simple, a NN with one hidden layer containing 20
+neurons is able to outperform a more complex NN with
+one hidden layer containing 1000 neurons (FIG. 7a). The
+diﬀerence aﬀects the loss value by a few orders of magni-
+tude. In this case, the number of hidden layers does not
+show any signiﬁcant enhancement for the same amount
+of training.
+The Schr¨odinger equation (7) being more
+complex because it is a second order ODE, a two hidden
+layer NN performs better than a single hidden layer NN.
+However, the loss function for more than two hidden lay-
+ers rapidly reaches a plateau and does not decrease after
+more training, making too complex NNs ineﬃcient (FIG.
+7b). Increasing the number of hidden layers for the Burst
+equation (8) to three is shown to both decrease the loss
+function faster and reach a smaller value than simple NNs
+(FIG. 7c). This tendency reveals the ODE complexity.
+Indeed, for all three equations, an empiric optimal NN
+architecture can be found and its complexity increases
+with the ODE complexity. The main limitation is that
+we ﬁnd no clear recipe of how to guess the optimal ar-
+chitecture, as it has to be done by testing. However, we
+suggest that too complex NNs (more than three hidden
+layers and more than 100 neurons in each layer) should
+not be used as the problem of solving ODEs is in general
+too simple.
+VI.
+CONCLUSION
+We have explored and critiqued the method of using
+NNs to ﬁnd solutions to diﬀerential equations provided
+by Piscopo et al. [24]. We found that the NN was able
+to perform better than typical numerical solvers for some
+diﬀerential equations, such as for highly oscillating solu-
+tions. We must note that the proposed method should
+not be seen as a replacement of numerical solvers as, in
+most cases, such methods meet the stability and perfor-
+mance required in practice.
+Our main message here is that the NN approach no
+longer appears as a black-box but a rather intuitive way
+of constructing accurate solutions.
+This approach was
+studied in detail. Three phases of ﬁtting were character-
+ized: ﬁrst ﬁnding the general trend, secondly adjusting
+the curvature of the solution, and ﬁnally making small
+adjustments to improve the accuracy of the solution.
+Within the training domain, the NN was found to pro-
+vide a continuous approximate function that matches the
+analytical solution to arbitrary accuracy depending on
+training time. However, extrapolation outside the train-
+ing domain fails. We found that training in smaller mini-
+batches rather than the whole discretized domain used in
+Lagaris et al. [23] and Piscopo et al. [24] gives a greatly
+reduced loss.
+A speciﬁcally designed loss function from the literature
+[24] was proved to be the appropriate metric for evaluat-
+ing the solution accuracy and the NN performances with-
+out the need of the exact solution, which is usually not
+known. Finally, we found the limitation of the method is
+ﬁnding a suitable architecture. There is no trivial rela-
+tionship between the NN architecture and the accuracy
+of the NN approximate solution for a general diﬀerential
+equation, though a general tendency to increase the num-
+ber of NN parameters to solve more complex diﬀerential
+equations was highlighted.
+A range of questions can be immediately explored. The
+performances of more sophisticated NN structures with
+dropouts and recurrent loops can be studied. Other sam-
+pling schemes can also be tested. Another question is
+whether the convergence of the NN solution to a certain
+accuracy can be achieved with fewer epochs. With the
+method we described, convergence comes locally, similar
+to a Taylor series. One might be able to reformulate the
+NN such that convergence comes globally, via a Fourier
+series representation, or using a diﬀerent complete basis.
+Such reformulations might help the NN to learn general
+representations about the ODEs [39]. Global convergence
+may give better extrapolation results. Nevertheless, NNs
+show great potential as a support for standard numerical
+techniques to solve diﬀerential equations.
+ACKNOWLEDGMENTS
+D.W. thanks the ENS Paris-Saclay for its continuing
+support via the normalien civil servant grant.
+
+
+=== PAGE 9 ===
+9
+10−6
+10−4
+10−2
+100
+(1000)
+(100)
+(50)
+(20)
+(10)
+104
+2.104
+3.104
+4.104
+Number of epochs
+10−6
+10−4
+10−2
+100
+(20, 20, 20, 20)
+(20, 20, 20)
+(20, 20)
+(20)
+Loss function, L
+(a) First order diﬀerential equation (6)
+10−4
+10−3
+10−2
+10−1
+(1000)
+(100)
+(50)
+(20)
+(10)
+2.104
+4.104
+6.104
+8.104
+105
+Number of epochs
+10−5
+10−4
+10−3
+10−2
+10−1
+(20, 20, 20, 20)
+(20, 20, 20)
+(20, 20)
+(20)
+Loss function, L
+(b) Schr¨odinger equation (7) for n = 2
+10−2
+(1000)
+(100)
+(50)
+(20)
+(10)
+5.104
+105
+15.104
+2.105
+Number of epochs
+10−3
+10−2
+(20, 20, 20, 20)
+(20, 20, 20)
+(20, 20)
+(20)
+Loss function, L
+(c) Burst equation (8) for n = 10
+FIG. 7: Loss function L, proved to be the scaled mean squared error, during the training for diﬀerent NN architectures. The
+ﬁrst order ODE, the Schr¨odinger equation for n = 2 and the Burst equation for n = 10 are shown in 7a, 7b and 7c respectively.
+For each Figure, the upper panel is generated by varying the number of neurons in a single hidden layer, and the lower panel
+is generated by varying the number of hidden layers with 20 neurons in each layer. The same optimizers, activation functions
+and training domains as in FIG. 1, 3 and 4 for each equation were used. The learning rate was set 10−4 for each optimizer.
+
+
+=== PAGE 10 ===
+10
+[1] K. Hornik, M. Stinchcombe, and H. White, Neural Net-
+works 2, 359 (1989).
+[2] A. Krizhevsky, I. Sutskever,
+and G. E. Hinton, in Ad-
+vances in Neural Information Processing Systems 25,
+edited by F. Pereira, C. J. C. Burges, L. Bottou,
+and
+K. Q. Weinberger (Curran Associates, Inc., 2012) pp.
+1097–1105.
+[3] A. Radford, J. Wu, R. Child, D. Luan, D. Amodei, and
+I. Sutskever, (2019).
+[4] G. Carleo, I. Cirac, K. Cranmer, L. Daudet, M. Schuld,
+N. Tishby, L. Vogt-Maranto,
+and L. Zdeborov´a, Rev.
+Mod. Phys. 91, 045002 (2019).
+[5] A.
+Tanaka
+and
+A.
+Tomiya,
+Journal
+of
+the
+Physical
+Society
+of
+Japan
+86,
+063001
+(2017),
+https://doi.org/10.7566/JPSJ.86.063001.
+[6] C.-D. Li, D.-R. Tan, and F.-J. Jiang, Annals of Physics
+391 (2017), 10.1016/j.aop.2018.02.018.
+[7] S. J. Wetzel and M. Scherzer, Phys. Rev. B 96, 184410
+(2017).
+[8] Q. Wei, R. G. Melko, and J. Z. Y. Chen, Phys. Rev. E
+95, 032504 (2017).
+[9] H. Huang, B. Xiao, H. Xiong, Z. Wu, Y. Mu,
+and
+H. Song, Nuclear Physics A 982, 927
+(2019), the 27th
+International Conference on Ultrarelativistic Nucleus-
+Nucleus Collisions: Quark Matter 2018.
+[10] J. Caldeira, W. Wu, B. Nord, C. Avestruz, S. Trivedi,
+and K. Story, Astronomy and Computing 28, 100307
+(2019).
+[11] H. Shen, J. Liu,
+and L. Fu, Phys. Rev. B 97, 205140
+(2018).
+[12] S. Arai,
+M. Ohzeki,
+and K. Tanaka, Journal of
+the
+Physical
+Society
+of
+Japan
+87,
+033001
+(2018),
+https://doi.org/10.7566/JPSJ.87.033001.
+[13] N. Yoshioka, Y. Akagi,
+and H. Katsura, Phys. Rev. B
+97, 205110 (2018).
+[14] W. Wang, Y. Huang, Y. Wang,
+and L. Wang, in
+2014 IEEE Conference on Computer Vision and Pattern
+Recognition, CVPR 2014, Columbus, OH, USA, June 23-
+28, 2014 (IEEE Computer Society, 2014).
+[15] J. Herrero, A. Valencia, and J. Dopazo, Bioinformatics
+17 (2001), 10.1093/bioinformatics/17.2.126.
+[16] E. Byvatov, U. Fechner, J. Sadowski,
+and G. Schnei-
+der,
+Journal
+of
+Chemical
+Information
+and
+Com-
+puter
+Sciences
+43,
+1882
+(2003),
+pMID:
+14632437,
+https://doi.org/10.1021/ci0341161.
+[17] H.-P. Breuer, U. Dorner, and F. Petruccione, Computer
+Physics Communications 132, 30 (2000).
+[18] S. Kang, B. Lee, J. Yang, S. Kim, and S. Kim, in Fron-
+tiers in the Convergence of Bioscience and Information
+Technologies 2007, FBIT 2007, Jeju Island, Korea, Octo-
+ber 11-13, 2007, edited by D. Howard and P. Rhee (IEEE
+Computer Society, 2007) pp. 26 – 31.
+[19] Y. Yan, Chin. J. Chem. Phys. 30 (2017), 10.1063/1674-
+0068/30/cjcp1703025.
+[20] F. J. Agocs, W. J. Handley, A. N. Lasenby, and M. P.
+Hobson, Phys. Rev. Research 2, 013030 (2020).
+[21] J. Wensch, M. Dne, W. Hergert, and A. Ernst, Computer
+Physics Communications 160, 129 (2004).
+[22] J. Bamber and W. Handley, Phys. Rev. D 101, 043517
+(2020).
+[23] I. E. Lagaris, A. Likas, and D. I. Fotiadis, IEEE Trans-
+actions on Neural Networks 9, 987 (1998).
+[24] M. L. Piscopo, M. Spannowsky,
+and P. Waite, Phys.
+Rev. D 100, 016002 (2019).
+[25] A. Koryagin, R. Khudorozhkov,
+and S. Tsimfer, “Py-
+dens: a python framework for solving diﬀerential equa-
+tions with neural networks,” 1909.11544.
+[26] Z. Liu, Y. Yang,
+and Q.-D. Cai, “Solving diﬀerential
+equation with constrained multilayer feedforward net-
+work,” 1904.06619v1.
+[27] Y. Lu, A. Zhong, Q. Li,
+and B. Dong, in Beyond Fi-
+nite Layer Neural Networks:
+Bridging Deep Architec-
+tures and Numerical Diﬀerential Equations, Proceedings
+of Machine Learning Research, Vol. 80, edited by J. G.
+Dy and A. Krause (PMLR, 2017).
+[28] S. Mall and S. Chakraverty, Advances in Artiﬁcial Neural
+Systems 2013, 1 (2013).
+[29] C. Michoski, M. Milosavljevic, T. Oliver, and D. Hatch,
+Neurocomputing (2020), 10.1016/j.neucom.2020.02.015.
+[30] I. Bolodurina, D. Parfenov,
+and L. Zabrodina, “Algo-
+rithm for solving ordinary diﬀerential equations using
+neural network technologies,” (2020) pp. 79–92.
+[31] J. Sirignano and K. Spiliopoulos, Journal of Computa-
+tional Physics 375 (2017), 10.1016/j.jcp.2018.08.029.
+[32] Y. Bekele, “Deep learning for one-dimensional consolida-
+tion,” 2004.11689.
+[33] M. Raissi, P. Perdikaris, and G. E. Karniadakis, “Physics
+informed deep learning (part i): Data-driven solutions of
+nonlinear partial diﬀerential equations,” 1711.10561.
+[34] C. M. Bishop, Pattern Recognition and Machine Learning
+(Information Science and Statistics), 1st ed. (Springer,
+2007).
+[35] F. Chollet et al., “Keras,” https://keras.io (2015).
+[36] M. Abadi, P. Barham, J. Chen, Z. Chen, A. Davis,
+J. Dean, M. Devin, S. Ghemawat, G. Irving, M. Isard,
+M. Kudlur, J. Levenberg, R. Monga, S. Moore, D. G.
+Murray, B. Steiner, P. Tucker, V. Vasudevan, P. War-
+den, M. Wicke, Y. Yu, and X. Zheng, in OSDI16: Pro-
+ceedings of the 12th USENIX Conference on Operating
+Systems Design and Implementation, OSDI16 (USENIX
+Association, USA, 2016) p. 265283.
+[37] X. Glorot and Y. Bengio, in Proceedings of the Thirteenth
+International Conference on Artiﬁcial Intelligence and
+Statistics, Proceedings of Machine Learning Research,
+Vol. 9, edited by Y. W. Teh and M. Titterington (PMLR,
+Chia Laguna Resort, Sardinia, Italy, 2010) pp. 249–256.
+[38] K. He, X. Zhang, S. Ren,
+and J. Sun, in Proceedings
+of the 2015 IEEE International Conference on Computer
+Vision (ICCV), ICCV 15 (IEEE Computer Society, USA,
+2015) p. 10261034.
+[39] M. Magill, F. Qureshi,
+and H. de Haan, in Advances
+in Neural Information Processing Systems 31, edited
+by S. Bengio, H. Wallach, H. Larochelle, K. Grauman,
+N. Cesa-Bianchi,
+and R. Garnett (Curran Associates,
+Inc., 2018) pp. 4071–4081.
