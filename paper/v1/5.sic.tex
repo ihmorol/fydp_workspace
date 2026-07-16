@@ -1,0 +1,167 @@
+\chapter{Standards and Design Constraints}
+
+
+\section{Compliance with the Standards}
+
+
+
+\section{Design Constraints}
+
+
+\section{Cost Analysis}
+
+
+\section{Complex Engineering Problem}
+
+This project is a complex engineering problem. It is not just writing code. We need to understand math, build numerical solvers, design neural networks, and compare results carefully. The Lorenz-1960 system is nonlinear and coupled, so solving it with an ANN requires real engineering decisions, not just running a script.
+
+\subsection{Complex Problem Solving}
+
+Table~\ref{tab:p_solve} shows how this project maps to the complex problem solving categories.
+
+\begin{center}
+    \begin{table}[ht]
+        \centering
+        \caption{Mapping with complex problem solving.}
+        \begin{tabular}{|p{0.12\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|p{0.12\textwidth}|}
+        \hline
+        P1& P2& P3& P4& P5& P6& P7\\
+        Dept of Knowledge & Range of Conflicting Requirements & Depth of Analysis & Familiarity of Issues & Extent of Applicable Codes & Extent of Stakeholder Involvement & Inter-dependence\\
+        \hline 
+        $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ & $\times$ & $\times$ & $\checkmark$\\
+        &&&&&&\\
+        \hline 
+        \end{tabular}
+        \label{tab:p_solve}
+    \end{table}
+\end{center}
+
+\subsubsection{P1: Depth of Knowledge --- Applicable ($\checkmark$)}
+
+We need to know many things at once: how ODEs work, how numerical solvers like Runge-Kutta produce reference solutions, how neural networks learn, how optimizers like Adam update weights, and how to measure errors. Knowing just one of these is not enough. They all connect together.
+
+\subsubsection{P2: Range of Conflicting Requirements --- Applicable ($\checkmark$)}
+
+We face trade-offs. A bigger network may give better accuracy but takes longer to train and may overfit. A faster training setup may be unstable. A model that works great once may not work again with a different random seed. We cannot get the best of everything at the same time, so we have to find a good balance.
+
+\subsubsection{P3: Depth of Analysis --- Applicable ($\checkmark$)}
+
+We do not just run the code and check if it works. We compare many ANN setups, look at error numbers, study how training behaves, check if results are stable, and explain why one setup works better than another. That takes real analysis.
+
+\subsubsection{P4: Familiarity of Issues --- Not Applicable ($\times$)}
+
+The Lorenz-1960 system is a well-known benchmark, and the techniques we use Runge-Kutta solvers, feedforward ANNs, Adam optimizer are all established methods. Although our specific combination is novel, the underlying issues are not unfamiliar to practitioners. So this criterion does not apply.
+
+\subsubsection{P5: Extent of Applicable Codes --- Not Applicable ($\times$)}
+
+Our project is a computational research study, not a commercial or safety-critical system. There are no industry standards, regulations, or professional codes that constrain how we design the ANN or evaluate its accuracy. So this criterion does not apply.
+
+\subsubsection{P6: Extent of Stakeholder Involvement --- Not Applicable ($\times$)}
+
+The only stakeholders are the student researchers and the academic supervisors.There are no external clients, end-users, or regulatory bodies whose conflicting needs must be balanced.All decisions are based on scientific reasoning, not stakeholder demands.So this criterion does not apply.
+
+\subsubsection{P7: Interdependence --- Applicable ($\checkmark$)}
+
+Every part of this project depends on the other parts. The solver makes the training data. The data affects how the ANN learns. The ANN design affects the results. The optimizer affects training. If any one part goes wrong, the whole result is affected.
+
+
+\subsection{Engineering Activities}
+
+Table~\ref{tab:e_act} shows how this project maps to the complex engineering activity categories.
+
+\begin{center}
+    \begin{table}[ht]
+        \centering
+        \caption{Mapping with complex engineering activities.}
+        \begin{tabular}{|p{0.18\textwidth}|p{0.18\textwidth}|p{0.18\textwidth}|p{0.18\textwidth}|p{0.18\textwidth}|}
+        \hline
+        A1& A2& A3& A4& A5\\
+        Range of resources & Level of Interaction & Innovation & Consequences for society and environment & Familiarity\\
+        \hline 
+        $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ & $\checkmark$\\
+        &&&&\\
+        \hline 
+        \end{tabular}
+        \label{tab:e_act}
+    \end{table}
+\end{center}
+
+\subsubsection{A1: Range of Resources --- Applicable ($\checkmark$)}
+
+We use many different tools and knowledge sources: ODE math, Runge-Kutta solvers, SciPy, PyTorch, NumPy, Matplotlib, and 13 research papers. No single tool or source is enough to complete this project.
+
+\subsubsection{A2: Level of Interaction --- Applicable ($\checkmark$)}
+
+The parts of this project talk to each other. The solver gives data to the ANN. The ANN design affects training. The training setup affects results. The evaluation depends on everything before it. You cannot work on one part without thinking about the others.
+
+\subsubsection{A3: Innovation --- Applicable ($\checkmark$)}
+
+No one has done a systematic comparison of plain ANN architectures on the Lorenz-1960 system before. Most existing work uses PINNs or hybrid methods \cite{matthews2024pinnde}. We test a different idea: can a plain ANN, without physics in the loss function, still solve this problem well? That is the new part.
+
+\subsubsection{A4: Consequences for Society and Environment --- Not Applicable ($\times$)}
+
+Our project is a purely academic study that trains small neural networks on a personal computer. It does not produce any physical product, does not affect public health or safety, and uses minimal computational resources. The Lorenz-1960 system is a theoretical benchmark, so our results do not drive any real-world decisions. This criterion does not apply.
+
+\subsubsection{A5: Familiarity --- Applicable ($\checkmark$)}
+
+This is not a standard textbook problem. The Lorenz-1960 system is nonlinear and chaotic. There is no ready-made ANN setup that we can just use. We have to figure out the best architecture through experiments, and the results need careful interpretation because low training loss does not always mean the solution is correct everywhere.
+
+\subsection{Knowledge and Attitude Profile}
+
+Table~\ref{tab:k_profile} shows how this project maps to the knowledge and attitude profile categories.
+
+\begin{center}
+    \begin{table}[ht]
+        \centering
+        \caption{Mapping with knowledge and attitude profile.}
+        \begin{tabular}{|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|}
+        \hline
+        WK1& WK2& WK3& WK4& WK5& WK6& WK7& WK8& WK9\\
+        Natural Sciences & Math \& Analysis & Eng. Funda- mentals & Specialist Knowledge & Resource Use & Eng. Practice & Role in Society & Research Lit. & Ethics\\
+        \hline 
+        $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\times$ & $\checkmark$ & $\times$ & $\checkmark$ & $\checkmark$\\
+        &&&&&&&&\\
+        \hline 
+        \end{tabular}
+        \label{tab:k_profile}
+    \end{table}
+\end{center}
+
+\subsubsection{WK1: Natural Sciences --- Applicable ($\checkmark$)}
+
+Our project requires a solid understanding of the natural sciences, specifically the physics behind the Lorenz-1960 system, which is a simplified meteorological model representing atmospheric convection. We must understand the theory governing nonlinear coupled ODEs to model these physical phenomena correctly.
+
+\subsubsection{WK2: Mathematics and Numerical Analysis --- Applicable ($\checkmark$)}
+
+This project heavily relies on conceptually based mathematics and numerical analysis. We use advanced calculus for ODEs, the Runge-Kutta method for generating reference numerical solutions, and statistics for evaluating the mean squared error of our ANN predictions. Data analysis is central to evaluating training convergence and model accuracy.
+
+\subsubsection{WK3: Engineering Fundamentals --- Applicable ($\checkmark$)}
+
+We apply a systematic formulation of engineering fundamentals by taking a well-defined mathematical problem and systematically solving it through computational means. The process of translating the Lorenz-1960 mathematical equations into a computational model requires core engineering methodology.
+
+\subsubsection{WK4: Specialist Knowledge --- Applicable ($\checkmark$)}
+
+Our work operates at the forefront of the discipline by exploring the capabilities of artificial neural networks in solving complex ODE systems. This requires specialist engineering knowledge in deep learning frameworks like PyTorch, optimization algorithms like Adam, and network architectures.
+
+\subsubsection{WK5: Engineering Design (Sustainability) --- Not Applicable ($\times$)}
+
+This project is a computational research study on a theoretical mathematical benchmark. It does not involve physical resource use, environmental impact assessments, or whole-life cost considerations. Therefore, this criterion does not apply.
+
+\subsubsection{WK6: Engineering Practice (Technology) --- Applicable ($\checkmark$)}
+
+We extensively use modern engineering practice and technology. We utilize programming languages and scientific computing libraries (SciPy, NumPy, Matplotlib) that are standard practice in the field of computational engineering and data science.
+
+\subsubsection{WK7: Role of Engineering in Society --- Not Applicable ($\times$)}
+
+The Lorenz-1960 system benchmark does not directly impact public safety, societal issues, or sustainable development. It is an academic exercise in algorithm evaluation, so there are no direct societal stakeholders whose safety must be considered. This criterion does not apply.
+
+\subsubsection{WK8: Engagement with Research Literature --- Applicable ($\checkmark$)}
+
+We conducted an extensive literature review, analyzing 13 research papers, to understand the current state-of-the-art in PINNs and standard ANNs for ODE solving. We applied critical thinking to identify the research gap---specifically, evaluating plain ANNs on the Lorenz-1960 system without physics-informed loss functions.
+
+\subsubsection{WK9: Ethics and Professional Conduct --- Applicable ($\checkmark$)}
+
+We adhere to professional ethics and academic integrity by properly citing all research papers and methodologies used. We ensure our experiments are reproducible, and our results are reported honestly without manipulation.
+
+
+\section{Summary}

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FYDP-I Poster — Lorenz × ANN</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap');
+
+:root{
+  --paper:#F3F6FC; --ink:#0C1226; --navy:#0B1020;
+  --muted:#52617E; --dim:#7C89A3; --line:#E2E7F1;
+  --coral:#F2622E; --teal:#0E9E8E; --indigo:#3552D8;
+  --disp:'Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+@page{ size:594mm 841mm; margin:0; }
+html,body{background:#fff}
+body{font-family:var(--body);color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.poster{
+  width:594mm; height:841mm; overflow:hidden; position:relative;
+  background:
+    radial-gradient(900mm 500mm at 110% -5%, rgba(53,82,216,.06), transparent 60%),
+    radial-gradient(700mm 500mm at -10% 108%, rgba(242,98,46,.06), transparent 55%),
+    var(--paper);
+  padding:14mm 14mm 0;
+  display:flex; flex-direction:column;
+}
+
+/* ---------- header ---------- */
+.header{
+  background:
+    radial-gradient(500mm 200mm at 88% -40%, rgba(91,140,255,.32), transparent 60%),
+    linear-gradient(120deg,#0E1530,#0B1020);
+  border-radius:10mm; padding:11mm 14mm; color:#fff; position:relative; overflow:hidden;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+.header .eyebrow{font-family:var(--mono);font-size:13pt;letter-spacing:.28em;text-transform:uppercase;color:#FF8A5C;font-weight:600}
+.header h1{font-family:var(--disp);font-weight:700;font-size:42pt;line-height:1.04;letter-spacing:-.01em;margin:5mm 0 5mm}
+.header h1 .acc{color:#FF7A4D}
+.header .meta{display:flex;justify-content:space-between;align-items:flex-end;gap:10mm}
+.authors{font-size:15pt;color:#D7DEEE;line-height:1.5}
+.authors b{color:#fff}
+.sup{font-size:14pt;color:#AEB9D4;margin-top:2mm}
+.sup b{color:#fff}
+.logo{height:30mm;background:#fff;border-radius:6mm;padding:3mm 4mm}
+.rulebar{height:2.4mm;width:70mm;border-radius:2mm;background:linear-gradient(90deg,var(--coral),var(--teal));margin-top:1mm}
+
+/* ---------- columns ---------- */
+.cols{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10mm;padding:10mm 0 7mm;min-height:0}
+.col{display:flex;flex-direction:column;justify-content:space-between;gap:9mm}
+
+.block{background:#fff;border:1px solid var(--line);border-radius:7mm;
+  box-shadow:0 4mm 12mm rgba(12,18,38,.05); padding:10mm 10mm;}
+.block .bh{display:flex;align-items:center;gap:4mm;margin-bottom:5mm}
+.block .bh .bar{width:5mm;height:10mm;border-radius:2mm;background:var(--coral)}
+.block.teal .bh .bar{background:var(--teal)} .block.indigo .bh .bar{background:var(--indigo)}
+.block h2{font-family:var(--disp);font-weight:600;font-size:24pt;letter-spacing:-.01em;color:var(--ink)}
+.block p{font-size:15pt;line-height:1.52;color:var(--muted)}
+.block strong{color:var(--ink);font-weight:600}
+.block em{color:var(--coral);font-style:normal;font-weight:600}
+
+ul.l{list-style:none}
+ul.l li{position:relative;padding-left:7mm;margin:3.4mm 0;font-size:15pt;line-height:1.48;color:var(--muted)}
+ul.l li::before{content:"";position:absolute;left:0;top:2.4mm;width:3mm;height:3mm;border-radius:1mm;background:var(--coral);transform:rotate(45deg)}
+ul.l.teal li::before{background:var(--teal)}
+
+.qbox{margin-top:6mm;background:linear-gradient(90deg,rgba(242,98,46,.09),rgba(14,158,142,.07));
+  border:1px solid var(--line);border-left:2mm solid var(--coral);border-radius:4mm;padding:6mm 7mm;font-size:15.5pt;line-height:1.5;color:var(--ink)}
+.qbox b{color:var(--coral)}
+
+/* equation */
+.eq{font-family:var(--mono);font-size:24pt;line-height:2.05;color:var(--ink)}
+.eq .op{color:var(--coral)} .eq .v{color:var(--teal)}
+.eqmeta{font-family:var(--mono);font-size:13pt;color:var(--dim);margin-top:4mm}
+
+/* inner phase cards */
+.phasecard{background:var(--paper);border:1px solid var(--line);border-radius:5mm;padding:6mm 7mm;margin:4mm 0}
+.phasecard .t{font-family:var(--disp);font-weight:600;font-size:18pt;color:var(--ink);margin-bottom:3mm}
+.phasecard .t .n{color:var(--indigo)} .phasecard.teal .t .n{color:var(--teal)}
+.phasecard p{font-size:14pt}
+.run{display:inline-block;margin-top:4mm;font-family:var(--mono);font-size:15pt;font-weight:600;color:#fff;
+  background:var(--indigo);border-radius:999px;padding:2.5mm 7mm}
+.run.teal{background:var(--teal)}
+
+.pipe{display:flex;align-items:center;gap:2.5mm;flex-wrap:wrap;margin-top:5mm}
+.node{flex:1;font-family:var(--mono);font-size:13pt;text-align:center;background:var(--paper);
+  border:1px solid var(--line);border-radius:3mm;padding:4.5mm 2mm;color:var(--ink)}
+.arrow{color:var(--coral);font-size:17pt;font-weight:700}
+
+.figcard{background:#fff;border:1px solid var(--line);border-radius:5mm;padding:4mm;text-align:center}
+.figcard img{width:100%;max-height:150mm;object-fit:contain}
+.cap{font-family:var(--mono);font-size:12pt;color:var(--dim);margin-top:3mm}
+
+.statrow{display:grid;grid-template-columns:1.05fr 1fr;gap:7mm;align-items:center;margin-top:6mm}
+.stat{background:linear-gradient(160deg,rgba(14,158,142,.12),rgba(53,82,216,.07));
+  border:1px solid var(--line);border-radius:5mm;padding:7mm}
+.stat .num{font-family:var(--mono);font-weight:700;font-size:54pt;color:var(--teal);line-height:1;letter-spacing:-.02em}
+.stat .lab{font-size:14pt;color:var(--muted);margin-top:3mm}
+.stat .ok{font-family:var(--mono);font-size:13pt;color:var(--coral);margin-top:3mm}
+
+/* footer */
+.footer{background:linear-gradient(120deg,#0E1530,#0B1020);color:#fff;border-radius:9mm 9mm 0 0;
+  padding:7mm 12mm;display:grid;grid-template-columns:2.4fr 1fr;gap:10mm;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.footer h3{font-family:var(--disp);font-size:16pt;color:#FF8A5C;margin-bottom:3mm;letter-spacing:.04em}
+.refs{font-size:12pt;line-height:1.6;color:#C6CFE3;columns:2;column-gap:9mm}
+.refs span.n{color:#FF8A5C;font-family:var(--mono)}
+.contact{font-size:12.5pt;color:#AEB9D4;line-height:1.7}
+.contact b{color:#fff}
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="eyebrow">FYDP&nbsp;I &middot; United International University &middot; Dept. of CSE</div>
+    <h1>Solving the Lorenz ODE System using <span class="acc">Optimal ANN</span> Architectures</h1>
+    <div class="meta">
+      <div>
+        <div class="authors"><b>Ikramul Hasan Moral</b> &middot; Md. Abu Bakar &middot; Samiur Rahman Omlan &middot; Fariha Islam &middot; Md. Touhidul Islam</div>
+        <div class="sup">Supervisor: <b>Dr. Muhammad Nomani Kabir</b>, Professor, Dept. of CSE &nbsp;&middot;&nbsp; Course Teacher: <b>Dr. Md. Motaharul Islam</b>, Professor, Dept. of CSE</div>
+        <div class="rulebar"></div>
+      </div>
+      <img class="logo" src="assets/uiu.png" alt="UIU">
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="cols">
+
+    <!-- LEFT -->
+    <div class="col">
+      <div class="block indigo">
+        <div class="bh"><span class="bar"></span><h2>Introduction &amp; Motivation</h2></div>
+        <p>Coupled nonlinear ODEs like the <strong>Lorenz-1960</strong> system — an early meteorological model — rarely have closed-form solutions. Classical solvers (Runge–Kutta) are accurate but <strong>mesh-dependent</strong> and re-solve step-by-step for every query. A trained network can instead learn the continuous map <strong>t &rarr; (x, y, z)</strong>, yet most neural ODE work relies on physics-informed losses or operator learning.</p>
+        <div class="qbox"><b>Central question:</b> can a <strong>plain feedforward ANN</strong> — trained only on numerical data, no physics in the loss — approximate the Lorenz-1960 solution, and <em>which architecture does it best?</em></div>
+      </div>
+
+      <div class="block">
+        <div class="bh"><span class="bar"></span><h2>Objectives</h2></div>
+        <ul class="l">
+          <li>Generate a trusted reference with RK4 <em>and</em> SciPy; cross-validate the two.</li>
+          <li>Systematically vary <strong>depth</strong>, <strong>width</strong>, and <strong>activation</strong> (plain ANN).</li>
+          <li>Measure accuracy vs cost: MSE, MAE, max error, training / inference time.</li>
+          <li>Benchmark the best plain ANN against PINN / DeepONet results.</li>
+        </ul>
+      </div>
+
+      <div class="block teal">
+        <div class="bh"><span class="bar"></span><h2>Research Questions &amp; Gap</h2></div>
+        <p><strong>Gap.</strong> No prior work runs a systematic plain-ANN architecture study on Lorenz-1960; existing studies fix the architecture, use only simple ODEs, or rely on physics-informed losses.</p>
+        <ul class="l teal" style="margin-top:3mm">
+          <li>Can a plain ANN learn the solution from numerical data alone?</li>
+          <li>Which depth &times; width &times; activation gives the best accuracy–cost trade-off?</li>
+          <li>How close does it come to physics-informed baselines?</li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <div class="bh"><span class="bar"></span><h2>Background: The System</h2></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6mm;align-items:center">
+          <div>
+            <div class="eq">x&#775; <span class="op">=</span> <span class="op">&minus;0.10</span> <span class="v">y z</span></div>
+            <div class="eq">y&#775; <span class="op">=</span> <span class="op">&plus;1.60</span> <span class="v">x z</span></div>
+            <div class="eq">z&#775; <span class="op">=</span> <span class="op">&minus;0.75</span> <span class="v">x y</span></div>
+            <div class="eqmeta">k=2, l=1 &middot; x&#8320;=0.5, y&#8320;=0.75, z&#8320;=1 &middot; t&isin;[0,1]</div>
+          </div>
+          <div class="figcard" style="border:none;box-shadow:none;padding:0">
+            <img src="assets/fig_dynamics_light.png" alt="dynamics" style="max-height:72mm">
+            <div class="cap">Bounded, quasi-periodic orbits, t&isin;[0,50].</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block indigo">
+        <div class="bh"><span class="bar"></span><h2>Complex Engineering Problem</h2></div>
+        <p>Mapped to the CEP rubric — <strong>problem solving</strong> (depth of knowledge, conflicting requirements, depth of analysis, interdependence), <strong>activities</strong> (resources, interaction, innovation, unfamiliarity), and <strong>knowledge</strong> (natural sciences, mathematics, engineering fundamentals, specialist ML, research literature, ethics).</p>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col">
+      <div class="block indigo">
+        <div class="bh"><span class="bar"></span><h2>Methodology: Two-Phase Study</h2></div>
+        <div class="phasecard">
+          <div class="t"><span class="n">Phase 1</span> — Architecture search</div>
+          <p>depth {1, 2, 3, 4} &times; width {20, 50, 100} &times; activation {tanh, ReLU, sigmoid, GELU, Swish}</p>
+          <span class="run">= 60 runs &middot; Adam fixed</span>
+        </div>
+        <div class="phasecard teal">
+          <div class="t"><span class="n">Phase 2</span> — Optimizer comparison</div>
+          <p>3 best architectures &times; {Adam, L-BFGS, SGD + momentum}, everything else constant.</p>
+          <span class="run teal">= 9 runs</span>
+        </div>
+        <p style="margin-top:4mm"><strong>69 controlled experiments</strong> — splitting the phases cleanly separates architecture effects from optimizer effects.</p>
+        <div class="pipe">
+          <div class="node">Generate<br>RK4 + SciPy</div><span class="arrow">&rarr;</span>
+          <div class="node">Preprocess<br>80/20 split</div><span class="arrow">&rarr;</span>
+          <div class="node">Train<br>ANN grid</div><span class="arrow">&rarr;</span>
+          <div class="node">Evaluate<br>5 metrics</div><span class="arrow">&rarr;</span>
+          <div class="node">Select<br>best</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="bh"><span class="bar"></span><h2>Numerical Baseline &amp; Validation <span style="font-size:13pt;color:var(--coral);font-family:var(--mono)">(Result)</span></h2></div>
+        <p>The reference trajectory is generated by two independent solvers and cross-checked before any ANN sees it: a custom <strong>RK4</strong> integrator (h = 10&#8315;&#179;, 1001 points) and <strong>SciPy DOP853</strong> (rtol = 10&#8315;&#185;&#8304;), with an 80/20 train–validation split (seed 42).</p>
+        <div class="statrow">
+          <div class="figcard"><img src="assets/fig_validation_light.png" alt="validation" style="max-height:88mm"><div class="cap">RK4 &minus; SciPy disagreement stays at the 10&#8315;&#185;&#185; level.</div></div>
+          <div class="stat">
+            <div class="num">1.8&times;10&#8315;&#178;&#178;</div>
+            <div class="lab">solver-agreement MSE (RK4 vs SciPy)</div>
+            <div class="ok">&#10003; target was &lt; 10&#8315;&#185;&#8304;</div>
+            <p style="font-size:11.5pt;color:var(--muted);margin-top:3mm">A defensible <strong>ground truth</strong> for all FYDP-II ANN training.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block teal">
+        <div class="bh"><span class="bar"></span><h2>Conclusion &amp; Future Work</h2></div>
+        <p><strong>Status (FYDP-I):</strong> research question framed, 17-paper review with an explicit gap, two-phase design (69 runs) locked, dual-solver baseline verified. No accuracy claims are made until the FYDP-II experiments produce evidence.</p>
+        <ul class="l teal" style="margin-top:3mm">
+          <li>Build the ANN training pipeline; run Phase 1 (60), then Phase 2 (9).</li>
+          <li>Repeated seeds for stability; denser grids and new initial conditions.</li>
+          <li>Direct comparison with PINN / operator-learning baselines.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div>
+      <h3>Selected References</h3>
+      <div class="refs">
+        <div><span class="n">[1]</span> Lorenz (1960), <i>Tellus</i> 12(3).</div>
+        <div><span class="n">[2]</span> Matthews &amp; Bihlo (2024), PinnDE.</div>
+        <div><span class="n">[3]</span> Raissi et al. (2019), <i>JCP</i> 378.</div>
+        <div><span class="n">[4]</span> Lagaris et al. (1998), <i>IEEE TNN</i> 9(5).</div>
+        <div><span class="n">[5]</span> Lau &amp; Werth (2020), ODEN.</div>
+        <div><span class="n">[6]</span> Mall &amp; Chakraverty (2013).</div>
+        <div><span class="n">[7]</span> Chen et al. (2018), Neural ODEs, <i>NeurIPS</i>.</div>
+        <div><span class="n">[8]</span> Dubey et al. (2024), coupled ODEs.</div>
+      </div>
+    </div>
+    <div class="contact">
+      <b>Team_ParaDox</b><br>
+      Final Year Design Project I<br>
+      Department of CSE, UIU<br>
+      Full bibliography &middot; paper/final/fydp.bib
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
