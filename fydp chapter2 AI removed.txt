@@ -1,0 +1,22 @@
+2.2.1 Similar Applications
+Dubey et al. [5] used an ANN (tanh activation) to solve coupled first-order ODEs with an error of 2.88 × 10⁻³ in a maximum of 120 iterations. A comparable PyTorch-based ANN was used by Audu et al. [9], which converged in 200-1500 iterations. Okereke et al. [8] bypassed backpropagation by calculating the weights based on regression with Gaussian Radial Basis Functions. The ODEN framework developed by Lau and Werth [3] demonstrates that NNs outperform RK4 on rapidly oscillating solutions, with errors of ∼ 10⁻⁴. On a damped vibration equation,  Mall and Chakraverty [7] compared arbitrary versus regression-based weight initialization and they found that regression-based weights reduce maximum deviation from 3.67% to 1.47%. Murugesh et al. [10] used neural networks with block numerical methods to directly solve higher-order ODEs and obtaining errors near machine precision (∼ 10⁻¹⁰). Pratama et al. [2] surveyed three ANN-based PDE solvers (PyDEns, NeuroDiffEq, Nangs) and used 3 hidden layers with 32 neurons and tanh activation. NeuroDiffEq uses the Trial Approximate Solution methodology, which suggests that initial conditions are hardcoded in the ansatz. This is a pure ANN method that is applied to our research.
+
+2.2.2 Related Research
+
+Physics-Informed Approaches
+PinnDE was proposed by Matthews and Bihlo [1], which solved the Lorenz-1960 system using a DeepONet (4 hidden layers, 40 nodes, tanh, Adam optimizer). Their DeepONet is trained to learn the operator G(u0)(t,x) which provides solutions given initial conditions over [0,1]. This is the closest baseline to our target problem, but it relies on physics-informed loss terms. Babni et al. [4] generalized the trial construction ũ(x,θ) = P(x) + Q(x)N(x,θ) by replacing Q(x) with a flexible φ(x), proving the error bound |Nφ(t,θ)−u(t)| ≤ eκ|t−t₀|Lφ(θ). This verifies that the smaller the loss, the smaller the solution error. Audu et al. [6] compared PINN and ANN models using six first-order ODE tests. Their PINN had an error of 10⁻⁸ to 10⁻¹⁰ which was much better as compared to ANN. This raises the issue of whether architecture optimization can bridge this gap or not.
+
+
+Pure ANN Approaches
+The NeuroDiffEq Trial Approximate Solution is physics-free. Pratama et al. [2] found that NeuroDiffEq can train without physics loss terms which is consistent with our methodology. But they benchmarked only on the heat equation which is linear. Dubey et al. [5] claim that plain ANNs can solve coupled ODEs but used a fixed architecture. Okereke et al. [8] removed backpropagation through weight computation instead of polynomial fitting. Audu et al. [9] achieved an error of 10⁻⁴ with a sigmoid ANN on three first-order ODEs. All these studies do not examine the implications of building patterns on performance.
+
+
+Architecture and Loss Function Studies
+Mall and Chakraverty [7] made comparisons between 4, 5, and 6 hidden nodes with random and regression-based weights. Weights that are based on regression are always better compared to random weights. After 6 nodes they found that accuracy remains the same. They applied only sigmoid activation on simple ODEs. Lau and Werth [3] discovered that sigmoid / tanh need less training in comparison to ReLU / ELU. Xavier initialization speeds up the convergence and Adam is better than SGD. They did not vary systematically depth and width. Xiong [11] arranged seven constructions (polynomial, exponential, hyperbolic, logarithmic, logistic, sigmoid, softplus) of loss functions. Exponential is best when applied to the law of Newton cooling and logarithmic is best when it is applied to the motor suspension system.
+
+Lorenz System Studies
+Aslam et al. [12] have used ANN + PSO-NNA hybrid optimization to solve Lorenz equations (Neurons=10, sigmoid, N=90, independent runs=100). They are directed to a diverse Lorenz parameterization (σ, ρ, β), are based on meta heuristic optimization and do not compare architectures.
+
+
+Neural ODEs
+Chen et al. [13] proposed neural ODEs where the derivative function dh(t)/dt = f(h(t),t,θ) that is parameterized with a neural network and trained using the adjoint method efficient for backpropagation. This sample is quite different than ours where we learn the dynamics (f) while neural ODEs find the approximation of the solution (y(t)) itself.

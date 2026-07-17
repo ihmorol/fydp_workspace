@@ -1,0 +1,735 @@
+
+=== PAGE 1 ===
+New Designed Loss Functions to Solve Ordinary Diﬀerential
+Equations with Artiﬁcial Neural Network
+Xiao Xiong
+Imperial College London
+xx1119@ic.ac.uk
+Abstract
+This paper investigates the use of artiﬁcial neural networks (ANNs) to solve diﬀerential equations
+(DEs) and the construction of the loss function which meets both diﬀerential equation and its ini-
+tial/boundary condition of a certain DE. In section 2, the loss function is generalized to nth order
+ordinary diﬀerential equation(ODE). Other methods of construction are examined in Section 3 and
+applied to three diﬀerent models to assess their eﬀectiveness.
+Keywords: loss function; artiﬁcial neural network; ordinary diﬀerential equations; models; function reconstruc-
+tion
+1
+Introduction
+Diﬀerential equations are used in the modeling of various phenomena in academic ﬁelds. Most diﬀerential equa-
+tions do not have analytical solutions and are instead solved using domain-discretization methods[1][2][3] such as
+boundary-element, ﬁnite-diﬀerences, or ﬁnite-volumes to obtain approximated solutions. However, discretization
+of the domain into mesh points is only practical for low-dimensional diﬀerential equations on regular domains.
+Furthermore, approximate solutions at points other than mesh points must be obtained through additional tech-
+niques such as interpolation.
+Monte Carlo methods and radial basis functions[4] have also been proposed as alternatives for solving diﬀerential
+equations without the need for mesh discretization. These methods allow for the easy generation of collocation
+points within the domain, but they are not as stable or eﬃcient as mesh-based methods.
+In this article, we introduce the use of artiﬁcial neural networks (ANNs) as an alternative method for solving
+diﬀerential equations. This approach does not require complex meshing and can be used as a universal function
+approximator[5] to produce a continuous and diﬀerentiable solution over the entire domain.
+To obtain an exact solution for a diﬀerential equation, both the main equation and the constraint equations
+(initial/boundary conditions) must be taken into account. The key challenge is ﬁguring out how to use one single
+network to satisfy these equations at the same time. One method is the DGM algorithm[6] shown in Figure 1,
+which minimizes the direct sum of three individual losses from the main diﬀerential equation, the initial conditions,
+and the boundary conditions in a single neural network. However, the solution obtained through this algorithm
+is not an accurate approximation to the solution of the main and constraint equations, as summing the losses can
+aﬀect the accuracy of each other.
+Figure 1: DGM algorithm for solving PDE
+1
+arXiv:2301.00636v1  [cs.LG]  29 Dec 2022
+
+
+=== PAGE 2 ===
+Lagaris[7] proposed a method in which the loss of the neural network can be reconstructed to obtain an exact
+solution to both the diﬀerential equation and its constraint conditions.
+The details of this method will be
+introduced and modiﬁed in the next section where the general formula of the loss functions for ordinary diﬀerential
+equations (ODEs) of any order is also established. In Section 3, diﬀerent forms of loss functions are designed and
+applied to three practical models with related code in GitHub. Some possible future works based on this paper
+are provided in the ﬁnal session.
+2
+Construction of Loss Function
+This section explains the concept of diﬀerential equations and the process of solving them using multi-layer percep-
+trons. It also describes how to construct loss functions for these equations during the training of neural networks,
+including examples for ﬁrst- and second-order ODEs. Finally, the section discusses how the formula for the loss
+function can be generalized to nth-order ODEs.
+Firstly, the deﬁnition of a general diﬀerential equation is
+F(x, u, Du, D2u, ..., Dmu) = 0,
+x ∈Ω⊂Rn
+(1)
+where u is the unknown solution to be determined and
+Dmu =
+(
+∂|α|u
+∂xα1
+1 . . . ∂xαn
+n
+α ∈Nn,|α| = m
+
+)
+The inputs to the neural network for solving the diﬀerential equation are discretized points of the domain Ω. Then
+the diﬀerential equation becomes a system of equations F(xi, u(xi), Du, D2u, ..., Dmu) = 0 for all xi ∈ˆΩ. When a
+speciﬁc neural network is trained, uNN(x, p) is used to present the output where p are weights and biases and x are
+inputs. The general loss used to do gradient descent is minp
+P
+xi∈ˆΩ(F(xi, uNN(xi), DuNN, D2uNN, ..., DmuNN))2,
+subject to initial and boundary conditions.
+In Lagaris’s approach[7] mentioned in section 1, he constructed the solution uNN(x, p) in the loss function to
+satisfy the diﬀerential equation and its initial or boundary conditions as
+uNN(x, p) = A(x) + G(x, N(x, p))
+(2)
+where N is an output of a feed-forward neural network, term A(x) corresponds to constraint conditions and term
+G satisﬁes the diﬀerential equation. After implementing the proposed method, solving certain diﬀerential equa-
+tions becomes an unconstrained problem that only involves a single equation, which means that we only need to
+calculate a single loss in the neural network compared with DGM algorithm to obtain the solution. Note that
+the gradient computation in this neural network process involves derivatives of the output with respect to any of
+its inputs (which is used in the calculation of losses) and its parameters (which is used in gradient descent). The
+procedure of gradient computation is deduced in paper[7].
+First order ODE
+To specialize equation (2) in the ﬁrst order ODE
+du
+dt = f(t, u)
+(3)
+with an initial condition u(a) = A, we let
+uNN(t) = A + (t −a)N(t, p)
+(4)
+in which uNN(a) = A, thus uNN satisﬁes the initial condition. After generating n inputs ti in the domain, we
+get n corresponding outputs by training a feed-forward neural network with the same weights and bias for each
+input value in a single epoch. Then the loss we need to minimize for gradient descent is L[p] = P
+i
+
+duNN (ti)
+dt
+−
+f(ti, uNN(ti))
+2
+.
+2
+
+
+=== PAGE 3 ===
+Second order ODE
+There are three loss construction cases corresponding to three diﬀerent constraint condition cases in second-order
+ODE:
+d2u
+dx2 = f(x, u, du
+dx)
+(5)
+The constraints in the ﬁrst case are u(a) = A
+and
+du
+dx
+
+x=b
+= B which results in the constructed function
+uNN(x) = A + B(x −a) + (x −a)(x −b)2N(x, p)
+(6)
+u′
+NN(b) = B can be veriﬁed by diﬀerentiating the above function with respect to t, getting u′
+NN(x) = B + [(x −
+b)2 + 2(x −b)(x −a)]N(x, p) + (x −a)(x −b)2N ′.
+The second case involves two conditions u(a) = A and u(b) = B, while the third case contains conditions on du
+dx,
+namely du
+dx
+
+x=a
+= A and
+du
+dx
+
+x=b
+= B with corresponding parts of loss function
+uNN(x) = A
+x −b
+a −b
+
++ B
+x −a
+b −a
+
++ (x −a)(x −b)N(x, p)
+(7)
+and
+uNN(x) = A(x −b)2
+2(a −b) + B(x −a)2
+2(b −a)
++ (x −a)2(x −b)2N(x, p).
+(8)
+Finally, the loss function derived from these constructed uNN function for second-order ODE is similar to the
+ﬁrst-order one.
+nth order ODE
+After clarifying how to construct functions in 1st and 2nd order cases, I extend formula to nth order ODE. The
+general nth order ODE is written as
+dnu
+dxn = f(x, u, du
+dx, ..., dn−1u
+dxn−1 )
+(9)
+with diﬀerent constraint conditions listed as follows:
+Case 1
+In this case, conditions on u are considered, equivalently
+u(xi) = Ci
+for
+{i ∈Z|1 ≤i ≤n}
+(10)
+where xi ̸= xj if i ̸= j. We reconstruct the solution function as
+uNN(x) =
+n
+X
+i=1
+(Ci
+j∈1,2,3,...,n
+Y
+j̸=i
+x −xj
+xi −xj ) +
+n
+Y
+i=1
+(x −xi)N(x, p)
+(11)
+Case 2
+The conditions on n −1th order derivatives are given in the forms
+dn−1u
+dxn−1
+
+x=xi
+= Ci
+for
+{i ∈Z|1 ≤i ≤n}
+(12)
+which leads to the constructed solution
+uNN(x) =
+n
+X
+i=1
+Ci
+Mi(x)
+dn−1Mi
+dxn−1 |x=xi
++
+n
+Y
+i=1
+(x −xi)nN(x, p)
+(13)
+where Mi(x) = Qj∈1,2,...,n
+j̸=i
+(x −xj)n.
+3
+
+
+=== PAGE 4 ===
+Case 3
+Case 3 involves conditions on derivatives up to order n −1:
+diu
+dxi
+
+x=xi
+= Ci
+for
+{i ∈Z|0 ≤i ≤n −1}
+(14)
+We ﬁrst deﬁne a series of functions Mi(x) = Mi−1(x −xi−1)i with M0(x) = 1 and some coeﬃcients Ni =
+
+Ci −Pi−1
+j=o(M (i)
+j (x)|x=xi × Nj)
+
+×
+1
+M(i)
+i
+|x=xi
+with N0 = C0. Then the reconstructed part of the loss function
+becomes
+uNN =
+n−1
+X
+i=0
+Ni × Mi(x) + MnN(x, p)
+(15)
+Case 4: General Condition Case
+In this part, I will introduce the general formula for the general condition cases. The format of the condition is
+diu
+dxi
+
+x=xiα
+= Ciα
+with
+{i ∈Z|0 ≤i ≤n −1}
+and
+{α ∈Z|1 ≤α ≤αi}
+(16)
+where Pn−1
+i=0 αi = n. The diﬀerential order of conditions in this scenario can vary and the same order diﬀerentiated
+condition can include multiple cases. However, the total number of conditions must be equal to n. Similar to case
+3, functions and coeﬃcients are deﬁned in advance by
+Miα(x) = (x −xiα)i+1,
+Mi(x) =
+αi
+Y
+α=1
+Miα,
+Fiα(x) =
+1
+Miα
+i
+Y
+j=0
+Mj
+and
+N0α = C0α ×
+1
+F0α(x)|x=x0α
+,
+Niα =
+
+Ciα −
+i−1
+X
+j=0
+αj
+X
+β=1
+NjβF (i)
+jβ |x=xiα −
+β∈1,...,αi
+X
+β̸=α
+NiβF (i)
+iβ |x=xiα
+
+×
+1
+F (i)
+iα (x)|x=xiα
+Finally, the general reconstructed solution function formula for nth order ODE with general constraint conditions
+is
+uNN =
+n−1
+X
+i=0
+αi
+X
+α=1
+Niα × Fiα(x) +
+n−1
+Y
+i=0
+Mi(x)N(x, p)
+(17)
+System of K ODEs
+Now, the system of ODE involving K equations is explored. We start from the ﬁrst-order system ODE
+duk
+dx = fk(x, u1, ..., uK)
+for
+k ∈1, 2, ..., K
+(18)
+together with conditions uk(xk) = Ck. In the ANN approach for solving the ODE system, total K multi-layer
+perceptrons work in parallel to process K equations. For each ﬁrst-order equation, we get a reconstructed function
+uNNk(x) = Ak + xNk(x, pk)
+(19)
+and the loss for each neural network is L[pk] = P
+i
+
+duNNk
+dx
+
+x=xi
+−fk(xi, uNN1, uNN2, ..., uNNK)
+2
+.
+To generalization, the system of K nth-order ODEs is shown as
+dnuk
+dxn = fk(x, S0, ..., Sn−1)
+for
+k ∈1, 2, ..., K
+(20)
+with the notation Si = diu1
+dxi , diu2
+dxi , ..., diuK
+dxi
+for
+i ∈0, ..., n−1. The constraint conditions are diuk
+dxi
+
+x=xkiα
+= Ckiα
+where i’s are integers in the range [0 ≤i ≤n −1] and α’s are integers in the range [1 ≤α ≤αki] with
+Pn−1
+i=0 αki = n. The reconstructed function for each equation in the system is exactly the same as nth order single
+ODE in equation(17).
+4
+
+
+=== PAGE 5 ===
+3
+Application in models
+In this section, we will look at diﬀerent methods for reconstructing uNN in loss functions for ﬁrst-order ordinary
+diﬀerential equations. Based on these methods, We can reconstruct solutions to higher-order ODEs, similar to
+how we did in section 2. There are a total of seven diﬀerent constructions shown in Table 1. The polynomial
+construction is an extension of the one presented in equation(4), where an additional coeﬃcient c is included and
+adjusted based on the speciﬁc ODE being considered. The exponential construction was introduced by Chen in
+[8]. Further to the above two constructions, I propose ﬁve more forms. The impact of the base of logarithm will
+also be examined in the next part of the analysis.
+Function name
+Formula
+Polynomial
+uNN(x) = A + c(x −a)N(x, p)
+Exponential
+uNN(x) = A + (1 −e−(x−a))N(x, p)
+Hyperbolic
+uNN(x) = A + e(t−a)−e(a−t)
+e(t−a)+e(a−t) N(x, p)
+Logarithmic
+uNN(x) = A + logc(t + 1 −a)N(x, p)
+Logistic
+uNN(x) = A + (
+1
+1+e(−t+a) −1
+2)N(x, p)
+Sigmoid
+uNN(x) = A + (
+t−a
+1+e(a−t) )N(x, p)
+Softplus
+uNN(x) = A + (ln(1 + e(t−a)) −ln(2))N(x, p)
+Table 1: 7 forms of solution reconstruction
+For second-order ODE with initial condition u(a) = A
+and
+du
+dx
+
+x=b
+= B, the exponential construction is
+uNN(t) = A + B(t −b) + (1 −e−t−a))2N(x, p)
+In the following model analysis, the performance of the seven functions mentioned above will be evaluated when
+they are implemented using a neural network approach in three diﬀerent models. The average of the 100 lowest
+losses within a certain number of epochs will be calculated to evaluate their performance. Additionally, the trends
+of loss value decreasing during epochs will be plotted and compared. Finally, the solution of the reconstructed
+function with the lowest loss will be compared with the analytical solution to state the accuracy of the ANN
+approach.
+3.1
+Newton’s Law of Cooling
+Model Description
+Newton’s law of cooling[9] states that the rate of change of the temperature of an object is proportional to the
+diﬀerence between its own temperature and the temperature of its surroundings. This relationship is described
+by the equation:
+dT
+dt = r(Tenv −T(t))
+(21)
+where
+•
+dT
+dt is the rate of change of temperature with respect to time (also known as the cooling rate)
+• T is the temperature of an object
+• Tenv is the temperature of the environment
+• r is the cooling coeﬃcient, which is a constant that depends on the characteristics of the object and the
+environment it is in
+In this study, we will predict how the temperature of the boiling water will change over time, given an initial
+temperature of 100◦C and a cooling coeﬃcient of 0.5, in an environment with a temperature of 10◦C.
+The analytical solution to the initial-value problem described above, solved using separation of variables, is as
+follows:
+T(t) = 10 + 90e−0.5t
+(22)
+Evaluation of Function Performance
+In this model, the speciﬁc neural network was trained for 200000 epochs in order to obtain the average losses
+shown in Table 2. The loss trends are also plotted in Figure 2. Based on the data presented in the table and
+5
+
+
+=== PAGE 6 ===
+polynomial
+exponential
+hyperbolic
+logarithm
+logistic
+sigmoid
+softplus
+Average Loss
+2.19e-05
+1.55e-07
+1.03e-06
+1.75e-06
+6.67e-07
+1.84e-05
+1.78e-05
+Table 2: Average losses of 7 constructed functions in the model of Newton’s law of cooling
+Figure 2: Comparing losses of 7 constructed func-
+tions in model of Newton’s law of cooling
+Figure 3: Comparing ANN and analytical solutions
+in model of Newton’s law of cooling
+graph, it can be seen that the exponential function performs the best in this model due to its ability to quickly
+reach the lower loss value and to achieve the lowest at the end of epochs. The logistic function also performs well
+in this model and reaches its own lowest loss value at an early point in the epochs.
+Finally, we compare our ANN solution based on the exponential function and the analytical solution in Figure 3,
+which demonstrates the eﬀectiveness of the ANN approach.
+3.2
+Motor Suspension System
+Model Description
+A motor suspension system[10] is a mechanical system that is used to support and isolate the motorcycle wheels
+from the rest of a vehicle. A mass-spring-damper model can be used to model the behavior of a motor suspension
+system by representing the wheels of a motorcycle as a mass, the suspension system as a spring, any damping
+eﬀects as a damper, and the shock absorber attached to the suspension system as a ﬁxed place. When the mo-
+torcycle wheels are resting on the ground and the rider gives extra force to them by sitting on the motor, the
+spring becomes compressed, bringing the system into an equilibrium position. What we are investigating now is
+the motion (displacement from the equilibrium position)of the wheels after the motor has a jump.
+The modeling diﬀerential equation is
+mdx2
+dt + cdx
+dt + kx = 0
+(23)
+where
+• m is the mass of the motorcycle wheels
+• c is the damping coeﬃcient
+• k is the spring constant
+• x is the displacement of the motor from its equilibrium position
+•
+dx
+dt is the velocity of the motor when hitting the ground
+•
+dx2
+dt is the acceleration of the motor
+In the English system, the total mass of wheels and a rider is chosen to be m = 12 slogs, the spring constant is
+k = 1152, the damping constant is c = 240, the initial displacement is x0 = 1
+3ft and the initial velocity is dx0
+dt =
+10ft/sec.
+6
+
+
+=== PAGE 7 ===
+Solving the above diﬀerential equation using a characteristic equation gives an analytical solution
+x(t) = 3.5e−8t −19
+6 e−12t
+(24)
+Evaluation of Function Performance
+In this model, the neural network is run for 200000 epochs, giving the average lowest losses for seven reconstructed
+functions in Table 3.
+polynomial
+exponential
+hyperbolic
+logarithm
+logistic
+sigmoid
+softplus
+Average Loss
+3.26e-1
+7.98e3
+1.32e3
+2.07e-3
+4.17e4
+1.09e2
+1.20e5
+Table 3: Average losses of 7 constructed functions in the model of motor suspension system
+According to the table, logarithmic and polynomial functions have lower losses compared to the other functions
+shown. This is also evident in Figure 4.
+Figure 4: Comparing losses of 7 constructed func-
+tions in model of motor suspension system
+Figure 5: Comparing ANN and analytical solutions
+in model of motor suspension system
+Figure 5 demonstrates that the numerical solution produced by our artiﬁcial neural network aligns perfectly with
+the analytical solution in this model.
+Evaluation of polynomial functions with diﬀerent coeﬃcients
+In this section, we will investigate how the coeﬃcient of the polynomial function impacts the loss performance
+of a neural network in this motor suspension system. Notice in Figure 6, when the coeﬃcients are very small or
+large, the loss that is achieved after completing all epochs tends to be higher. The impact of coeﬃcient values
+between 5 and 30 is roughly the same. In other words, we can select any coeﬃcient within the above range in
+order to obtain an accurate solution.
+3.3
+Home Heating
+Model Description
+The heat transfer in a house can be modeled using a system of ﬁrst-order ordinary diﬀerential equations[11]. This
+is useful for understanding how the temperature of a house changes over time, and for designing heating systems
+that maintain a comfortable temperature inside the house.
+Here, we examine the variations in temperature of the attic, basement, and insulated main ﬂoor in a house using
+Newton’s cooling law. It is assumed that the temperature outside, in the attic, and on the main ﬂoor is constantly
+35◦F during the day in the winter, and the temperature in the basement is 45◦F before the heater is turned on.
+7
+
+
+=== PAGE 8 ===
+Figure 6: Comparing losses of polynomial functions with diﬀerent coeﬃcients
+When a heater starts to work at noon (t=0) and is set the temperature to 100◦F, it increases the temperature
+by 20◦F per hour. This could be modeled as following diﬀerential equations:
+dx
+dt = k0(Tearth −x) + k1(y −x)
+(25)
+dy
+dt = k1(x −y) + k2(Tout −x) + k3(z −y) + Qheater
+(26)
+dz
+dt = k3(y −z) + k2(Tout −x)
+(27)
+where
+• x, y, and z represent the temperatures of the basement, main living area, and attic, respectively
+• Tearth,Tout represent the initial temperatures of the basement and outside respectively.
+• The variable Qheater represents the heating rate of the heater
+• The k is called the cooling constant which describes the rate of change of the temperatures of each area
+over time.
+As the model described above, the initial temperatures at noon (t = 0) are Tearth = x(0) = 45, Tout= y(0) = z(0)
+= 35 and Qheater = 20. And we set cooling constant as k0 = 1
+2, k1 = 1
+2, k2 = 1
+4, k3 = 1
+4, k4 = 3
+4.
+Evaluation of Function Performance
+This time, we train a certain neural network 20000 times to achieve a low loss value at the end. The average of
+the 100 lowest losses and how losses decrease during the training process for diﬀerent constructed functions are
+displaced in table 4 and Figure 7.
+polynomial
+exponential
+hyperbolic
+logarithm
+logistic
+sigmoid
+softplus
+Average Loss
+3.41e-04
+1.23e-06
+1.19e-05
+4.48e-06
+2.36e-04
+2.69e-03
+2.12e-03
+Table 4: Average losses of 7 constructed functions in Home Heating model
+As shown in the table and graph, the exponential, logarithmic, and hyperbolic functions all have small losses,
+with the hyperbolic and exponential functions converging the fastest in the ﬁrst 5000 epochs.
+In Figure 8, the analytical solution of this system of ordinary diﬀerential equations is calculated using the ”odeint”
+Python module, which is then compared to the solution obtained using artiﬁcial neural networks.
+Evaluation of logarithmic functions with diﬀerent basis
+In this section, the eﬀect of the base of logarithm on the loss performance of the ANN approach in the home
+heating model will be explored. To clearly demonstrate the eﬀect of the base number on the performance, we
+trained the neural network for 50000 epochs and displayed the results in Figure 9. It can be observed that the
+convergence speed is faster when the base number is smaller in the ﬁrst 10000 epochs. Additionally, logarithm
+with base 4 results in the lowest loss value in this model, thus being the best choice of base.
+8
+
+
+=== PAGE 9 ===
+Figure 7: Comparing losses of 7 constructed func-
+tions in home heating model
+Figure 8: Comparing ANN and analytical solutions
+in model of home heating
+Figure 9: Comparing losses of logarithmic functions with diﬀerent basis
+4
+Conclusion and Future Research
+Based on the artiﬁcial neural network, solving diﬀerential equations becomes more accurate and eﬃcient due to
+the easy generation of domain points and the good approximation capabilities of the neural network. In the paper,
+the loss function is reconstructed to meet initial/boundary conditions during the artiﬁcial neural network process,
+transforming the constrained problem into an unconstrained one and resulting in a good approximation of the
+solution. This paper explains how to reconstruct the solution function and extends the construction formula to
+nth order ODEs. In addition, the diﬀerent forms of construction are tested in three realistic models to evaluate
+their eﬀectiveness.
+The general nth order formula is only based on the polynomial function for the ordinary diﬀerential equations. As
+future work, the other six forms of reconstruction mentioned in section 3 could be extended to nth order ODEs.
+Meanwhile, the development of a general construction formula for partial diﬀerential equations could be pursued
+to better ﬁt a wider range of models in various academic ﬁelds.
+References
+[1] Smith, G.D. (2008) Numerical solution of partial diﬀerential equations: Finite diﬀerence methods. Oxford:
+Clarendon Press.
+[2] R., H.T.J. (1987) The ﬁnite element method: Linear static and dynamic ﬁnite element analysis. Englewood
+Cliﬀs, NJ: Prentice-Hall.
+9
+
+
+=== PAGE 10 ===
+[3] Brebbia, C.A., F., T.J.C. and Wrobel, L.C. (1985) Boundary Element Techniques: Theory and applications
+in engineering. Taipei: Gao li.
+[4] Berg,
+J.
+and
+Nystr¨om,
+K.
+(2018)
+“A
+uniﬁed
+deep
+artiﬁcial
+neural
+network
+approach
+to
+par-
+tial diﬀerential equations in complex geometries,” Neurocomputing,
+317,
+pp. 28–41. Available at:
+https://doi.org/10.1016/j.neucom.2018.06.056.
+[5] Hornik, K., Stinchcombe, M. and White, H. (1989) “Multilayer feedforward networks are universal approxi-
+mators,” Neural Networks, 2(5), pp. 359–366. Available at: https://doi.org/10.1016/0893-6080(89)90020-8.
+[6] Sirignano,
+J.
+and
+Spiliopoulos,
+K.
+(2018)
+“DGM:
+A
+deep
+learning
+algorithm
+for
+solving
+par-
+tial
+diﬀerential
+equations,”
+Journal of Computational Physics,
+375,
+pp.
+1339–1364.
+Available
+at:
+https://doi.org/10.1016/j.jcp.2018.08.029.
+[7] Lagaris, I.E., Likas, A. and Fotiadis, D.I. (1998) “Artiﬁcial neural networks for solving ordinary and
+partial diﬀerential equations,” IEEE Transactions on Neural Networks, 9(5), pp. 987–1000. Available at:
+https://doi.org/10.1109/72.712178.
+[8] Chen,
+F. and Sondak,
+D. (2020) “NeuroDiﬀEq:
+A python package for solving diﬀerential equa-
+tions
+with
+neural
+networks,”
+Journal
+of
+Open
+Source
+Software,
+5(46),
+p.
+1931.
+Available
+at:
+https://doi.org/10.21105/joss.01931.
+[9] Davidzon,
+M.I.
+(2012)
+“Newton’s
+law
+of
+cooling
+and
+its
+interpretation,”
+Interna-
+tional
+Journal
+of
+Heat
+and
+Mass
+Transfer,
+55(21-22),
+pp.
+5397–5402.
+Available
+at:
+https://doi.org/10.1016/j.ijheatmasstransfer.2012.03.035.
+[10] Strang, G. and Herman, E. (2016) Calculus. Houston, TX: OpenStax, Rice University.
+[11] Perko, L. (2014) Diﬀerential equations and dynamical systems: With 241 illustrations. New York: Springer.
+10
