@@ -40,18 +40,19 @@ def ode_residual(u: Tensor, dudt: Tensor, coeffs) -> Tensor:
     return dudt - f
 
 
-def residual(model: PINN, t: Tensor) -> Tensor:
+def residual(model: PINN, t: Tensor, create_graph: bool = True) -> Tensor:
     u = model(t)
     cols = []
     for j in range(u.shape[1]):
-        grad = torch.autograd.grad(u[:, j].sum(), t, create_graph=True)[0]
+        grad = torch.autograd.grad(u[:, j].sum(), t, create_graph=create_graph, retain_graph=True)[0]
         cols.append(grad[:, 0])
     dudt = torch.stack(cols, dim=1)
     return ode_residual(u, dudt, model.coeffs)
 
 
 def residual_magnitude(model: PINN, t: Tensor) -> Tensor:
-    return residual(model, t).pow(2).sum(dim=1).sqrt()
+    # Adaptivity never backprops, so avoid retaining a higher-order graph.
+    return residual(model, t, create_graph=False).detach().pow(2).sum(dim=1).sqrt()
 
 
 def pinn_loss(model: PINN, t: Tensor) -> Tensor:
