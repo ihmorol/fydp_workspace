@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
+from torch import Tensor
 
-from .collocation import make_grid, resample
 from .config import Config, compute_error_metrics, reference_trajectory
 from .pinn import PINN, pinn_loss
 
@@ -27,28 +27,49 @@ def set_seed(seed: int) -> None:
     np.random.seed(seed)
 
 
+def make_grid(cfg: Config, device: torch.device) -> Tensor:
+    t0, tf = cfg.t_span
+    return torch.linspace(t0, tf, cfg.n_collocation, device=device).reshape(-1, 1)
+
+
 def train(cfg: Config) -> tuple[PINN, list[float]]:
     set_seed(cfg.seed)
     device = get_device()
     model = PINN(cfg).to(device)
-    opt = torch.optim.Adam(model.parameters(), lr=cfg.lr_start)
+    grid = make_grid(cfg, device)
+    history: list[float] = []
+
+    def loss_fn() -> Tensor:
+        return pinn_loss(model, grid.clone().requires_grad_(True))
+
+    adam = torch.optim.Adam(model.parameters(), lr=cfg.lr_start)
     decay = cfg.lr_end / cfg.lr_start
     sched = torch.optim.lr_scheduler.LambdaLR(
-        opt, lambda e: 1.0 + (decay - 1.0) * min(e, cfg.epochs) / cfg.epochs
+        adam, lambda e: 1.0 + (decay - 1.0) * min(e, cfg.epochs) / cfg.epochs
     )
-
-    points = make_grid(cfg, device)
-    history: list[float] = []
-    for epoch in range(cfg.epochs):
-        t = points.clone().requires_grad_(True)
-        opt.zero_grad()
-        loss = pinn_loss(model, t)
+    for _ in range(cfg.epochs):
+        adam.zero_grad()
+        loss = loss_fn()
         loss.backward()
-        opt.step()
+        adam.step()
         sched.step()
         history.append(loss.item())
-        if cfg.adapt != "grid" and (epoch + 1) % cfg.refine_every == 0 and epoch + 1 < cfg.epochs:
-            points = resample(model, cfg, device, points)
+
+    if cfg.lbfgs_iters > 0:
+        lbfgs = torch.optim.LBFGS(
+            model.parameters(), max_iter=cfg.lbfgs_iters, history_size=50,
+            tolerance_grad=1e-12, tolerance_change=1e-14, line_search_fn="strong_wolfe",
+        )
+
+        def closure() -> Tensor:
+            lbfgs.zero_grad()
+            loss = loss_fn()
+            loss.backward()
+            history.append(loss.item())
+            return loss
+
+        lbfgs.step(closure)
+
     return model, history
 
 
@@ -78,9 +99,9 @@ def save_results(model: PINN, history: list[float], cfg: Config) -> pd.DataFrame
 
     plt.figure()
     plt.semilogy(history)
-    plt.xlabel("epoch")
+    plt.xlabel("iteration")
     plt.ylabel("residual loss")
-    plt.title("PINN convergence")
+    plt.title("PINN convergence (Adam + L-BFGS)")
     plt.tight_layout()
     plt.savefig(results / "convergence.png", dpi=150)
     plt.close()

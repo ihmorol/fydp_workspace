@@ -26,6 +26,14 @@ def test_residual_zero_on_truth():
 def test_training_reduces_loss():
     from fydp2.train import train
 
-    cfg = Config(epochs=100, n_collocation=101, adapt="rar", refine_every=50, n_add=10, seed=0)
+    cfg = Config(epochs=100, n_collocation=101, lbfgs_iters=50, seed=0)
+    _, history = train(cfg)
+    assert history[-1] < 0.1 * history[0]
+
+
+def test_soft_ic_trains():
+    from fydp2.train import train
+
+    cfg = Config(ic="soft", epochs=200, n_collocation=101, lbfgs_iters=50, seed=0)
     _, history = train(cfg)
     assert history[-1] < 0.1 * history[0]

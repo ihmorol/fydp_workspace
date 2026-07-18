@@ -18,7 +18,7 @@ from lorenz1960_baseline import (  # noqa: E402
 )
 
 ACTIVATIONS = ("tanh", "relu", "sigmoid", "gelu", "swish")
-STRATEGIES = ("grid", "rar", "rad")
+IC_MODES = ("hard", "soft")
 
 
 @dataclass(frozen=True)
@@ -32,15 +32,16 @@ class Config:
     width: int = 40
     activation: str = "tanh"
 
-    epochs: int = 20000
+    ic: str = "hard"          # "hard" trial solution, or "soft" IC penalty (Raissi-style)
+    gamma: float = 1.0        # soft-IC penalty weight (unused when ic="hard")
+
+    epochs: int = 20000       # Adam epochs
+    lbfgs_iters: int = 2000   # L-BFGS fine-tuning iterations (0 disables)
     lr_start: float = 1e-3
     lr_end: float = 1e-4
     seed: int = 0
 
     n_collocation: int = 1001
-    adapt: str = "rar"
-    refine_every: int = 2000
-    n_add: int = 100
 
     results_dir: str = "results/fydp2"
     ckpt_dir: str = "data/fydp2"
@@ -48,8 +49,8 @@ class Config:
     def __post_init__(self) -> None:
         if self.activation not in ACTIVATIONS:
             raise ValueError(f"activation must be one of {ACTIVATIONS}")
-        if self.adapt not in STRATEGIES:
-            raise ValueError(f"adapt must be one of {STRATEGIES}")
+        if self.ic not in IC_MODES:
+            raise ValueError(f"ic must be one of {IC_MODES}")
 
     @property
     def coefficients(self) -> np.ndarray:
@@ -65,4 +66,4 @@ def reference_trajectory(cfg: Config, n: int = 1001) -> tuple[np.ndarray, np.nda
     return t, ys
 
 
-__all__ = ["Config", "reference_trajectory", "compute_error_metrics", "ACTIVATIONS", "STRATEGIES"]
+__all__ = ["Config", "reference_trajectory", "compute_error_metrics", "ACTIVATIONS", "IC_MODES"]
