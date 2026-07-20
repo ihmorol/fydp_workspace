@@ -29,19 +29,19 @@ class Config:
     t_span: tuple[float, float] = (0.0, 1.0)
 
     depth: int = 4
-    width: int = 40
+    width: int = 60
     activation: str = "tanh"
 
     ic: str = "hard"          # "hard" trial solution, or "soft" IC penalty (Raissi-style)
     gamma: float = 1.0        # soft-IC penalty weight (unused when ic="hard")
 
     epochs: int = 20000       # Adam epochs
-    lbfgs_iters: int = 2000   # L-BFGS fine-tuning iterations (0 disables)
+    lbfgs_iters: int = 5000   # L-BFGS fine-tuning iterations (0 disables)
     lr_start: float = 1e-3
     lr_end: float = 1e-4
     seed: int = 0
 
-    n_collocation: int = 1001
+    n_collocation: int = 3000
 
     results_dir: str = "results/fydp2"
     ckpt_dir: str = "data/fydp2"

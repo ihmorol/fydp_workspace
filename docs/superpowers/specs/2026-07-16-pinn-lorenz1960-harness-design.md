@@ -49,9 +49,9 @@ r_z = z_T'(t) - c_z·x_T·y_T     (c_z = -0.75)
 
 Derivatives via `torch.autograd.grad`. **Residual-only loss** `mean(r_x²+r_y²+r_z²)`.
 
-- **Collocation:** a uniform grid over `[0,1]`. (No adaptive sampling — the
-  Lorenz solution is smooth; paper1 uses adaptivity only for the shock-bearing
-  Burgers case, not for its ODE examples.)
+- **Collocation:** a Latin hypercube sample over `[0,1]` (3000 points, paper1
+  §4.1). (No adaptive sampling — the Lorenz solution is smooth; paper1 uses
+  adaptivity only for the shock-bearing Burgers case, not for its ODE examples.)
 - **Optimizer:** Adam + polynomial LR decay (1e-3 -> 1e-4) then **L-BFGS**
   fine-tuning, matching paper1's forward-PINN two-step protocol (Section 4.1).
 - **Soft-IC mode** (`ic="soft"`): raw network output with a Raissi-style penalty
@@ -91,10 +91,10 @@ One frozen dataclass; the notebook builds one instance and overrides fields.
 ```
 Config:
   k, l, initial_state, t_span                          # system (coeffs via baseline)
-  depth=4, width=40, activation in {tanh,relu,sigmoid,gelu,swish}
+  depth=4, width=60, activation in {tanh,relu,sigmoid,gelu,swish}
   ic in {"hard","soft"}, gamma=1.0                     # IC enforcement
-  epochs=20000, lbfgs_iters=2000, lr_start=1e-3, lr_end=1e-4, seed=0
-  n_collocation=1001
+  epochs=20000, lbfgs_iters=5000, lr_start=1e-3, lr_end=1e-4, seed=0
+  n_collocation=3000                                   # Latin hypercube
   results_dir, ckpt_dir
 ```
 
@@ -120,7 +120,8 @@ Config -> coefficients + IC + t-span (baseline)
 - Hard IC exact at `t=0`.
 - Trained PINN reproduces the baseline to well below rel-err `1e-2` at `t=1`
   (Adam+L-BFGS reaches ~1e-6 rel-err / ~1e-10 MSE).
-- Full-trajectory MSE reported; convergence / solution / error plots saved.
+- Full-trajectory MSE reported; a single paper1-style `results.png` (solution vs
+  reference | error+MSE | loss with L-BFGS start marked) saved.
 
 ## 10. Out of scope (v1) / future
 

@@ -154,12 +154,12 @@ These match paper1 Section 4.2 exactly.
 
 ```python
 31     depth: int = 4
-32     width: int = 40
+32     width: int = 60
 33     activation: str = "tanh"
 ```
-The network shape: 4 hidden layers, 40 neurons each, `tanh` activation — the
-baseline architecture (matches paper1's Lorenz network width). Change these to
-try other architectures **without touching any code**.
+The network shape: 4 hidden layers, 60 neurons each, `tanh` activation — matching
+paper1's forward-PINN examples (Section 4.1). Change these to try other
+architectures **without touching any code**.
 
 ```python
 35     ic: str = "hard"
@@ -170,19 +170,20 @@ try other architectures **without touching any code**.
 
 ```python
 38     epochs: int = 20000
-39     lbfgs_iters: int = 2000
+39     lbfgs_iters: int = 5000
 40     lr_start: float = 1e-3
 41     lr_end: float = 1e-4
 42     seed: int = 0
 ```
-Training settings: how many Adam steps, how many L-BFGS polishing steps, the
-learning rate start/end (it decays from 1e-3 to 1e-4), and a random seed so runs
-are repeatable.
+Training settings (paper1 §4.1): 20000 Adam steps then up to 5000 L-BFGS polishing
+steps, the learning rate decaying from 1e-3 to 1e-4, and a random seed so runs are
+repeatable.
 
 ```python
-44     n_collocation: int = 1001
+44     n_collocation: int = 3000
 ```
-How many time points we check the physics at (an even grid over `[0,1]`).
+How many time points we check the physics at (3000, drawn by Latin hypercube
+sampling over `[0,1]`, following paper1).
 
 ```python
 46     results_dir: str = "results/fydp2"
@@ -409,14 +410,16 @@ code runs fast on Kaggle's GPU and still works on a laptop.
 Fixes the randomness so a run can be repeated. Important for honest research.
 
 ```python
-30 def make_grid(cfg: Config, device: torch.device) -> Tensor:
-31     t0, tf = cfg.t_span
-32     return torch.linspace(t0, tf, cfg.n_collocation, device=device).reshape(-1, 1)
+def make_grid(cfg, device):
+    t0, tf = cfg.t_span
+    sample = qmc.LatinHypercube(d=1, seed=cfg.seed).random(cfg.n_collocation)
+    t = t0 + (tf - t0) * sample
+    return torch.as_tensor(t, dtype=torch.float32, device=device).reshape(-1, 1)
 ```
-Creates the collocation points: `n_collocation` evenly spaced times from 0 to 1,
-shaped as a column (`N×1`) because the network expects one input per row. (A plain
-grid is enough here — the solution is smooth, so we don't need fancy adaptive
-sampling.)
+Creates the collocation points using **Latin hypercube sampling** (as in paper1):
+`n_collocation` well-spread times in `[0,1]`, shaped as a column (`N×1`) because
+the network expects one input per row. (In 1-D this behaves like a lightly
+jittered even grid; it is seeded so runs repeat.)
 
 ```python
 35 def train(cfg: Config) -> tuple[PINN, list[float]]:
@@ -530,15 +533,13 @@ reload the model without retraining.
 Get the truth, get the prediction, compute the error table, and write it to
 `metrics.csv`.
 
-```python
-100 ... plt.semilogy(history) ... convergence.png
-109 ... PINN vs baseline (3 panels) ... solution.png
-121 ... absolute error vs t (3 panels) ... error.png
-```
-Three plots:
-1. **convergence.png** — loss vs iteration on a log scale (should trend downward).
-2. **solution.png** — PINN curve vs baseline curve for x, y, z (should overlap).
-3. **error.png** — the gap between them over time (should be tiny).
+One combined figure (matching paper1's style), saved as **`results.png`**, with
+three side-by-side panels:
+1. **left** — the PINN solution (solid) over the reference (dashed) for x, y, z;
+   they should overlap.
+2. **middle** — the signed error per variable, with the **MSE in the title**.
+3. **right** — the loss on a log scale; a **red dashed line marks where L-BFGS**
+   takes over from Adam.
 
 ```python
 134 def main(cfg: Config | None = None):
@@ -628,7 +629,7 @@ pandas, pytest`. Install with `pip install -r fydp2/requirements.txt`.
 10. **(code)** `save_results(...)`, computes the final-state relative error, and
     shows the metrics table.
 11. **(markdown)** "Plots."
-12. **(code)** Displays the three saved PNGs inline.
+12. **(code)** Displays the saved `results.png` figure inline.
 
 ---
 

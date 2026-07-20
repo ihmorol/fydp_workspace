@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
+from scipy.stats import qmc
 from torch import Tensor
 
 from .config import Config, compute_error_metrics, reference_trajectory
@@ -28,8 +29,11 @@ def set_seed(seed: int) -> None:
 
 
 def make_grid(cfg: Config, device: torch.device) -> Tensor:
+    # Latin hypercube sampling over [t0, tf], following paper1.
     t0, tf = cfg.t_span
-    return torch.linspace(t0, tf, cfg.n_collocation, device=device).reshape(-1, 1)
+    sample = qmc.LatinHypercube(d=1, seed=cfg.seed).random(cfg.n_collocation)
+    t = t0 + (tf - t0) * sample
+    return torch.as_tensor(t, dtype=torch.float32, device=device).reshape(-1, 1)
 
 
 def train(cfg: Config) -> tuple[PINN, list[float]]:
@@ -96,36 +100,39 @@ def save_results(model: PINN, history: list[float], cfg: Config) -> pd.DataFrame
     pred = predict(model, t)
     metrics = compute_error_metrics(ys, pred)
     metrics.to_csv(results / "metrics.csv", index=False)
+    mse = float(np.mean((pred - ys) ** 2))
 
-    plt.figure()
-    plt.semilogy(history)
-    plt.xlabel("iteration")
-    plt.ylabel("residual loss")
-    plt.title("PINN convergence (Adam + L-BFGS)")
-    plt.tight_layout()
-    plt.savefig(results / "convergence.png", dpi=150)
-    plt.close()
+    # Single paper1-style figure: solution vs reference | error (+MSE) | loss (+L-BFGS start).
+    fig, ax = plt.subplots(1, 3, figsize=(15, 4))
+    colors = ("tab:blue", "tab:orange", "tab:green")
+    for j, c in enumerate(colors):
+        ax[0].plot(t, pred[:, j], color=c, label=STATE[j])
+        ax[0].plot(t, ys[:, j], "--", color=c, label=f"{STATE[j]} (ref)")
+    ax[0].set_xlabel("t")
+    ax[0].set_ylabel(", ".join(STATE))
+    ax[0].set_title("Neural network solution vs reference")
+    ax[0].legend(loc="best", ncol=2)
+    ax[0].grid(alpha=0.3)
 
-    fig, axes = plt.subplots(3, 1, figsize=(8, 8), sharex=True)
-    for j, ax in enumerate(axes):
-        ax.plot(t, ys[:, j], "k--", label="RK4/SciPy")
-        ax.plot(t, pred[:, j], label="PINN")
-        ax.set_ylabel(STATE[j])
-        ax.legend(loc="best")
-    axes[-1].set_xlabel("t")
-    fig.suptitle("PINN vs baseline")
+    for j, c in enumerate(colors):
+        ax[1].plot(t, pred[:, j] - ys[:, j], color=c, label=f"{STATE[j]} - {STATE[j]}(ref)")
+    ax[1].set_xlabel("t")
+    ax[1].set_ylabel("error")
+    ax[1].set_title(f"MSE: {mse:.2e}")
+    ax[1].legend(loc="best")
+    ax[1].grid(alpha=0.3)
+
+    ax[2].semilogy(history)
+    if cfg.lbfgs_iters > 0:
+        ax[2].axvline(cfg.epochs, color="red", linestyle="--", label="L-BFGS start")
+        ax[2].legend(loc="best")
+    ax[2].set_xlabel("iteration")
+    ax[2].set_ylabel("loss")
+    ax[2].set_title("Epoch loss")
+    ax[2].grid(alpha=0.3)
+
     fig.tight_layout()
-    fig.savefig(results / "solution.png", dpi=150)
-    plt.close(fig)
-
-    fig, axes = plt.subplots(3, 1, figsize=(8, 8), sharex=True)
-    for j, ax in enumerate(axes):
-        ax.plot(t, np.abs(pred[:, j] - ys[:, j]))
-        ax.set_ylabel(f"|d{STATE[j]}|")
-    axes[-1].set_xlabel("t")
-    fig.suptitle("Absolute error vs t")
-    fig.tight_layout()
-    fig.savefig(results / "error.png", dpi=150)
+    fig.savefig(results / "results.png", dpi=150)
     plt.close(fig)
 
     return metrics

@@ -20,9 +20,10 @@ baseline in `src/baseline/`.
 `u_T(t) = u0 + g(t)·N(t)`, `g(t) = (t − t0)/(t_f − t0)` — the initial condition is
 satisfied exactly (hard mode). Loss is residual-only: `mean(r²)`,
 `r_j = d u_j/dt − f_j(u)`, with `f` from the Section-4.2 coefficients imported
-from the baseline. Collocation is a uniform grid over `[0,1]`. Optimized with
-Adam (polynomial LR decay) then L-BFGS fine-tuning, following paper1's forward-PINN
-protocol. A soft-IC mode (`ic="soft"`, Raissi-style penalty) is available for
+from the baseline. Collocation is a Latin hypercube sample over `[0,1]`. Optimized
+with Adam (polynomial LR decay) then L-BFGS fine-tuning, following paper1's
+forward-PINN protocol (Section 4.1: 4x60 tanh, 3000 points, 20000 Adam + 5000
+L-BFGS). A soft-IC mode (`ic="soft"`, Raissi-style penalty) is available for
 comparison. The RK4/SciPy reference is used only to validate, never in the loss.
 
 ## Run locally
@@ -40,7 +41,7 @@ Open `lorenz_pinn.ipynb`. On Colab, clone the repo in the first cell so
 
 ## Outputs
 
-- `results/fydp2/` — `metrics.csv`, `convergence.png`, `solution.png`, `error.png` (tracked)
+- `results/fydp2/` — `metrics.csv`, `results.png` (3-panel: solution vs reference, error+MSE, loss with L-BFGS start) (tracked)
 - `data/fydp2/pinn.pt` — checkpoint (gitignored)
 
 ## Config knobs
